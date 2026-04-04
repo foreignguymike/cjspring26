@@ -12,6 +12,12 @@ public class Entity {
 
     protected TextureRegion image;
 
+    protected void setImage(TextureRegion image) {
+        this.image = image;
+        w = image.getRegionWidth();
+        h = image.getRegionHeight();
+    }
+
     public void update(float dt) {
 
     }

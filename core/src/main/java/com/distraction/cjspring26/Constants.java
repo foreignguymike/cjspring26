@@ -12,6 +12,7 @@ public class Constants {
     public static final boolean FULLSCREEN = true;
 
     public static final Color BLACK = Color.BLACK;
+    public static final Color TEXTURE_OPACITY = new Color(1, 1, 1, 0.1f);
 
     public static final Color PEACH = Color.valueOf("f0dab1");
     public static final Color PINK = Color.valueOf("e39aac");

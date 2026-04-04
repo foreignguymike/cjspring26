@@ -5,16 +5,21 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
+import com.distraction.cjspring26.entity.Background;
 import com.distraction.cjspring26.entity.Player;
 import com.distraction.cjspring26.tile.TileMap;
 
 public class PlayScreen extends Screen {
+
+    private final Background textureBg;
 
     private final TileMap tileMap;
     private final Player player;
 
     public PlayScreen(Context context) {
         super(context);
+
+        textureBg = new Background(cam, context.getImage("papermache"), Constants.TEXTURE_OPACITY);
 
         tileMap = new TileMap(context);
         player = new Player(context, tileMap);
@@ -65,6 +70,8 @@ public class PlayScreen extends Screen {
         tileMap.render(sb);
 
         player.render(sb);
+
+        textureBg.render(sb);
 
         in.render(sb);
         out.render(sb);
