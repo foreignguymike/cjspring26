@@ -1,0 +1,9 @@
+cjspring26.png
+size:512,256
+repeat:none
+grass
+bounds:2,5,192,192
+pixel
+bounds:2,2,1,1
+player
+bounds:196,61,164,136
