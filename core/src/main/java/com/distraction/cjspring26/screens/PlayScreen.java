@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Background;
+import com.distraction.cjspring26.entity.Inventory;
 import com.distraction.cjspring26.entity.Player;
 import com.distraction.cjspring26.tile.TileMap;
 
@@ -30,7 +31,7 @@ public class PlayScreen extends Screen {
         out = new Transition(context, Transition.Type.CHECKERED_OUT, 0.5f);
 
         context.audio.stopMusic();
-        context.audio.playMusic("main", 0.5f, true);
+        context.audio.playMusic("main", 0.3f, true);
     }
 
     @Override
@@ -41,9 +42,12 @@ public class PlayScreen extends Screen {
         player.down = Gdx.input.isKeyPressed(Input.Keys.DOWN);
         player.left = Gdx.input.isKeyPressed(Input.Keys.LEFT);
         player.right = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            player.action();
-        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) player.action();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) player.inventory.setSelectedIndex(1);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) player.inventory.setSelectedIndex(2);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) player.inventory.setSelectedIndex(3);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) player.inventory.setSelectedIndex(4);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) player.inventory.setSelectedIndex(5);
     }
 
     @Override
@@ -72,6 +76,10 @@ public class PlayScreen extends Screen {
         player.render(sb);
 
         textureBg.render(sb);
+
+        sb.setProjectionMatrix(uiCam.combined);
+        sb.setColor(Color.WHITE);
+        player.inventory.render(sb);
 
         in.render(sb);
         out.render(sb);

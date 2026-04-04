@@ -16,11 +16,15 @@ public class Player extends TileEntity {
 
     public boolean up, down, left, right;
 
+    public Inventory inventory;
+
     public Player(Context context, TileMap tileMap) {
         super(tileMap);
         image = context.getImage("player");
 
-        setTile(1, 1);
+        setTile(0, 14);
+
+        inventory = new Inventory(context);
     }
 
     @Override
@@ -32,9 +36,13 @@ public class Player extends TileEntity {
 
     public void action() {
         if (moving) return;
-        if (tileMap.isAnchor(row, col)) {
+        boolean isAnchor = tileMap.isAnchor(row, col);
+        boolean canAdd = inventory.canAddLadder();
+        System.out.println(isAnchor + ", " + canAdd);
+        if (tileMap.isAnchor(row, col) && inventory.canAddLadder()) {
             tileMap.removeAnchor(row, col);
-        } else {
+            inventory.addLadder();
+        } else if (inventory.isLadderSelected()) {
             int r = row;
             int c = col;
             if (direction == Direction.UP) r++;
@@ -43,6 +51,7 @@ public class Player extends TileEntity {
             else if (direction == Direction.RIGHT) c++;
             if (tileMap.canBuild(r, c)) {
                 tileMap.addAnchor(row, col, direction);
+                inventory.removeLadder();
             }
         }
     }
