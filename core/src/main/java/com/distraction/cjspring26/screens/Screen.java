@@ -20,6 +20,8 @@ public abstract class Screen {
 
     protected Viewport viewport;
     protected Camera cam;
+    protected Viewport uiViewport;
+    protected Camera uiCam;
     protected final Vector3 m;
 
     protected SpriteBatch sb;
@@ -37,6 +39,9 @@ public abstract class Screen {
 
         viewport = new MyViewport(Constants.WIDTH, Constants.HEIGHT);
         cam = viewport.getCamera();
+
+        uiViewport = new MyViewport(Constants.WIDTH, Constants.HEIGHT);
+        uiCam = uiViewport.getCamera();
 
         m = new Vector3();
     }

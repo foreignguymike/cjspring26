@@ -1,9 +1,14 @@
 cjspring26.png
-size:512,256
+size:1024,256
+filter:Linear,Linear
 repeat:none
+anchor
+bounds:198,7,192,192
 grass
-bounds:2,5,192,192
+bounds:2,7,192,192
+ladder
+bounds:394,7,192,192
 pixel
 bounds:2,2,1,1
 player
-bounds:196,61,164,136
+bounds:590,63,164,136

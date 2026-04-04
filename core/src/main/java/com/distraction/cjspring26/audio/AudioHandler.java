@@ -16,6 +16,7 @@ public class AudioHandler {
 
     public AudioHandler() {
         music = new HashMap<>();
+        addMusic("main", "music/Castles In the Sky.mp3");
         sounds = new HashMap<>();
     }
 
