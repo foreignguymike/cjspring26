@@ -40,13 +40,7 @@ public class Player extends TileEntity {
             tileMap.removeAnchor(row, col);
             inventory.addLadder();
         } else if (inventory.isLadderSelected()) {
-            int r = row;
-            int c = col;
-            if (direction == Direction.UP) r++;
-            else if (direction == Direction.DOWN) r--;
-            else if (direction == Direction.LEFT) c--;
-            else if (direction == Direction.RIGHT) c++;
-            if (tileMap.canBuild(r, c)) {
+            if (tileMap.canBuild(row, col, direction)) {
                 tileMap.addAnchor(row, col, direction);
                 inventory.removeLadder();
             }
@@ -76,21 +70,21 @@ public class Player extends TileEntity {
             else if (left) direction = Direction.LEFT;
             else if (right) direction = Direction.RIGHT;
             if (direction != oldDirection) {
-                directionTime = 0.15f;
+                directionTime = 0; // make it higher if you want delay
             } else {
-                if (up && !tileMap.isWater(row + 1, col)) {
+                if (up && tileMap.canWalk(row + 1, col)) {
                     row++;
                     direction = Direction.UP;
                     ydest = tileMap.coord(row);
-                } else if (down && !tileMap.isWater(row - 1, col)) {
+                } else if (down && tileMap.canWalk(row - 1, col)) {
                     row--;
                     direction = Direction.DOWN;
                     ydest = tileMap.coord(row);
-                } else if (left && !tileMap.isWater(row, col - 1)) {
+                } else if (left && tileMap.canWalk(row, col - 1)) {
                     col--;
                     direction = Direction.LEFT;
                     xdest = tileMap.coord(col);
-                } else if (right && !tileMap.isWater(row, col + 1)) {
+                } else if (right && tileMap.canWalk(row, col + 1)) {
                     col++;
                     direction = Direction.RIGHT;
                     xdest = tileMap.coord(col);

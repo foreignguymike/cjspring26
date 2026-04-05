@@ -25,10 +25,10 @@ public class Utils {
         );
     }
 
-    public static void flip(int[][] map) {
+    public static <T> void flip(T[][] map) {
         int numRows = map.length;
         for (int i = 0; i < numRows / 2; i++) {
-            int[] temp = map[i];
+            T[] temp = map[i];
             map[i] = map[numRows - 1 - i];
             map[numRows - 1 - i] = temp;
         }

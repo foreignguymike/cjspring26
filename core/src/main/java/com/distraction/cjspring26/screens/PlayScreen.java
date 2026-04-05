@@ -73,6 +73,8 @@ public class PlayScreen extends Screen {
                 i--;
             }
         }
+
+        tileMap.update(dt);
     }
 
     @Override
