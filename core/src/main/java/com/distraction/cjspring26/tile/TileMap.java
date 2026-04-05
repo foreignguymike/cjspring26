@@ -1,12 +1,13 @@
 package com.distraction.cjspring26.tile;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
 import com.distraction.cjspring26.Utils;
+import com.distraction.cjspring26.entity.Anchor;
 import com.distraction.cjspring26.entity.Collectible;
-import com.distraction.cjspring26.entity.Ladder;
+import com.distraction.cjspring26.entity.Stone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,26 +15,33 @@ import java.util.List;
 public class TileMap {
 
     private final Context context;
-    private final TextureRegion grass;
     private final Tile[][] map;
     private final int tileSize = 192;
 
-    private final List<Ladder> ladders;
+    private final List<Anchor> anchors;
+    private final List<Stone> stones;
     public final List<Collectible> collectibles;
 
     public TileMap(Context context) {
         this.context = context;
-        grass = context.getImage("grass");
-        ladders = new ArrayList<>();
+        anchors = new ArrayList<>();
+        stones = new ArrayList<>();
 
         int[][] mapData = MapData.mapData;
         map = new Tile[mapData.length][mapData[0].length];
         for (int row = 0; row < map.length; row++) {
             for (int col = 0; col < map[0].length; col++) {
-                Tile tile = new Tile();
+                Tile tile = new Tile(context, this, map.length - row - 1, col);
                 int type = mapData[row][col];
                 if (type == 0) tile.water = true;
                 else if (type == 1) tile.grass = true;
+                else if (type == 2) {
+                    tile.water = true;
+                    stones.add(new Stone(context, this, map.length - row - 1, col, false));
+                } else if (type == 3) {
+                    tile.water = true;
+                    stones.add(new Stone(context, this, map.length - row - 1, col, true));
+                }
                 map[row][col] = tile;
             }
         }
@@ -53,6 +61,34 @@ public class TileMap {
         return map.length * tileSize;
     }
 
+    public void toggle() {
+        for (Stone s : stones) {
+            s.toggle();
+            map[s.row][s.col].stone = !map[s.row][s.col].stone;
+            // find any anchors on this stone, toggle them and all chains
+            for (Anchor anchor : anchors) {
+                if (anchor.row == s.row && anchor.col == s.col) {
+                    chainToggle(anchor);
+                }
+            }
+        }
+    }
+
+    private void chainToggle(Anchor anchor) {
+        anchor.toggle();
+        int row = anchor.row;
+        int col = anchor.col;
+        Direction direction = anchor.direction;
+        map[row][col].anchor = !map[row][col].anchor;
+        if (direction == Direction.UP) map[row + 1][col].ladder = map[row][col].anchor;
+        else if (direction == Direction.DOWN) map[row - 1][col].ladder = map[row][col].anchor;
+        else if (direction == Direction.LEFT) map[row][col - 1].ladder = map[row][col].anchor;
+        else if (direction == Direction.RIGHT) map[row][col + 1].ladder = map[row][col].anchor;
+        if (anchor.anchor != null) {
+            chainToggle(anchor.anchor);
+        }
+    }
+
     public boolean canBuild(int row, int col, Direction direction) {
         if (row < 0 || col < 0 || row >= map.length || col >= map[0].length) return false;
         if (map[row][col].anchor) return false;
@@ -62,7 +98,7 @@ public class TileMap {
         else if (direction == Direction.DOWN) r--;
         else if (direction == Direction.LEFT) c--;
         else if (direction == Direction.RIGHT) c++;
-        return map[r][c].canBuildBridge();
+        return map[r][c].canBuildLadder();
     }
 
     public boolean canWalk(int row, int col) {
@@ -71,8 +107,8 @@ public class TileMap {
     }
 
     public boolean isAnchor(int row, int col) {
-        for (Ladder ladder : ladders) {
-            if (ladder.row == row && ladder.col == col) {
+        for (Anchor anchor : anchors) {
+            if (anchor.row == row && anchor.col == col) {
                 return true;
             }
         }
@@ -83,17 +119,17 @@ public class TileMap {
     public boolean removeAnchor(int row, int col) {
         if (!map[row][col].anchor) return false;
         boolean ret = false;
-        Ladder removedLadder = null;
-        for (int i = 0; i < ladders.size(); i++) {
-            Ladder ladder = ladders.get(i);
-            Direction direction = ladder.direction;
-            if (ladder.row == row && ladder.col == col) {
-                if (ladder.ladder == null) {
-                    if (direction == Direction.UP) map[row + 1][col].bridge = false;
-                    else if (direction == Direction.DOWN) map[row - 1][col].bridge = false;
-                    else if (direction == Direction.LEFT) map[row][col - 1].bridge = false;
-                    else if (direction == Direction.RIGHT) map[row][col + 1].bridge = false;
-                    removedLadder = ladders.remove(i);
+        Anchor removedAnchor = null;
+        for (int i = 0; i < anchors.size(); i++) {
+            Anchor anchor = anchors.get(i);
+            Direction direction = anchor.direction;
+            if (anchor.row == row && anchor.col == col) {
+                if (anchor.anchor == null) {
+                    if (direction == Direction.UP) map[row + 1][col].ladder = false;
+                    else if (direction == Direction.DOWN) map[row - 1][col].ladder = false;
+                    else if (direction == Direction.LEFT) map[row][col - 1].ladder = false;
+                    else if (direction == Direction.RIGHT) map[row][col + 1].ladder = false;
+                    removedAnchor = anchors.remove(i);
                     map[row][col].anchor = false;
                     ret = true;
                 }
@@ -101,28 +137,28 @@ public class TileMap {
             }
         }
         // break previous chain
-        for (Ladder ladder : ladders) {
-            if (ladder.ladder == removedLadder) {
-                ladder.ladder = null;
+        for (Anchor anchor : anchors) {
+            if (anchor.anchor == removedAnchor) {
+                anchor.anchor = null;
             }
         }
         return ret;
     }
 
     public void addAnchor(int row, int col, Direction direction) {
-        Ladder newLadder = new Ladder(context, this, direction, row, col);
-        for (Ladder ladder : ladders) {
-            if (ladder.contains(row, col)) {
-                ladder.ladder = newLadder;
+        Anchor newAnchor = new Anchor(context, this, direction, row, col);
+        for (Anchor anchor : anchors) {
+            if (anchor.contains(row, col)) {
+                anchor.anchor = newAnchor; // chain
                 break;
             }
         }
-        ladders.add(newLadder);
+        anchors.add(newAnchor);
         map[row][col].anchor = true;
-        if (direction == Direction.UP) map[row + 1][col].bridge = true;
-        else if (direction == Direction.DOWN) map[row - 1][col].bridge = true;
-        else if (direction == Direction.LEFT) map[row][col - 1].bridge = true;
-        else if (direction == Direction.RIGHT) map[row][col + 1].bridge = true;
+        if (direction == Direction.UP) map[row + 1][col].ladder = true;
+        else if (direction == Direction.DOWN) map[row - 1][col].ladder = true;
+        else if (direction == Direction.LEFT) map[row][col - 1].ladder = true;
+        else if (direction == Direction.RIGHT) map[row][col + 1].ladder = true;
     }
 
     public int coord(int tile) {
@@ -136,19 +172,25 @@ public class TileMap {
     }
 
     public void render(SpriteBatch sb) {
-        for (int row = 0; row < map.length; row++) {
+        sb.setColor(Color.WHITE);
+        for (int row = map.length - 1; row >= 0; row--) {
             for (int col = 0; col < map[row].length; col++) {
-                Tile tile = map[row][col];
-                if (tile.grass) {
-                    sb.draw(grass, col * tileSize, row * tileSize);
-                }
+                map[row][col].render(sb);
             }
         }
-        for (Ladder ladder : ladders) {
-            ladder.render(sb);
+        for (Stone stone : stones) {
+            stone.render(sb);
+        }
+        for (Anchor anchor : anchors) {
+            anchor.render(sb);
         }
         for (Collectible collectible : collectibles) {
             collectible.render(sb);
+        }
+        for (int row = map.length - 1; row >= 0; row--) {
+            for (int col = 0; col < map[row].length; col++) {
+                map[row][col].renderFont(sb);
+            }
         }
     }
 
