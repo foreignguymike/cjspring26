@@ -18,10 +18,9 @@ public class Stone extends TileEntity {
 
     @Override
     public void render(SpriteBatch sb) {
-        int yoffset = getYOffset();
         sb.setColor(Color.WHITE);
-        if (!on) sb.setColor(Constants.BLUE);
-        Utils.drawCentered(sb, image, x, y + yoffset);
+        if (!on) sb.setColor(Constants.DARK_PURPLE);
+        Utils.drawCentered(sb, image, x, y + yoffset - 42);
         sb.setColor(Color.WHITE);
     }
 }

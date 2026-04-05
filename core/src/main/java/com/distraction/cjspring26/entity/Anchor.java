@@ -34,8 +34,7 @@ public class Anchor extends TileEntity {
 
     @Override
     public void render(SpriteBatch sb) {
-        int yoffset = getYOffset();
-        if (!on) sb.setColor(Constants.BLUE);
+        if (!on) sb.setColor(Constants.DARK_PURPLE);
         Utils.drawCentered(sb, image, x, y + yoffset, direction.deg);
         if (direction == Direction.UP) Utils.drawCentered(sb, ladderImage, x, tileMap.coord(row + 1) + yoffset, direction.deg);
         else if (direction == Direction.DOWN) Utils.drawCentered(sb, ladderImage, x, tileMap.coord(row - 1) + yoffset, direction.deg);

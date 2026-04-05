@@ -175,9 +175,9 @@ public class TileMap {
     }
 
     public void update(float dt) {
-        for (Collectible collectible : collectibles) {
-            collectible.update(dt);
-        }
+        for (Stone s : stones) s.update(dt);
+        for (Anchor a : anchors) a.update(dt);
+        for (Collectible collectible : collectibles) collectible.update(dt);
     }
 
     public void render(SpriteBatch sb) {
@@ -196,11 +196,11 @@ public class TileMap {
         for (Collectible collectible : collectibles) {
             collectible.render(sb);
         }
-        for (int row = map.length - 1; row >= 0; row--) {
-            for (int col = 0; col < map[row].length; col++) {
-                map[row][col].renderFont(sb);
-            }
-        }
+//        for (int row = map.length - 1; row >= 0; row--) {
+//            for (int col = 0; col < map[row].length; col++) {
+//                map[row][col].renderFont(sb);
+//            }
+//        }
     }
 
 }

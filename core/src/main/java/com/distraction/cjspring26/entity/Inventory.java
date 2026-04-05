@@ -42,6 +42,7 @@ public class Inventory extends Entity {
         if (selectedIndex < 0) return;
         if (inv[selectedIndex]) {
             inv[selectedIndex] = false;
+            selectedIndex = -1;
             for (int i = 0; i < inv.length; i++) {
                 if (inv[i]) {
                     selectedIndex = i;
