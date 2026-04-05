@@ -1,6 +1,7 @@
 package com.distraction.cjspring26.screens;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -19,9 +20,9 @@ public abstract class Screen {
     public boolean transparent = false;
 
     protected Viewport viewport;
-    protected Camera cam;
+    protected OrthographicCamera cam;
     protected Viewport uiViewport;
-    protected Camera uiCam;
+    protected OrthographicCamera uiCam;
     protected final Vector3 m;
 
     protected SpriteBatch sb;
@@ -38,10 +39,11 @@ public abstract class Screen {
         pixel = context.getPixel();
 
         viewport = new MyViewport(Constants.WIDTH, Constants.HEIGHT);
-        cam = viewport.getCamera();
+        cam = (OrthographicCamera) viewport.getCamera();
+        System.out.println(cam);
 
         uiViewport = new MyViewport(Constants.WIDTH, Constants.HEIGHT);
-        uiCam = uiViewport.getCamera();
+        uiCam = (OrthographicCamera) uiViewport.getCamera();
 
         m = new Vector3();
     }

@@ -3,12 +3,15 @@ package com.distraction.cjspring26.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Background;
-import com.distraction.cjspring26.entity.Inventory;
+import com.distraction.cjspring26.entity.Collectible;
 import com.distraction.cjspring26.entity.Player;
 import com.distraction.cjspring26.tile.TileMap;
+
+import java.util.List;
 
 public class PlayScreen extends Screen {
 
@@ -56,8 +59,20 @@ public class PlayScreen extends Screen {
         out.update(dt);
 
         player.update(dt);
-        cam.position.set(player.x, player.y, 0);
+        cam.position.set(
+            MathUtils.clamp(player.x, Constants.WIDTH / 2f, tileMap.getTotalWidth() - Constants.WIDTH / 2f),
+            MathUtils.clamp(player.y, Constants.HEIGHT / 2f, tileMap.getTotalHeight() - Constants.HEIGHT / 2f),
+            0
+        );
         cam.update();
+
+        for (int i = 0; i < tileMap.collectibles.size(); i++) {
+            Collectible c = tileMap.collectibles.get(i);
+            if (player.collect(c)) {
+                tileMap.collectibles.remove(i);
+                i--;
+            }
+        }
     }
 
     @Override

@@ -24,8 +24,6 @@ public class Inventory extends Entity {
         h = slot.getRegionHeight();
 
         inv = new boolean[5];
-        inv[0] = true;
-        inv[1] = true;
     }
 
     public boolean isLadderSelected() {
@@ -45,7 +43,6 @@ public class Inventory extends Entity {
         if (inv[selectedIndex]) {
             inv[selectedIndex] = false;
             selectedIndex = -1;
-            return;
         }
     }
 
@@ -53,6 +50,7 @@ public class Inventory extends Entity {
         for (int i = 0; i < inv.length; i++) {
             if (!inv[i]) {
                 inv[i] = true;
+                selectedIndex = i;
                 return;
             }
         }
@@ -66,9 +64,9 @@ public class Inventory extends Entity {
     @Override
     public void render(SpriteBatch sb) {
         for (int i = 0; i < inv.length; i++) {
-            float x = Constants.WIDTH / 2f - ((int) (inv.length / 2) - i) * w * 1.2f;
-            Utils.drawCentered(sb, selectedIndex == i ? slotSelected : slot, x, h);
-            if (inv[i]) Utils.drawCentered(sb, ladderInv, x, h);
+            float x = Constants.WIDTH / 2f - ((inv.length >> 1) - i) * w * 1.2f;
+            Utils.drawCentered(sb, selectedIndex == i ? slotSelected : slot, x, Constants.HEIGHT - 3 * h / 4);
+            if (inv[i]) Utils.drawCentered(sb, ladderInv, x, Constants.HEIGHT - 3 * h / 4);
         }
     }
 }

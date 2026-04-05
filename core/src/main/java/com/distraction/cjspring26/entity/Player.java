@@ -36,9 +36,6 @@ public class Player extends TileEntity {
 
     public void action() {
         if (moving) return;
-        boolean isAnchor = tileMap.isAnchor(row, col);
-        boolean canAdd = inventory.canAddLadder();
-        System.out.println(isAnchor + ", " + canAdd);
         if (tileMap.isAnchor(row, col) && inventory.canAddLadder()) {
             tileMap.removeAnchor(row, col);
             inventory.addLadder();
@@ -54,6 +51,19 @@ public class Player extends TileEntity {
                 inventory.removeLadder();
             }
         }
+    }
+
+    public boolean collect(Collectible c) {
+        if (row != c.row || col != c.col) return false;
+        if (c.type == Collectible.Type.LADDER) {
+            if (inventory.canAddLadder()) {
+                inventory.addLadder();
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

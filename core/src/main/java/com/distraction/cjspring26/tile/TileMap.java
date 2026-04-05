@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
 import com.distraction.cjspring26.Utils;
+import com.distraction.cjspring26.entity.Collectible;
 import com.distraction.cjspring26.entity.Ladder;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class TileMap {
     private final int tileSize = 192;
 
     private final List<Ladder> ladders;
+    public final List<Collectible> collectibles;
 
     public TileMap(Context context) {
         this.context = context;
@@ -37,6 +39,18 @@ public class TileMap {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         };
         Utils.flip(map);
+
+        collectibles = new ArrayList<>();
+        collectibles.add(new Collectible(context, this, Collectible.Type.LADDER, 4, 8));
+        collectibles.add(new Collectible(context, this, Collectible.Type.LADDER, 4, 15));
+    }
+
+    public int getTotalWidth() {
+        return map[0].length * tileSize;
+    }
+
+    public int getTotalHeight() {
+        return map.length * tileSize;
     }
 
     public boolean canBuild(int row, int col) {
@@ -111,6 +125,9 @@ public class TileMap {
         }
         for (Ladder ladder : ladders) {
             ladder.render(sb);
+        }
+        for (Collectible collectible : collectibles) {
+            collectible.render(sb);
         }
     }
 
