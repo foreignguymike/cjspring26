@@ -1,6 +1,7 @@
 package com.distraction.cjspring26.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
 import com.distraction.cjspring26.Utils;
@@ -10,9 +11,12 @@ public class Player extends TileEntity {
 
     private float xdest, ydest;
     private boolean moving;
-    private float speed = 500;
+    private float speed = 600;
     private Direction direction = Direction.RIGHT;
-    private float directionTime = 0;
+
+    private boolean jumping;
+    private float jumpy;
+    private float totalDistance;
 
     public boolean up, down, left, right;
 
@@ -22,7 +26,7 @@ public class Player extends TileEntity {
         super(tileMap);
         image = context.getImage("player");
 
-        setTile(0, 14);
+        setTile(9, 0);
 
         inventory = new Inventory(context);
     }
@@ -34,68 +38,61 @@ public class Player extends TileEntity {
         ydest = y;
     }
 
-    public void action() {
-        if (moving) return;
-        if (tileMap.isAnchor(row, col) && inventory.canAddLadder()) {
-            if (tileMap.removeAnchor(row, col)) {
-                inventory.addLadder();
-            }
-        } else if (inventory.isLadderSelected()) {
-            if (tileMap.canBuild(row, col, direction)) {
-                tileMap.addAnchor(row, col, direction);
-                inventory.removeLadder();
-            }
-        }
-    }
-
     public boolean collect(Collectible c) {
         if (row != c.row || col != c.col) return false;
-        if (c.type == Collectible.Type.LADDER) {
-            if (inventory.canAddLadder()) {
-                inventory.addLadder();
-                return true;
-            } else {
-                return false;
-            }
-        }
+        // todo collect
         return true;
+    }
+
+    private float getRemainingDistance() {
+        return Math.abs(x - xdest) + Math.abs(y - ydest);
     }
 
     @Override
     public void update(float dt) {
         // can only move if not yet moving
         if (!moving) {
-            Direction oldDirection = direction;
-            if (up) direction = Direction.UP;
-            else if (down) direction = Direction.DOWN;
-            else if (left) direction = Direction.LEFT;
-            else if (right) direction = Direction.RIGHT;
-            if (direction != oldDirection) {
-                directionTime = 0; // make it higher if you want delay
-            } else {
-                if (up && tileMap.canWalk(row + 1, col)) {
-                    row++;
-                    direction = Direction.UP;
+            int dist = 0;
+            if (up) {
+                direction = Direction.UP;
+                dist = tileMap.getTravelDistance(row, col, direction);
+                if (dist > 0) {
+                    row += dist;
                     ydest = tileMap.coord(row);
-                } else if (down && tileMap.canWalk(row - 1, col)) {
-                    row--;
-                    direction = Direction.DOWN;
+                    totalDistance = getRemainingDistance();
+                }
+            } else if (down) {
+                direction = Direction.DOWN;
+                dist = tileMap.getTravelDistance(row, col, direction);
+                if (dist > 0) {
+                    row -= dist;
                     ydest = tileMap.coord(row);
-                } else if (left && tileMap.canWalk(row, col - 1)) {
-                    col--;
-                    direction = Direction.LEFT;
+                    totalDistance = getRemainingDistance();
+                }
+            } else if (left) {
+                direction = Direction.LEFT;
+                dist = tileMap.getTravelDistance(row, col, direction);
+                if (dist > 0) {
+                    col -= dist;
                     xdest = tileMap.coord(col);
-                } else if (right && tileMap.canWalk(row, col + 1)) {
-                    col++;
-                    direction = Direction.RIGHT;
+                    totalDistance = getRemainingDistance();
+                }
+            } else if (right) {
+                direction = Direction.RIGHT;
+                dist = tileMap.getTravelDistance(row, col, direction);
+                if (dist > 0) {
+                    col += dist;
                     xdest = tileMap.coord(col);
+                    totalDistance = getRemainingDistance();
                 }
             }
+            jumping = dist > 1;
         }
 
         boolean reachedDestination = x == xdest && y == ydest;
 
         // move
+        float speed = jumping ? 1.5f * this.speed : this.speed;
         if (x < xdest) {
             x += speed * dt;
             if (x > xdest) x = xdest;
@@ -111,23 +108,27 @@ public class Player extends TileEntity {
             if (y < ydest) y = ydest;
         }
 
-        if (directionTime > 0) directionTime -= dt;
-
         // just reached destination
         if (!reachedDestination && x == xdest && y == ydest) {
-            tileMap.playerLanded(row, col);
+            tileMap.playerLanded(this, row, col);
         }
 
         // prevent moving while already moving or changing direction
-        moving = x != xdest || y != ydest || directionTime > 0;
+        moving = x != xdest || y != ydest;
+
+        // calculate jump
+        if (!moving) jumping = false;
+        if (jumping) {
+            jumpy = 100 * MathUtils.sin(3.14f * getRemainingDistance() / totalDistance);
+        }
     }
 
     @Override
     public void render(SpriteBatch sb) {
-        Utils.drawCentered(sb, image, x, y);
-        if (direction == Direction.UP) Utils.drawCentered(sb, image, x, y + 50);
-        else if (direction == Direction.DOWN) Utils.drawCentered(sb, image, x, y - 50);
-        else if (direction == Direction.LEFT) Utils.drawCentered(sb, image, x - 50, y);
-        else if (direction == Direction.RIGHT) Utils.drawCentered(sb, image, x + 50, y);
+        Utils.drawCentered(sb, image, x, y + jumpy);
+        if (direction == Direction.UP) Utils.drawCentered(sb, image, x, y + 50 + jumpy);
+        else if (direction == Direction.DOWN) Utils.drawCentered(sb, image, x, y - 50 + jumpy);
+        else if (direction == Direction.LEFT) Utils.drawCentered(sb, image, x - 50, y + jumpy);
+        else if (direction == Direction.RIGHT) Utils.drawCentered(sb, image, x + 50, y + jumpy);
     }
 }

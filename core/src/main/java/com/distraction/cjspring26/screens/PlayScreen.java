@@ -7,11 +7,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Background;
-import com.distraction.cjspring26.entity.Collectible;
 import com.distraction.cjspring26.entity.Player;
 import com.distraction.cjspring26.tile.TileMap;
-
-import java.util.List;
 
 public class PlayScreen extends Screen {
 
@@ -35,6 +32,7 @@ public class PlayScreen extends Screen {
 
         context.audio.stopMusic();
         context.audio.playMusic("main", 0.3f, true);
+        tileMap.toggle();
     }
 
     @Override
@@ -45,12 +43,6 @@ public class PlayScreen extends Screen {
         player.down = Gdx.input.isKeyPressed(Input.Keys.DOWN);
         player.left = Gdx.input.isKeyPressed(Input.Keys.LEFT);
         player.right = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) player.action();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) player.inventory.setSelectedIndex(1);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) player.inventory.setSelectedIndex(2);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) player.inventory.setSelectedIndex(3);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) player.inventory.setSelectedIndex(4);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) player.inventory.setSelectedIndex(5);
     }
 
     @Override
@@ -64,15 +56,8 @@ public class PlayScreen extends Screen {
             MathUtils.clamp(player.y, Constants.HEIGHT / 2f, tileMap.getTotalHeight() - Constants.HEIGHT / 2f),
             0
         );
+        cam.zoom = 1.66f;
         cam.update();
-
-        for (int i = 0; i < tileMap.collectibles.size(); i++) {
-            Collectible c = tileMap.collectibles.get(i);
-            if (player.collect(c)) {
-                tileMap.collectibles.remove(i);
-                i--;
-            }
-        }
 
         tileMap.update(dt);
     }

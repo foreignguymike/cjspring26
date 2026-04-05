@@ -1,5 +1,6 @@
 package com.distraction.cjspring26.tile;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,12 +12,11 @@ public class Tile extends TileEntity {
 
     public boolean water;
     public boolean grass;
-    public boolean ladder;
-    public boolean anchor;
     public boolean stone;
     public boolean stoneToggle;
 
     private final TextureRegion grassImage;
+    private final TextureRegion stoneImage;
     private final TextureRegion stoneToggleImage;
     private final BitmapFont font;
 
@@ -24,29 +24,25 @@ public class Tile extends TileEntity {
         super(tileMap);
         setTile(row, col);
         grassImage = context.getImage("grass");
+        stoneImage = context.getImage("stone");
         stoneToggleImage = context.getImage("stonetoggle");
         font = context.getFont();
     }
 
-    public boolean canBuildLadder() {
-        return water && !grass && !ladder && !stone;
-    }
-
     public boolean canWalk() {
-        return grass || ladder || stone;
+        return grass || stone;
     }
 
     public void render(SpriteBatch sb) {
         if (grass) Utils.drawCentered(sb, grassImage, x, y - 42);
-        if (stoneToggle) Utils.drawCentered(sb, stoneToggleImage, x, y);
+        if (stone) Utils.drawCentered(sb, stoneImage, x, y + yoffset - 42);
+        if (stoneToggle) Utils.drawCentered(sb, stoneToggleImage, x, y + 192);
     }
 
     public void renderFont(SpriteBatch sb) {
         String s = "";
         if (water) s += "w";
         if (grass) s += "g";
-        if (ladder) s += "l";
-        if (anchor) s += "a";
         if (stone) s += "s";
         font.draw(sb, s, x - 90, y + 100);
     }
