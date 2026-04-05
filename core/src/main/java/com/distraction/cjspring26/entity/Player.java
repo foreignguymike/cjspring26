@@ -37,8 +37,9 @@ public class Player extends TileEntity {
     public void action() {
         if (moving) return;
         if (tileMap.isAnchor(row, col) && inventory.canAddLadder()) {
-            tileMap.removeAnchor(row, col);
-            inventory.addLadder();
+            if (tileMap.removeAnchor(row, col)) {
+                inventory.addLadder();
+            }
         } else if (inventory.isLadderSelected()) {
             if (tileMap.canBuild(row, col, direction)) {
                 tileMap.addAnchor(row, col, direction);

@@ -79,8 +79,10 @@ public class TileMap {
         return false;
     }
 
-    public void removeAnchor(int row, int col) {
-        if (!map[row][col].anchor) return;
+    // can only remove if it's the end chain (ie no ladder on ladder)
+    public boolean removeAnchor(int row, int col) {
+        if (!map[row][col].anchor) return false;
+        boolean ret = false;
         Ladder removedLadder = null;
         for (int i = 0; i < ladders.size(); i++) {
             Ladder ladder = ladders.get(i);
@@ -92,16 +94,19 @@ public class TileMap {
                     else if (direction == Direction.LEFT) map[row][col - 1].bridge = false;
                     else if (direction == Direction.RIGHT) map[row][col + 1].bridge = false;
                     removedLadder = ladders.remove(i);
+                    map[row][col].anchor = false;
+                    ret = true;
                 }
                 break;
             }
         }
+        // break previous chain
         for (Ladder ladder : ladders) {
             if (ladder.ladder == removedLadder) {
                 ladder.ladder = null;
             }
         }
-        map[row][col].anchor = false;
+        return ret;
     }
 
     public void addAnchor(int row, int col, Direction direction) {
