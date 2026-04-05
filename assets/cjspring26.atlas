@@ -9,7 +9,7 @@ bounds:4,148,192,275
 ladder
 bounds:404,231,192,192
 ladderinv
-bounds:339,125,94,98
+bounds:473,125,94,98
 papermache
 bounds:4,431,960,540
 pixel
@@ -22,3 +22,5 @@ slotselected
 bounds:604,276,147,147
 stone
 bounds:204,96,127,127
+stonetoggle
+bounds:339,97,126,126

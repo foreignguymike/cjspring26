@@ -41,6 +41,9 @@ public class TileMap {
                 } else if (type == 3) {
                     tile.water = true;
                     stones.add(new Stone(context, this, map.length - row - 1, col, true));
+                } else if (type == 4) {
+                    tile.grass = true;
+                    tile.stoneToggle = true;
                 }
                 map[row][col] = tile;
             }
@@ -59,6 +62,12 @@ public class TileMap {
 
     public int getTotalHeight() {
         return map.length * tileSize;
+    }
+
+    public void playerLanded(int row, int col) {
+        if (map[row][col].stoneToggle) {
+            toggle();
+        }
     }
 
     public void toggle() {

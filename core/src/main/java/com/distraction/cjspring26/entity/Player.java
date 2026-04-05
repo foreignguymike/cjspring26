@@ -93,6 +93,8 @@ public class Player extends TileEntity {
             }
         }
 
+        boolean reachedDestination = x == xdest && y == ydest;
+
         // move
         if (x < xdest) {
             x += speed * dt;
@@ -110,6 +112,11 @@ public class Player extends TileEntity {
         }
 
         if (directionTime > 0) directionTime -= dt;
+
+        // just reached destination
+        if (!reachedDestination && x == xdest && y == ydest) {
+            tileMap.playerLanded(row, col);
+        }
 
         // prevent moving while already moving or changing direction
         moving = x != xdest || y != ydest || directionTime > 0;

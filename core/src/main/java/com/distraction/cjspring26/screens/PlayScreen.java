@@ -51,7 +51,6 @@ public class PlayScreen extends Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) player.inventory.setSelectedIndex(3);
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) player.inventory.setSelectedIndex(4);
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) player.inventory.setSelectedIndex(5);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.T)) tileMap.toggle();
     }
 
     @Override
