@@ -16,7 +16,7 @@ import java.util.List;
 
 public class TileMap {
 
-    private OrthographicCamera cam;
+    private final OrthographicCamera cam;
     private int startRow;
     private int endRow;
     private int startCol;
@@ -66,14 +66,6 @@ public class TileMap {
         for (GridPoint2 c : MapData.collectibles) {
             collectibles.add(new Collectible(context, this, map.length - c.x - 2, c.y));
         }
-    }
-
-    public int getTotalWidth() {
-        return map[0].length * tileSize;
-    }
-
-    public int getTotalHeight() {
-        return map.length * tileSize;
     }
 
     public void playerLanded(Player player, int row, int col) {

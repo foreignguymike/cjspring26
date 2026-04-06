@@ -46,7 +46,7 @@ public class Context {
         return getImage("pixel");
     }
 
-    public BitmapFont getFont() {
+    public BitmapFont getUiFont() {
         return font;
     }
 

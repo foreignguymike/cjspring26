@@ -9,9 +9,10 @@ import com.distraction.cjspring26.tile.TileMap;
 
 public class Player extends TileEntity {
 
+    private static final float SPEED = 600;
+
     private float xdest, ydest;
     private boolean moving;
-    private float speed = 600;
     private Direction direction = Direction.RIGHT;
 
     private boolean jumping;
@@ -40,7 +41,7 @@ public class Player extends TileEntity {
 
     public boolean collect(Collectible c) {
         if (row != c.row || col != c.col) return false;
-        // todo collect
+        inventory.increment();
         return true;
     }
 
@@ -92,7 +93,7 @@ public class Player extends TileEntity {
         boolean reachedDestination = x == xdest && y == ydest;
 
         // move
-        float speed = jumping ? 1.5f * this.speed : this.speed;
+        float speed = jumping ? 1.5f * SPEED : SPEED;
         if (x < xdest) {
             x += speed * dt;
             if (x > xdest) x = xdest;
@@ -121,6 +122,8 @@ public class Player extends TileEntity {
         if (jumping) {
             jumpy = 100 * MathUtils.sin(3.14f * getRemainingDistance() / totalDistance);
         }
+
+        inventory.update(dt);
     }
 
     @Override
