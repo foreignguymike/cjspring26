@@ -40,7 +40,6 @@ public abstract class Screen {
 
         viewport = new MyViewport(Constants.WIDTH, Constants.HEIGHT);
         cam = (OrthographicCamera) viewport.getCamera();
-        System.out.println(cam);
 
         uiViewport = new MyViewport(Constants.WIDTH, Constants.HEIGHT);
         uiCam = (OrthographicCamera) uiViewport.getCamera();

@@ -17,6 +17,7 @@ import java.util.List;
 
 public class TileMap {
 
+    private final Context context;
     private final OrthographicCamera cam;
     private final OrthographicCamera uiCam;
     private int startRow;
@@ -32,6 +33,7 @@ public class TileMap {
     public final List<Collectible> collectibles;
 
     public TileMap(Context context, OrthographicCamera cam, OrthographicCamera uiCam) {
+        this.context = context;
         this.cam = cam;
         this.uiCam = uiCam;
         platforms = new ArrayList<>();
@@ -72,6 +74,10 @@ public class TileMap {
         }
     }
 
+    public int getTotalWidth() {
+        return map[0].length * tileSize;
+    }
+
     public void playerLanded(Player player, int row, int col) {
         for (int i = 0; i < collectibles.size(); i++) {
             Collectible c = collectibles.get(i);
@@ -90,6 +96,7 @@ public class TileMap {
     }
 
     public void toggle() {
+        context.audio.playSound("toggle", 0.3f);
         for (GridPoint2 s : platforms) {
             map[s.x + 1][s.y].toggle();
         }

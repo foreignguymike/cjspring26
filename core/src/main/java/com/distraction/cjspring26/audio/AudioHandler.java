@@ -3,9 +3,11 @@ package com.distraction.cjspring26.audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.FileHandler;
 
 public class AudioHandler {
 
@@ -18,14 +20,21 @@ public class AudioHandler {
         music = new HashMap<>();
         addMusic("main", "music/Castles In the Sky.mp3");
         sounds = new HashMap<>();
+        importSounds();
+    }
+
+    private void importSounds() {
+        FileHandle dir = Gdx.files.internal("assets/sfx");
+        for (FileHandle file : dir.list()) {
+            String ext = file.extension().toLowerCase();
+            if (ext.equals("wav")) {
+                sounds.put(file.nameWithoutExtension(), Gdx.audio.newSound(file));
+            }
+        }
     }
 
     private void addMusic(String key, String fileName) {
         music.put(key, Gdx.audio.newMusic(Gdx.files.internal(fileName)));
-    }
-
-    private void addSound(String key, String fileName) {
-        sounds.put(key, Gdx.audio.newSound(Gdx.files.internal(fileName)));
     }
 
     public boolean isMusicPlaying() {

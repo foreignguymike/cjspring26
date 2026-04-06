@@ -50,7 +50,11 @@ public class PlayScreen extends Screen {
         out.update(dt);
 
         player.update(dt);
-        cam.position.set(player.x, player.y, 0);
+        cam.position.set(
+            MathUtils.clamp(player.x, Constants.WIDTH2, tileMap.getTotalWidth() - Constants.WIDTH2),
+            player.y,
+            0
+        );
         cam.update();
 
         tileMap.update(dt);

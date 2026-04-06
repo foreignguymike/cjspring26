@@ -8,8 +8,9 @@ public class Constants {
 
     public static final int WIDTH = 1920;
     public static final int HEIGHT = 1080;
+    public static final int WIDTH2 = WIDTH / 2;
 
-    public static final boolean FULLSCREEN = false;
+    public static final boolean FULLSCREEN = true;
 
     public static final Color[] WISTERIC_17 = new Color[] {
         Color.valueOf("c9dab8"), // 0

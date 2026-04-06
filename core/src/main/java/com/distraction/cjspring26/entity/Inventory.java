@@ -38,7 +38,7 @@ public class Inventory extends Entity {
         dx = SPEED * (xdest - x) / dist;
         dy = SPEED * (ydest - y) / dist;
 
-        System.out.println("collecting " + index + ": " + x + ", " + y + ", " + xdest + ", " + ydest + ", " + dx + ", " + dy);
+        context.audio.playSound("collect", 0.2f);
     }
 
     @Override
@@ -47,6 +47,7 @@ public class Inventory extends Entity {
             boolean reachedDestination = atDestination();
             move(dt);
             if (!reachedDestination && atDestination()) {
+                context.audio.playSound("swallow", 0.1f);
                 incTimer = INC_INTERVAL;
                 inv[collectingIndex] = true;
             }
@@ -65,7 +66,7 @@ public class Inventory extends Entity {
     public void render(SpriteBatch sb) {
         for (int i = 0; i < MAX; i++) {
             if (inv[i]) {
-                float scale = collectingIndex == i ? 1 + incTimer * 2f : 1f;
+                float scale = collectingIndex == i ? 1 + incTimer * 3f : 1f;
                 Utils.drawCentered(sb, image, pos[i], 70, scale);
             } else {
                 Utils.drawCentered(sb, offImage, pos[i], 70);
