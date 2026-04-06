@@ -11,16 +11,29 @@ public class Constants {
 
     public static final boolean FULLSCREEN = true;
 
-    public static final Color BLACK = Color.BLACK;
-    public static final Color TEXTURE_OPACITY = new Color(1, 1, 1, 0.1f);
+    public static final Color[] WISTERIC_17 = new Color[] {
+        Color.valueOf("c9dab8"), // 0
+        Color.valueOf("86c1a3"), // 1
+        Color.valueOf("569082"), // 2
+        Color.valueOf("2d535b"), // 3
+        Color.valueOf("162841"), // 4
+        Color.valueOf("100b27"), // 5
+        Color.valueOf("331541"), // 6
+        Color.valueOf("732d72"), // 7
+        Color.valueOf("a75b80"), // 8
+        Color.valueOf("cd7a87"), // 9
+        Color.valueOf("f3b5a8"), // 10
+        Color.valueOf("ffddcb"), // 11
+        Color.valueOf("e6c9c3"), // 12
+        Color.valueOf("cea3ad"), // 13
+        Color.valueOf("b37fa1"), // 14
+        Color.valueOf("8d5489"), // 15
+        Color.valueOf("53315a") // 16
+    };
 
-    public static final Color PEACH = Color.valueOf("f0dab1");
-    public static final Color PINK = Color.valueOf("e39aac");
-    public static final Color VIOLET = Color.valueOf("c45d9f");
-    public static final Color DARK_PURPLE = Color.valueOf("634b7d");
-    public static final Color PURPLE = Color.valueOf("6461c2");
-    public static final Color BLUE = Color.valueOf("2ba9b4");
-    public static final Color GREEN = Color.valueOf("93d4b5");
-    public static final Color WHITE = Color.valueOf("f0f6e8");
+    public static final Color BLACK = WISTERIC_17[5];
+    public static final Color WATER = WISTERIC_17[12];
+
+    public static final Color TEXTURE_OPACITY = new Color(1, 1, 1, 0.1f);
 
 }

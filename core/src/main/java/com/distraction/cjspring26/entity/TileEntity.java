@@ -1,19 +1,20 @@
 package com.distraction.cjspring26.entity;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.tile.TileMap;
 
 public abstract class TileEntity extends Entity {
 
     protected TileMap tileMap;
     public int row, col;
-    protected boolean on = true;
+    public boolean on = true;
     protected float toggleTime;
-    protected float yoffset;
-    protected final float totalToggleTime = 0.2f;
-    protected final float maxyoffset = 200;
+    protected float toggleScale;
+    protected final float totalToggleTime = 0.1f;
 
-    protected TileEntity(TileMap tileMap) {
+    protected TileEntity(Context context, TileMap tileMap) {
+        super(context);
         this.tileMap = tileMap;
     }
 
@@ -28,8 +29,8 @@ public abstract class TileEntity extends Entity {
         toggleTime -= dt;
         if (toggleTime < 0) toggleTime = 0;
 
-        if (on) yoffset = MathUtils.map(totalToggleTime, 0, -200, 0, toggleTime);
-        else yoffset = MathUtils.map(totalToggleTime, 0, 0, -200, toggleTime);
+        if (on) toggleScale = MathUtils.map(totalToggleTime, 0, 0, 1, toggleTime);
+        else toggleScale = MathUtils.map(totalToggleTime, 0, 1, 0, toggleTime);
     }
 
     protected void setTile(int row, int col) {

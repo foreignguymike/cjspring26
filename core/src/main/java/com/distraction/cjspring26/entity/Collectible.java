@@ -11,9 +11,9 @@ public class Collectible extends TileEntity {
     private float time;
 
     public Collectible(Context context, TileMap tileMap, int row, int col) {
-        super(tileMap);
+        super(context, tileMap);
 
-        setImage(context.getImage("ladderinv"));
+        setImage(context.getImage("strawberry"));
         setTile(row, col);
     }
 

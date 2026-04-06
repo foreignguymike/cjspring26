@@ -23,7 +23,7 @@ public class Player extends TileEntity {
     public Inventory inventory;
 
     public Player(Context context, TileMap tileMap) {
-        super(tileMap);
+        super(context, tileMap);
         image = context.getImage("player");
 
         setTile(9, 0);

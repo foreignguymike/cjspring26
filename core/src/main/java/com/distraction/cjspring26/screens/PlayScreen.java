@@ -20,9 +20,9 @@ public class PlayScreen extends Screen {
     public PlayScreen(Context context) {
         super(context);
 
-        textureBg = new Background(cam, context.getImage("papermache"), Constants.TEXTURE_OPACITY);
+        textureBg = new Background(context, cam, context.getImage("papermache"), Constants.TEXTURE_OPACITY);
 
-        tileMap = new TileMap(context);
+        tileMap = new TileMap(context, cam);
         player = new Player(context, tileMap);
 
         in = new Transition(context, Transition.Type.CHECKERED_IN, 0.5f, () -> ignoreInput = false);
@@ -50,13 +50,7 @@ public class PlayScreen extends Screen {
         out.update(dt);
 
         player.update(dt);
-        cam.position.set(
-            MathUtils.clamp(player.x, Constants.WIDTH / 2f, tileMap.getTotalWidth() - Constants.WIDTH / 2f),
-            MathUtils.clamp(player.y, Constants.HEIGHT / 2f, tileMap.getTotalHeight() - Constants.HEIGHT / 2f),
-            0
-        );
-//        cam.zoom = 1.66f;
-        cam.zoom = 4f;
+        cam.position.set(player.x, player.y, 0);
         cam.update();
 
         tileMap.update(dt);
@@ -67,13 +61,13 @@ public class PlayScreen extends Screen {
         sb.begin();
 
         sb.setProjectionMatrix(uiCam.combined);
-        sb.setColor(Constants.BLUE);
+        sb.setColor(Constants.WATER);
         sb.draw(context.getPixel(), 0, 0, Constants.WIDTH, Constants.HEIGHT);
 
         sb.setProjectionMatrix(cam.combined);
         sb.setColor(Color.WHITE);
 
-        tileMap.render(sb, cam.position.x, cam.position.y);
+        tileMap.render(sb);
 
         player.render(sb);
 

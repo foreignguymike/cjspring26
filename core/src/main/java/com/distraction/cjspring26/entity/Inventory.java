@@ -9,7 +9,7 @@ import com.distraction.cjspring26.Utils;
 public class Inventory extends Entity {
 
     public Inventory(Context context) {
-
+        super(context);
     }
 
     @Override

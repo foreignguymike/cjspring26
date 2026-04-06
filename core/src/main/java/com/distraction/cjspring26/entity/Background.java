@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.distraction.cjspring26.Constants;
+import com.distraction.cjspring26.Context;
 
 public class Background extends Entity {
 
@@ -14,7 +15,8 @@ public class Background extends Entity {
     private final Camera cam;
     private final Color color;
 
-    public Background(Camera cam, TextureRegion image, Color color) {
+    public Background(Context context, Camera cam, TextureRegion image, Color color) {
+        super(context);
         this.cam = cam;
         this.color = color;
         setImage(image);

@@ -1,31 +1,37 @@
 package com.distraction.cjspring26.tile;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
-import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
 import com.distraction.cjspring26.Utils;
 import com.distraction.cjspring26.entity.Collectible;
 import com.distraction.cjspring26.entity.Player;
-import com.distraction.cjspring26.entity.Stone;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TileMap {
 
+    private OrthographicCamera cam;
+    private int startRow;
+    private int endRow;
+    private int startCol;
+    private int endCol;
+
     private final Tile[][] map;
-    private final int tileSize = 192;
+    private final int tileSize = 128;
 
     // cache
-    private final List<Stone> stones;
+    private final List<GridPoint2> platforms;
     public final List<Collectible> collectibles;
 
-    public TileMap(Context context) {
-        stones = new ArrayList<>();
+    public TileMap(Context context, OrthographicCamera cam) {
+        this.cam = cam;
+        platforms = new ArrayList<>();
 
         int[][] mapData = MapData.mapData;
         map = new Tile[mapData.length][mapData[0].length];
@@ -37,12 +43,14 @@ public class TileMap {
                 else if (type == 1) tile.grass = true;
                 else if (type == 3) {
                     tile.water = true;
-                    tile.stone = false;
-                    stones.add(new Stone(context, this, map.length - row - 2, col, false));
+                    tile.platform = true;
+                    tile.on = false;
+                    platforms.add(new GridPoint2(map.length - row - 2, col));
                 } else if (type == 4) {
                     tile.water = true;
-                    tile.stone = true;
-                    stones.add(new Stone(context, this, map.length - row - 2, col, true));
+                    tile.platform = true;
+                    tile.on = true;
+                    platforms.add(new GridPoint2(map.length - row - 2, col));
                 }
                 map[row][col] = tile;
             }
@@ -51,12 +59,12 @@ public class TileMap {
         Utils.flip(map);
 
         for (GridPoint2 toggle : MapData.toggles) {
-            map[map.length - toggle.x - 2][toggle.y].stoneToggle = true;
+            map[map.length - toggle.x - 2][toggle.y].platformToggle = true;
         }
 
         collectibles = new ArrayList<>();
-        for (GridPoint2 coin : MapData.coins) {
-            collectibles.add(new Collectible(context, this, map.length - coin.x - 2, coin.y));
+        for (GridPoint2 c : MapData.collectibles) {
+            collectibles.add(new Collectible(context, this, map.length - c.x - 2, c.y));
         }
     }
 
@@ -76,15 +84,14 @@ public class TileMap {
                 i--;
             }
         }
-        if (map[row][col].stoneToggle) {
+        if (map[row][col].platformToggle) {
             toggle();
         }
     }
 
     public void toggle() {
-        for (Stone s : stones) {
-            s.toggle();
-            map[s.row + 1][s.col].stone = !map[s.row + 1][s.col].stone;
+        for (GridPoint2 s : platforms) {
+            map[s.x + 1][s.y].toggle();
         }
     }
 
@@ -114,16 +121,22 @@ public class TileMap {
     }
 
     public void update(float dt) {
-        for (Stone s : stones) s.update(dt);
+        float x = cam.position.x;
+        float y= cam.position.y;
+        startRow = MathUtils.clamp((int) (y / tileSize) + 6, 0, map.length - 1);
+        endRow = MathUtils.clamp((int) (y / tileSize) - 4, 0, map.length - 1);
+        startCol = MathUtils.clamp((int) (x / tileSize) - 10, 0, map[0].length - 1);
+        endCol = MathUtils.clamp((int) (x / tileSize) + 10, 0, map[0].length - 1);
+        for (int row = startRow; row >= endRow; row--) {
+            for (int col = startCol; col < endCol; col++) {
+                map[row][col].update(dt);
+            }
+        }
         for (Collectible collectible : collectibles) collectible.update(dt);
     }
 
-    public void render(SpriteBatch sb, float x, float y) {
+    public void render(SpriteBatch sb) {
         sb.setColor(Color.WHITE);
-        int startRow = MathUtils.clamp((int) (y / tileSize) + 6, 0, map.length - 1);
-        int endRow = MathUtils.clamp((int) (y / tileSize) - 4, 0, map.length - 1);
-        int startCol = MathUtils.clamp((int) (x / tileSize) - 10, 0, map[0].length - 1);
-        int endCol = MathUtils.clamp((int) (x / tileSize) + 10, 0, map[0].length - 1);
         for (int row = startRow; row >= endRow; row--) {
             for (int col = startCol; col < endCol; col++) {
                 map[row][col].render(sb);

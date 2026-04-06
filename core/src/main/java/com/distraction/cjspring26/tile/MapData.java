@@ -1,11 +1,9 @@
 package com.distraction.cjspring26.tile;
 
 import com.badlogic.gdx.math.GridPoint2;
-import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class MapData {
 
@@ -37,7 +35,7 @@ public class MapData {
     };
 
     public static List<GridPoint2> toggles = new ArrayList<>();
-    public static List<GridPoint2> coins = new ArrayList<>();
+    public static List<GridPoint2> collectibles = new ArrayList<>();
 
     static {
         toggles.add(new GridPoint2(7, 14));
@@ -54,14 +52,14 @@ public class MapData {
         toggles.add(new GridPoint2(8, 62));
         toggles.add(new GridPoint2(3, 54));
 
-        coins.add(new GridPoint2(2, 1));
-        coins.add(new GridPoint2(19, 18));
-        coins.add(new GridPoint2(4, 21));
-        coins.add(new GridPoint2(10, 14));
-        coins.add(new GridPoint2(17, 28));
-        coins.add(new GridPoint2(11, 47));
-        coins.add(new GridPoint2(18, 43));
-        coins.add(new GridPoint2(7, 49));
+        collectibles.add(new GridPoint2(2, 1));
+        collectibles.add(new GridPoint2(19, 18));
+        collectibles.add(new GridPoint2(4, 21));
+        collectibles.add(new GridPoint2(10, 14));
+        collectibles.add(new GridPoint2(17, 28));
+        collectibles.add(new GridPoint2(11, 47));
+        collectibles.add(new GridPoint2(18, 43));
+        collectibles.add(new GridPoint2(7, 49));
     }
 
 }
