@@ -37,7 +37,7 @@ public class Tile extends TileEntity {
             Utils.drawCentered(sb, platformImage, x, y - 42, toggleScale);
             if (!on && toggleTime <= 0) Utils.drawCentered(sb, platformOffImage, x, y - 23);
         }
-        if (platformToggle) Utils.drawCentered(sb, platformToggleImage, x, y + 106);
+        if (platformToggle) Utils.drawCentered(sb, platformToggleImage, x, y + 110);
     }
 
 }

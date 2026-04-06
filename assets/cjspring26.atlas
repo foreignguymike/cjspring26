@@ -13,8 +13,10 @@ bounds:4,4,92,108
 platformoff
 bounds:176,305,128,128
 platformtoggle
-bounds:409,367,58,66
+bounds:507,367,58,66
 player
 bounds:4,297,164,136
 strawberry
-bounds:312,340,89,93
+bounds:410,340,89,93
+strawberryoff
+bounds:312,338,90,95

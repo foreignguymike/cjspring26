@@ -8,10 +8,12 @@ import com.distraction.cjspring26.tile.TileMap;
 
 public class Collectible extends TileEntity {
 
+    public final int index;
     private float time;
 
-    public Collectible(Context context, TileMap tileMap, int row, int col) {
+    public Collectible(Context context, TileMap tileMap, int row, int col, int index) {
         super(context, tileMap);
+        this.index = index;
 
         setImage(context.getImage("strawberry"));
         setTile(row, col);

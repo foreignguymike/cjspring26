@@ -9,9 +9,8 @@ import com.distraction.cjspring26.tile.TileMap;
 
 public class Player extends TileEntity {
 
-    private static final float SPEED = 600;
+    private static final float SPEED = 500;
 
-    private float xdest, ydest;
     private boolean moving;
     private Direction direction = Direction.RIGHT;
 
@@ -30,6 +29,8 @@ public class Player extends TileEntity {
         setTile(9, 0);
 
         inventory = new Inventory(context);
+
+        dx = dy = SPEED;
     }
 
     @Override
@@ -39,14 +40,8 @@ public class Player extends TileEntity {
         ydest = y;
     }
 
-    public boolean collect(Collectible c) {
-        if (row != c.row || col != c.col) return false;
-        inventory.increment();
-        return true;
-    }
-
-    private float getRemainingDistance() {
-        return Math.abs(x - xdest) + Math.abs(y - ydest);
+    public void collect(Collectible c, float x, float y) {
+        inventory.collect(c.index, x, y);
     }
 
     @Override
@@ -60,7 +55,9 @@ public class Player extends TileEntity {
                 if (dist > 0) {
                     row += dist;
                     ydest = tileMap.coord(row);
-                    totalDistance = getRemainingDistance();
+                    totalDistance = getRemainingDistanceM();
+                    dx = 0;
+                    dy = SPEED * (dist > 1 ? 1.2f : 1);
                 }
             } else if (down) {
                 direction = Direction.DOWN;
@@ -68,7 +65,9 @@ public class Player extends TileEntity {
                 if (dist > 0) {
                     row -= dist;
                     ydest = tileMap.coord(row);
-                    totalDistance = getRemainingDistance();
+                    totalDistance = getRemainingDistanceM();
+                    dx = 0;
+                    dy = -SPEED * (dist > 1 ? 1.2f : 1);
                 }
             } else if (left) {
                 direction = Direction.LEFT;
@@ -76,7 +75,9 @@ public class Player extends TileEntity {
                 if (dist > 0) {
                     col -= dist;
                     xdest = tileMap.coord(col);
-                    totalDistance = getRemainingDistance();
+                    totalDistance = getRemainingDistanceM();
+                    dx = -SPEED * (dist > 1 ? 1.2f : 1);
+                    dy = 0;
                 }
             } else if (right) {
                 direction = Direction.RIGHT;
@@ -84,33 +85,23 @@ public class Player extends TileEntity {
                 if (dist > 0) {
                     col += dist;
                     xdest = tileMap.coord(col);
-                    totalDistance = getRemainingDistance();
+                    totalDistance = getRemainingDistanceM();
+                    dx = SPEED * (dist > 1 ? 1.2f : 1);
+                    dy = 0;
                 }
+            } else {
+                dx = dy = 0;
             }
             jumping = dist > 1;
         }
 
-        boolean reachedDestination = x == xdest && y == ydest;
+        boolean reachedDestination = atDestination();
 
         // move
-        float speed = jumping ? 1.5f * SPEED : SPEED;
-        if (x < xdest) {
-            x += speed * dt;
-            if (x > xdest) x = xdest;
-        } else if (x > xdest) {
-            x -= speed * dt;
-            if (x < xdest) x = xdest;
-        }
-        if (y < ydest) {
-            y += speed * dt;
-            if (y > ydest) y = ydest;
-        } else if (y > ydest) {
-            y -= speed * dt;
-            if (y < ydest) y = ydest;
-        }
+        move(dt);
 
         // just reached destination
-        if (!reachedDestination && x == xdest && y == ydest) {
+        if (!reachedDestination && atDestination()) {
             tileMap.playerLanded(this, row, col);
         }
 
@@ -120,7 +111,7 @@ public class Player extends TileEntity {
         // calculate jump
         if (!moving) jumping = false;
         if (jumping) {
-            jumpy = 100 * MathUtils.sin(3.14f * getRemainingDistance() / totalDistance);
+            jumpy = 100 * MathUtils.sin(3.14f * getRemainingDistanceM() / totalDistance);
         }
 
         inventory.update(dt);

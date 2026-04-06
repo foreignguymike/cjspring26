@@ -22,7 +22,7 @@ public class PlayScreen extends Screen {
 
         textureBg = new Background(context, cam, context.getImage("papermache"), Constants.TEXTURE_OPACITY);
 
-        tileMap = new TileMap(context, cam);
+        tileMap = new TileMap(context, cam, uiCam);
         player = new Player(context, tileMap);
 
         in = new Transition(context, Transition.Type.CHECKERED_IN, 0.5f, () -> ignoreInput = false);
@@ -70,6 +70,7 @@ public class PlayScreen extends Screen {
         tileMap.render(sb);
 
         player.render(sb);
+        tileMap.renderCollectibles(sb);
 
         textureBg.render(sb);
 

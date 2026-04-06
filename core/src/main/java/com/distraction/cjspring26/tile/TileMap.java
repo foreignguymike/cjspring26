@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
 import com.distraction.cjspring26.Utils;
@@ -17,6 +18,7 @@ import java.util.List;
 public class TileMap {
 
     private final OrthographicCamera cam;
+    private final OrthographicCamera uiCam;
     private int startRow;
     private int endRow;
     private int startCol;
@@ -29,8 +31,9 @@ public class TileMap {
     private final List<GridPoint2> platforms;
     public final List<Collectible> collectibles;
 
-    public TileMap(Context context, OrthographicCamera cam) {
+    public TileMap(Context context, OrthographicCamera cam, OrthographicCamera uiCam) {
         this.cam = cam;
+        this.uiCam = uiCam;
         platforms = new ArrayList<>();
 
         int[][] mapData = MapData.mapData;
@@ -63,15 +66,20 @@ public class TileMap {
         }
 
         collectibles = new ArrayList<>();
+        int index = 0;
         for (GridPoint2 c : MapData.collectibles) {
-            collectibles.add(new Collectible(context, this, map.length - c.x - 2, c.y));
+            collectibles.add(new Collectible(context, this, map.length - c.x - 2, c.y, index++));
         }
     }
 
     public void playerLanded(Player player, int row, int col) {
         for (int i = 0; i < collectibles.size(); i++) {
             Collectible c = collectibles.get(i);
-            if (player.collect(c)) {
+            if (c.row == row && c.col == col) {
+                Vector3 pos = new Vector3(c.x, c.y, 0);
+                cam.project(pos);
+                uiCam.unproject(pos);
+                player.collect(c, pos.x, pos.y);
                 collectibles.remove(i);
                 i--;
             }
@@ -134,6 +142,9 @@ public class TileMap {
                 map[row][col].render(sb);
             }
         }
+    }
+
+    public void renderCollectibles(SpriteBatch sb) {
         for (Collectible collectible : collectibles) {
             collectible.render(sb);
         }
