@@ -39,12 +39,4 @@ public class Tile extends TileEntity {
         if (stoneToggle) Utils.drawCentered(sb, stoneToggleImage, x, y + 192);
     }
 
-    public void renderFont(SpriteBatch sb) {
-        String s = "";
-        if (water) s += "w";
-        if (grass) s += "g";
-        if (stone) s += "s";
-        font.draw(sb, s, x - 90, y + 100);
-    }
-
 }

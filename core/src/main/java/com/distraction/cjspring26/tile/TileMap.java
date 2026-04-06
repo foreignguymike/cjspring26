@@ -3,6 +3,8 @@ package com.distraction.cjspring26.tile;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.MathUtils;
+import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
 import com.distraction.cjspring26.Utils;
@@ -116,20 +118,19 @@ public class TileMap {
         for (Collectible collectible : collectibles) collectible.update(dt);
     }
 
-    public void render(SpriteBatch sb) {
+    public void render(SpriteBatch sb, float x, float y) {
         sb.setColor(Color.WHITE);
-        for (int row = map.length - 1; row >= 0; row--) {
-            for (int col = 0; col < map[row].length; col++) {
+        int startRow = MathUtils.clamp((int) (y / tileSize) + 6, 0, map.length - 1);
+        int endRow = MathUtils.clamp((int) (y / tileSize) - 4, 0, map.length - 1);
+        int startCol = MathUtils.clamp((int) (x / tileSize) - 10, 0, map[0].length - 1);
+        int endCol = MathUtils.clamp((int) (x / tileSize) + 10, 0, map[0].length - 1);
+        for (int row = startRow; row >= endRow; row--) {
+            for (int col = startCol; col < endCol; col++) {
                 map[row][col].render(sb);
             }
         }
         for (Collectible collectible : collectibles) {
             collectible.render(sb);
-        }
-        for (int row = map.length - 1; row >= 0; row--) {
-            for (int col = 0; col < map[row].length; col++) {
-                map[row][col].renderFont(sb);
-            }
         }
     }
 

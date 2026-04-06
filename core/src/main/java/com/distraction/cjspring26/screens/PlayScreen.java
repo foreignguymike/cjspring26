@@ -32,7 +32,6 @@ public class PlayScreen extends Screen {
 
         context.audio.stopMusic();
         context.audio.playMusic("main", 0.3f, true);
-        tileMap.toggle();
     }
 
     @Override
@@ -56,7 +55,8 @@ public class PlayScreen extends Screen {
             MathUtils.clamp(player.y, Constants.HEIGHT / 2f, tileMap.getTotalHeight() - Constants.HEIGHT / 2f),
             0
         );
-        cam.zoom = 1.66f;
+//        cam.zoom = 1.66f;
+        cam.zoom = 4f;
         cam.update();
 
         tileMap.update(dt);
@@ -73,7 +73,7 @@ public class PlayScreen extends Screen {
         sb.setProjectionMatrix(cam.combined);
         sb.setColor(Color.WHITE);
 
-        tileMap.render(sb);
+        tileMap.render(sb, cam.position.x, cam.position.y);
 
         player.render(sb);
 
