@@ -118,7 +118,7 @@ public class TileMap {
         startRow = MathUtils.clamp((int) (y / tileSize) + 6, 0, map.length - 1);
         endRow = MathUtils.clamp((int) (y / tileSize) - 4, 0, map.length - 1);
         startCol = MathUtils.clamp((int) (x / tileSize) - 10, 0, map[0].length - 1);
-        endCol = MathUtils.clamp((int) (x / tileSize) + 10, 0, map[0].length - 1);
+        endCol = MathUtils.clamp((int) (x / tileSize) + 10, 0, map[0].length);
         for (int row = startRow; row >= endRow; row--) {
             for (int col = startCol; col < endCol; col++) {
                 map[row][col].update(dt);

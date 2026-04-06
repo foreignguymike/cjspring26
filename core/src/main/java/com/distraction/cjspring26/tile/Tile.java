@@ -16,7 +16,7 @@ public class Tile extends TileEntity {
     private final TextureRegion grassImage;
     private final TextureRegion platformImage;
     private final TextureRegion platformOffImage;
-    private final TextureRegion stoneToggleImage;
+    private final TextureRegion platformToggleImage;
 
     public Tile(Context context, TileMap tileMap, int row, int col) {
         super(context, tileMap);
@@ -24,7 +24,7 @@ public class Tile extends TileEntity {
         grassImage = context.getImage("grass");
         platformImage = context.getImage("grass");
         platformOffImage = context.getImage("platformoff");
-        stoneToggleImage = context.getImage("stonetoggle");
+        platformToggleImage = context.getImage("platformtoggle");
     }
 
     public boolean canWalk() {
@@ -37,7 +37,7 @@ public class Tile extends TileEntity {
             Utils.drawCentered(sb, platformImage, x, y - 42, toggleScale);
             if (!on && toggleTime <= 0) Utils.drawCentered(sb, platformOffImage, x, y - 23);
         }
-        if (platformToggle) Utils.drawCentered(sb, stoneToggleImage, x, y + 106);
+        if (platformToggle) Utils.drawCentered(sb, platformToggleImage, x, y + 106);
     }
 
 }
