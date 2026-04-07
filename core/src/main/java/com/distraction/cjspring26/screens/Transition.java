@@ -104,7 +104,7 @@ public class Transition {
     public void render(SpriteBatch sb) {
         if (!start) return;
         sb.setColor(Constants.BLACK);
-        float squareSize = Constants.WIDTH / 8f;
+        float squareSize = Constants.WIDTH / 16f;
         int numRows = MathUtils.ceil(Constants.HEIGHT / squareSize);
         int numCols = MathUtils.ceil(Constants.WIDTH / squareSize);
         if (type == Type.CHECKERED_IN) {

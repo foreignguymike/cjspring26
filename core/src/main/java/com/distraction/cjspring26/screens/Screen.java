@@ -20,14 +20,14 @@ public abstract class Screen {
     public boolean transparent = false;
 
     protected Viewport viewport;
-    protected OrthographicCamera cam;
+    public OrthographicCamera cam;
     protected Viewport uiViewport;
-    protected OrthographicCamera uiCam;
+    public OrthographicCamera uiCam;
     protected final Vector3 m;
 
     protected SpriteBatch sb;
 
-    protected boolean ignoreInput;
+    public boolean ignoreInput;
 
     public Transition in = null;
     public Transition out = null;
@@ -55,7 +55,7 @@ public abstract class Screen {
     }
 
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        viewport.update(width, height);
     }
 
     public abstract void input();
