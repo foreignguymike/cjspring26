@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Background;
@@ -12,10 +13,15 @@ import com.distraction.cjspring26.tile.TileMap;
 
 public class PlayScreen extends Screen {
 
+    private static final float CAM_LERP = 3f;
+
     private final Background textureBg;
 
     private final TileMap tileMap;
     private final Player player;
+    private final Player stuck;
+
+    private final Vector3 camTarget = new Vector3();
 
     public PlayScreen(Context context) {
         super(context);
@@ -24,6 +30,9 @@ public class PlayScreen extends Screen {
 
         tileMap = new TileMap(context, cam, uiCam);
         player = new Player(context, tileMap);
+        player.setTile(9, 0);
+        stuck = new Player(context, tileMap);
+        stuck.setTile(9, 66);
 
         in = new Transition(context, Transition.Type.CHECKERED_IN, 0.5f, () -> ignoreInput = false);
         ignoreInput = true;
@@ -50,12 +59,15 @@ public class PlayScreen extends Screen {
         out.update(dt);
 
         player.update(dt);
-        cam.position.set(
+
+        camTarget.set(
             MathUtils.clamp(player.x, Constants.WIDTH2, tileMap.getTotalWidth() - Constants.WIDTH2),
             player.y,
             0
         );
+        cam.position.lerp(camTarget, CAM_LERP * dt);
         cam.update();
+        stuck.update(dt);
 
         tileMap.update(dt);
     }
@@ -74,6 +86,7 @@ public class PlayScreen extends Screen {
         tileMap.render(sb);
 
         player.render(sb);
+        stuck.render(sb);
         tileMap.renderCollectibles(sb);
 
         textureBg.render(sb);

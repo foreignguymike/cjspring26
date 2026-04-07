@@ -47,7 +47,7 @@ public class Inventory extends Entity {
             boolean reachedDestination = atDestination();
             move(dt);
             if (!reachedDestination && atDestination()) {
-                context.audio.playSound("swallow", 0.1f);
+                context.audio.playSound("swallow", 0.2f);
                 incTimer = INC_INTERVAL;
                 inv[collectingIndex] = true;
             }

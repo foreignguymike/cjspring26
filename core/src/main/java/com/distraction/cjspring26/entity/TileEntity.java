@@ -23,6 +23,15 @@ public abstract class TileEntity extends Entity {
         toggleTime = totalToggleTime;
     }
 
+    public void setTile(int row, int col) {
+        this.row = row;
+        this.col = col;
+        x = tileMap.coord(col);
+        y = tileMap.coord(row);
+        xdest = x;
+        ydest = y;
+    }
+
     @Override
     public void update(float dt) {
         super.update(dt);
@@ -31,13 +40,6 @@ public abstract class TileEntity extends Entity {
 
         if (on) toggleScale = MathUtils.map(totalToggleTime, 0, 0, 1, toggleTime);
         else toggleScale = MathUtils.map(totalToggleTime, 0, 1, 0, toggleTime);
-    }
-
-    protected void setTile(int row, int col) {
-        this.row = row;
-        this.col = col;
-        this.x = tileMap.coord(col);
-        this.y = tileMap.coord(row);
     }
 
 }

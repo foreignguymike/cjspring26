@@ -1,5 +1,6 @@
 package com.distraction.cjspring26.tile;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -84,6 +85,7 @@ public class TileMap {
             if (c.row == row && c.col == col) {
                 Vector3 pos = new Vector3(c.x, c.y, 0);
                 cam.project(pos);
+                pos.y = Gdx.graphics.getHeight() - pos.y;
                 uiCam.unproject(pos);
                 player.collect(c, pos.x, pos.y);
                 collectibles.remove(i);

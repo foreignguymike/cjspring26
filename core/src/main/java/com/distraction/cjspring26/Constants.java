@@ -10,6 +10,9 @@ public class Constants {
     public static final int HEIGHT = 1080;
     public static final int WIDTH2 = WIDTH / 2;
 
+    public static final int SWIDTH = WIDTH;
+    public static final int SHEIGHT = HEIGHT;
+
     public static final boolean FULLSCREEN = true;
 
     public static final Color[] WISTERIC_17 = new Color[] {

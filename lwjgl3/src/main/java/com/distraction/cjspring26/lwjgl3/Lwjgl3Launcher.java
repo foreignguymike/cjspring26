@@ -32,7 +32,7 @@ public class Lwjgl3Launcher {
         if (Constants.FULLSCREEN) {
             configuration.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
         } else {
-            configuration.setWindowedMode(Constants.WIDTH, Constants.HEIGHT);
+            configuration.setWindowedMode(Constants.SWIDTH, Constants.SHEIGHT);
         }
         //// You can change these files; they are in lwjgl3/src/main/resources/ .
         //// They can also be loaded from the root of assets/ .

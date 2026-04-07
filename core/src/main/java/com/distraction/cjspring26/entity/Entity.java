@@ -2,7 +2,6 @@ package com.distraction.cjspring26.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Context;
 
 public class Entity {

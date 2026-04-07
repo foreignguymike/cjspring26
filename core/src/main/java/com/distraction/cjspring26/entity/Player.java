@@ -1,6 +1,7 @@
 package com.distraction.cjspring26.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
@@ -11,6 +12,8 @@ public class Player extends TileEntity {
 
     private static final float SPEED = 500;
 
+    private final TextureRegion playerSkinImage;
+
     private boolean moving;
     private Direction direction = Direction.RIGHT;
 
@@ -19,25 +22,15 @@ public class Player extends TileEntity {
     private float totalDistance;
 
     public boolean up, down, left, right;
+    private boolean mirror;
 
     public Inventory inventory;
 
     public Player(Context context, TileMap tileMap) {
         super(context, tileMap);
-        image = context.getImage("player");
-
-        setTile(9, 0);
-
+        image = context.getImage("playeroutline");
+        playerSkinImage = context.getImage("playerskin");
         inventory = new Inventory(context);
-
-        dx = dy = SPEED;
-    }
-
-    @Override
-    protected void setTile(int row, int col) {
-        super.setTile(row, col);
-        xdest = x;
-        ydest = y;
     }
 
     public void collect(Collectible c, float x, float y) {
@@ -70,6 +63,7 @@ public class Player extends TileEntity {
                     dy = -SPEED * (dist > 1 ? 1.2f : 1);
                 }
             } else if (left) {
+                mirror = true;
                 direction = Direction.LEFT;
                 dist = tileMap.getTravelDistance(row, col, direction);
                 if (dist > 0) {
@@ -80,6 +74,7 @@ public class Player extends TileEntity {
                     dy = 0;
                 }
             } else if (right) {
+                mirror = false;
                 direction = Direction.RIGHT;
                 dist = tileMap.getTravelDistance(row, col, direction);
                 if (dist > 0) {
@@ -119,10 +114,12 @@ public class Player extends TileEntity {
 
     @Override
     public void render(SpriteBatch sb) {
-        Utils.drawCentered(sb, image, x, y + jumpy);
-        if (direction == Direction.UP) Utils.drawCentered(sb, image, x, y + 50 + jumpy);
-        else if (direction == Direction.DOWN) Utils.drawCentered(sb, image, x, y - 50 + jumpy);
-        else if (direction == Direction.LEFT) Utils.drawCentered(sb, image, x - 50, y + jumpy);
-        else if (direction == Direction.RIGHT) Utils.drawCentered(sb, image, x + 50, y + jumpy);
+        if (mirror) {
+            Utils.drawCenteredFlipped(sb, playerSkinImage, x, y + jumpy);
+            Utils.drawCenteredFlipped(sb, image, x, y + jumpy);
+        } else {
+            Utils.drawCentered(sb, playerSkinImage, x, y + jumpy);
+            Utils.drawCentered(sb, image, x, y + jumpy);
+        }
     }
 }
