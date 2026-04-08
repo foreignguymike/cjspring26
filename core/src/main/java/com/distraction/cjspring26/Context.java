@@ -1,6 +1,7 @@
 package com.distraction.cjspring26;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -29,6 +30,7 @@ public class Context {
         assets.finishLoading();
 
         font = assets.get(FONT64, BitmapFont.class);
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         dialogFont = new BitmapFont(
             new BitmapFont.BitmapFontData(font.getData().fontFile, false),
             font.getRegion(),

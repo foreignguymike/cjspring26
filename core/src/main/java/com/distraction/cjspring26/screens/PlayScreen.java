@@ -9,25 +9,18 @@ import com.distraction.cjspring26.screens.scenes.EndScene;
 import com.distraction.cjspring26.screens.scenes.HelpScene;
 import com.distraction.cjspring26.screens.scenes.IntroScene;
 import com.distraction.cjspring26.screens.scenes.Scene;
-import com.distraction.cjspring26.screens.scenes.PanScene;
 import com.distraction.cjspring26.screens.scenes.PlayScene;
 import com.distraction.cjspring26.tile.TileMap;
 
 public class PlayScreen extends Screen {
-
-    public final Scene introScene;
-    public final Scene helpScene;
-    public final Scene panScene;
-    public final Scene playScene;
-    public final Scene endScene;
 
     private Scene scene = null;
 
     private final Background textureBg;
 
     public final TileMap tileMap;
-    public final Player player;
-    public final Player stuck;
+    public Player player;
+    public Player stuck;
 
     public PlayScreen(Context context) {
         super(context);
@@ -36,7 +29,7 @@ public class PlayScreen extends Screen {
 
         tileMap = new TileMap(context, cam, uiCam);
         player = new Player(context, tileMap);
-        player.setTile(7, 59);
+        player.setTile(9, 0);
         stuck = new Player(context, tileMap);
         stuck.setTile(9, 68);
         stuck.mirror = true;
@@ -46,16 +39,16 @@ public class PlayScreen extends Screen {
         in.start();
         out = new Transition(context, Transition.Type.CHECKERED_OUT, 0.5f);
 
-        introScene = new IntroScene(this);
-        helpScene = new HelpScene(this);
-        panScene = new PanScene(this);
-        playScene = new PlayScene(this);
-        endScene = new EndScene(this);
-
-        setScene(introScene);
+        setScene(new IntroScene(this));
 
         context.audio.stopMusic();
         context.audio.playMusic("main", 0.3f, true);
+    }
+
+    public void playerSwap() {
+        stuck = player;
+        player = new Player(context, tileMap, player.inventory);
+        player.setTile(9, 0);
     }
 
     public void setScene(Scene scene) {

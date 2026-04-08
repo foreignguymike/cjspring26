@@ -89,7 +89,7 @@ public class TileMap {
     }
 
     public int getPlayableWidth() {
-        return (map[0].length - 2) * tileSize;
+        return (map[0].length - 3) * tileSize;
     }
 
     public void playerLeft(int row, int col) {

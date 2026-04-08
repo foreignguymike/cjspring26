@@ -35,6 +35,13 @@ public class Player extends TileEntity {
         inventory = new Inventory(context);
     }
 
+    public Player(Context context, TileMap tileMap, Inventory inventory) {
+        super(context, tileMap);
+        image = context.getImage("playeroutline");
+        playerSkinImage = context.getImage("playerskin");
+        this.inventory = inventory;
+    }
+
     public void reset() {
         up = down = left = right = false;
     }

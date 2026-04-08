@@ -56,7 +56,7 @@ public class Entity {
         return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
-    protected boolean atDestination() {
+    public boolean atDestination() {
         return x == xdest && y == ydest;
     }
 

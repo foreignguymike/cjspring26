@@ -42,7 +42,7 @@ public class PlayScene extends Scene {
         cam.update();
 
         if (player.col == 65) {
-            screen.setScene(screen.endScene);
+            screen.setScene(new EndScene(screen));
         }
     }
 
