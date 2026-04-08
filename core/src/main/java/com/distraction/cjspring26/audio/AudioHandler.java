@@ -64,22 +64,26 @@ public class AudioHandler {
     }
 
     public void playSound(String key) {
-        playSound(key, 1, false);
+        playSound(key, 1, false, 1f);
     }
 
     public void playSound(String key, float volume) {
-        playSound(key, volume, false);
+        playSound(key, volume, false, 1f);
+    }
+
+    public void playSound(String key, float volume, float pitch) {
+        playSound(key, volume, false, pitch);
     }
 
     public void playSoundCut(String key, float volume) {
-        playSound(key, volume, true);
+        playSound(key, volume, true, 1f);
     }
 
-    public void playSound(String key, float volume, boolean cut) {
+    public void playSound(String key, float volume, boolean cut, float pitch) {
         for (Map.Entry<String, Sound> entry : sounds.entrySet()) {
             if (entry.getKey().equals(key)) {
                 if (cut) entry.getValue().stop();
-                entry.getValue().play(volume);
+                entry.getValue().play(volume, pitch, 1f);
             }
         }
     }

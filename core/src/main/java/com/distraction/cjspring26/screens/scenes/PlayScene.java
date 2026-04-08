@@ -2,7 +2,6 @@ package com.distraction.cjspring26.screens.scenes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.distraction.cjspring26.Constants;
@@ -25,10 +24,10 @@ public class PlayScene extends Scene {
 
     @Override
     public void input() {
-        player.up = Gdx.input.isKeyPressed(Input.Keys.UP);
-        player.down = Gdx.input.isKeyPressed(Input.Keys.DOWN);
-        player.left = Gdx.input.isKeyPressed(Input.Keys.LEFT);
-        player.right = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+        player.up = Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W);
+        player.down = Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S);
+        player.left = Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A);
+        player.right = Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D);
     }
 
     @Override

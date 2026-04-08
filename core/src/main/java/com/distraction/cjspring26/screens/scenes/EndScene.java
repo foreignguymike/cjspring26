@@ -47,67 +47,47 @@ public class EndScene extends Scene {
 
         stuckDialog1 = new Dialog(
             screen.context,
-            new Dialog.DialogEntry[]{
-                new Dialog.DialogEntry(
-                    new String[]{
-                        "You made it!",
-                        "So...",
-                        "Someone has\nto stand",
-                        "on this switch\nto exit."
-                    },
-                    stuck
-                )
-            }
+            new String[]{
+                "You made it!",
+                "So...",
+                "Someone has\nto stand",
+                "on this switch\nto exit."
+            },
+            stuck
         );
         stuckDialog2 = new Dialog(
             screen.context,
-            new Dialog.DialogEntry[]{
-                new Dialog.DialogEntry(
-                    new String[]{
-                        "See?",
-                        "If you step\non it...",
-                        "I can\nleave...",
-                        "and come\nback with help!",
-                    },
-                    stuck
-                )
-            }
+            new String[]{
+                "See?",
+                "If you step\non it...",
+                "I can\nleave...",
+                "and come\nback with help!",
+            },
+            stuck
         );
         playerDialog1 = new Dialog(
             screen.context,
-            new Dialog.DialogEntry[]{
-                new Dialog.DialogEntry(
-                    new String[]{
-                        "Ok...",
-                    },
-                    player
-                )
-            }
+            new String[]{
+                "Ok...",
+            },
+            player
         );
         stuckDialog3 = new Dialog(
             screen.context,
-            new Dialog.DialogEntry[]{
-                new Dialog.DialogEntry(
-                    new String[]{
-                        "Thanks...",
-                        "SUCKER!!"
-                    },
-                    stuck
-                )
-            }
+            new String[]{
+                "Thanks...",
+                "SUCKER!!"
+            },
+            stuck
         );
         stuckDialog3.lock = true;
         playerDialog2 = new Dialog(
             screen.context,
-            new Dialog.DialogEntry[]{
-                new Dialog.DialogEntry(
-                    new String[]{
-                        "HEY!!!",
-                        "..."
-                    },
-                    player
-                )
-            }
+            new String[]{
+                "HEY!!!",
+                "..."
+            },
+            player
         );
 
         dialog = stuckDialog1;
@@ -212,6 +192,6 @@ public class EndScene extends Scene {
 
     @Override
     public void render(SpriteBatch sb) {
-        dialog.render(sb);
+        if (!dialog.isDone()) dialog.render(sb);
     }
 }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
+import com.distraction.cjspring26.entity.Inventory;
 import com.distraction.cjspring26.util.Utils;
 import com.distraction.cjspring26.entity.Collectible;
 import com.distraction.cjspring26.entity.Player;
@@ -37,6 +38,8 @@ public class TileMap {
     private final List<Collectible> collectibles;
 
     private float releaseTime;
+
+    public final Inventory inventory;
 
     public TileMap(Context context, OrthographicCamera cam, OrthographicCamera uiCam) {
         this.context = context;
@@ -86,6 +89,8 @@ public class TileMap {
         for (GridPoint2 c : MapData.collectibles) {
             collectibles.add(new Collectible(context, this, map.length - c.x - 2, c.y, index++));
         }
+
+        inventory = new Inventory(context);
     }
 
     public int getPlayableWidth() {
@@ -106,7 +111,7 @@ public class TileMap {
                 cam.project(pos);
                 pos.y = Gdx.graphics.getHeight() - pos.y;
                 uiCam.unproject(pos);
-                player.collect(c, pos.x, pos.y);
+                inventory.collect(c.index, pos.x, pos.y);
                 collectibles.remove(i);
                 i--;
             }
@@ -178,6 +183,7 @@ public class TileMap {
                 toggleExits();
             }
         }
+        inventory.update(dt);
     }
 
     public void render(SpriteBatch sb) {

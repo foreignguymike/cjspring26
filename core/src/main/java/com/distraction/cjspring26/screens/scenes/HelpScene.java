@@ -19,17 +19,13 @@ public class HelpScene extends Scene {
 
         dialog = new Dialog(
             screen.context,
-            new Dialog.DialogEntry[]{
-                new Dialog.DialogEntry(
-                    new String[]{
-                        "!!",
-                        "Hey there!",
-                        "Can you help\nme please?",
-                        "I'm stuck!"
-                    },
-                    stuck
-                )
-            }
+            new String[]{
+                "!!",
+                "Hey there!",
+                "Can you help\nme please?",
+                "I'm stuck!"
+            },
+            stuck
         );
     }
 
@@ -50,7 +46,7 @@ public class HelpScene extends Scene {
     public void update(float dt) {
         dialog.update(dt);
         if (dialog.isDone()) {
-            player.inventory.start = true;
+            tileMap.inventory.start = true;
             camTarget.set(
                 MathUtils.clamp(player.x, Constants.WIDTH2, tileMap.getPlayableWidth() - Constants.WIDTH2),
                 player.y,
@@ -68,6 +64,6 @@ public class HelpScene extends Scene {
 
     @Override
     public void render(SpriteBatch sb) {
-        dialog.render(sb);
+        if (!dialog.isDone()) dialog.render(sb);
     }
 }

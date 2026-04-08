@@ -11,11 +11,11 @@ import com.distraction.cjspring26.tile.TileMap;
 public class Player extends TileEntity {
 
     private static final float SPEED = 500;
+    private static final float OFFSET_Y = 20;
 
     private final TextureRegion playerSkinImage;
 
     private boolean moving;
-    private Direction direction = Direction.RIGHT;
 
     private boolean jumping;
     private float jumpy;
@@ -24,30 +24,14 @@ public class Player extends TileEntity {
     public boolean up, down, left, right;
     public boolean mirror;
 
-    public Inventory inventory;
-
-    private final float offsety = 20;
-
     public Player(Context context, TileMap tileMap) {
         super(context, tileMap);
         image = context.getImage("playeroutline");
         playerSkinImage = context.getImage("playerskin");
-        inventory = new Inventory(context);
-    }
-
-    public Player(Context context, TileMap tileMap, Inventory inventory) {
-        super(context, tileMap);
-        image = context.getImage("playeroutline");
-        playerSkinImage = context.getImage("playerskin");
-        this.inventory = inventory;
     }
 
     public void reset() {
         up = down = left = right = false;
-    }
-
-    public void collect(Collectible c, float x, float y) {
-        inventory.collect(c.index, x, y);
     }
 
     @Override
@@ -56,8 +40,7 @@ public class Player extends TileEntity {
         if (!moving) {
             int dist = 0;
             if (up) {
-                direction = Direction.UP;
-                dist = tileMap.getTravelDistance(row, col, direction);
+                dist = tileMap.getTravelDistance(row, col, Direction.UP);
                 if (dist > 0) {
                     tileMap.playerLeft(row, col);
                     row += dist;
@@ -67,8 +50,7 @@ public class Player extends TileEntity {
                     dy = SPEED * (dist > 1 ? 1.2f : 1);
                 }
             } else if (down) {
-                direction = Direction.DOWN;
-                dist = tileMap.getTravelDistance(row, col, direction);
+                dist = tileMap.getTravelDistance(row, col, Direction.DOWN);
                 if (dist > 0) {
                     tileMap.playerLeft(row, col);
                     row -= dist;
@@ -79,8 +61,7 @@ public class Player extends TileEntity {
                 }
             } else if (left) {
                 mirror = true;
-                direction = Direction.LEFT;
-                dist = tileMap.getTravelDistance(row, col, direction);
+                dist = tileMap.getTravelDistance(row, col, Direction.LEFT);
                 if (dist > 0) {
                     tileMap.playerLeft(row, col);
                     col -= dist;
@@ -91,8 +72,7 @@ public class Player extends TileEntity {
                 }
             } else if (right) {
                 mirror = false;
-                direction = Direction.RIGHT;
-                dist = tileMap.getTravelDistance(row, col, direction);
+                dist = tileMap.getTravelDistance(row, col, Direction.RIGHT);
                 if (dist > 0) {
                     tileMap.playerLeft(row, col);
                     col += dist;
@@ -125,18 +105,16 @@ public class Player extends TileEntity {
         if (jumping) {
             jumpy = 100 * MathUtils.sin(3.14f * getRemainingDistanceM() / totalDistance);
         }
-
-        inventory.update(dt);
     }
 
     @Override
     public void render(SpriteBatch sb) {
         if (mirror) {
-            Utils.drawCenteredFlipped(sb, playerSkinImage, x, y + jumpy + offsety);
-            Utils.drawCenteredFlipped(sb, image, x, y + jumpy + offsety);
+            Utils.drawCenteredFlipped(sb, playerSkinImage, x, y + jumpy + OFFSET_Y);
+            Utils.drawCenteredFlipped(sb, image, x, y + jumpy + OFFSET_Y);
         } else {
-            Utils.drawCentered(sb, playerSkinImage, x, y + jumpy + offsety);
-            Utils.drawCentered(sb, image, x, y + jumpy + offsety);
+            Utils.drawCentered(sb, playerSkinImage, x, y + jumpy + OFFSET_Y);
+            Utils.drawCentered(sb, image, x, y + jumpy + OFFSET_Y);
         }
     }
 }

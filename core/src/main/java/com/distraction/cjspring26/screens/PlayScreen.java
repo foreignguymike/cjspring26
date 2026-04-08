@@ -5,11 +5,8 @@ import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Background;
 import com.distraction.cjspring26.entity.Player;
-import com.distraction.cjspring26.screens.scenes.EndScene;
-import com.distraction.cjspring26.screens.scenes.HelpScene;
 import com.distraction.cjspring26.screens.scenes.IntroScene;
 import com.distraction.cjspring26.screens.scenes.Scene;
-import com.distraction.cjspring26.screens.scenes.PlayScene;
 import com.distraction.cjspring26.tile.TileMap;
 
 public class PlayScreen extends Screen {
@@ -30,6 +27,7 @@ public class PlayScreen extends Screen {
         tileMap = new TileMap(context, cam, uiCam);
         player = new Player(context, tileMap);
         player.setTile(9, 0);
+//        player.setTile(7, 60); // test
         stuck = new Player(context, tileMap);
         stuck.setTile(9, 68);
         stuck.mirror = true;
@@ -47,7 +45,7 @@ public class PlayScreen extends Screen {
 
     public void playerSwap() {
         stuck = player;
-        player = new Player(context, tileMap, player.inventory);
+        player = new Player(context, tileMap);
         player.setTile(9, 0);
     }
 
@@ -98,7 +96,7 @@ public class PlayScreen extends Screen {
 
         sb.setProjectionMatrix(uiCam.combined);
         sb.setColor(Color.WHITE);
-        player.inventory.render(sb);
+        tileMap.inventory.render(sb);
 
         in.render(sb);
         out.render(sb);

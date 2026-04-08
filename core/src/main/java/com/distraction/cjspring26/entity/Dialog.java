@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
@@ -11,20 +13,15 @@ import com.distraction.cjspring26.util.Utils;
 
 public class Dialog extends Entity {
 
-    public static class DialogEntry {
-        public String[] texts;
-        public Entity entity;
-        public DialogEntry(String[] texts, Entity entity) {
-            this.texts = texts;
-            this.entity = entity;
-        }
-    }
-
+    private static final Interpolation SWING_OUT_5 = new Interpolation.SwingOut(3f);
+    private static final Interpolation CLOSE = Interpolation.fastSlow;
+    private static final float POP_TIME = 0.2f;
     private static final float CHAR_TIME = 1 / 20f;
+    private static final float BLIP_TIME = 1 / 12f;
 
-    private final DialogEntry[] entries;
-    private int entryIndex = -1;
-    private int textIndex = 0;
+    private final Entity entity;
+    private final String[] texts;
+    private int textIndex = -1;
     private int charIndex = 0;
     private float time;
     private String text;
@@ -34,9 +31,13 @@ public class Dialog extends Entity {
 
     public boolean lock;
 
-    public Dialog(Context context, DialogEntry[] entries) {
+    private float popTime;
+    private float blipTime;
+
+    public Dialog(Context context, String[] texts, Entity entity) {
         super(context);
-        this.entries = entries;
+        this.texts = texts;
+        this.entity = entity;
         setImage(context.getImage("dialogbox"));
 
         font = context.getDialogFont();
@@ -44,56 +45,32 @@ public class Dialog extends Entity {
     }
 
     public void next() {
-        if (entryIndex ==  entries.length) return;
-        if (lock && entryIndex == entries.length - 1 && textIndex == entries[entryIndex].texts.length - 1) return;
-        if (entryIndex < 0) {
-            entryIndex = 0;
-            textIndex = -1;
-            charIndex = 0;
-        }
-
+        if (lock && textIndex == texts.length - 1) return;
         if (!isCurrentTextDone()) return;
 
         textIndex++;
-        if (textIndex >= entries[entryIndex].texts.length) {
-            entryIndex++;
-        } else {
+        if (textIndex < texts.length) {
             text = "";
             time = CHAR_TIME;
+            blipTime = 0;
             charIndex = 0;
-        }
-    }
-
-    // optional press to skip to show all text
-    private void skip() {
-        if (charIndex > 0 && charIndex < entries[entryIndex].texts[textIndex].length()) {
-            text = entries[entryIndex].texts[textIndex];
-            updateText();
-            time = 0;
-            charIndex = entries[entryIndex].texts[textIndex].length();
         }
     }
 
     private boolean isCurrentTextDone() {
-        if (entryIndex >= 0 && entryIndex < entries.length) {
-            if (textIndex >= 0 && textIndex < entries[entryIndex].texts.length) {
-                return charIndex == entries[entryIndex].texts[textIndex].length();
-            }
-        }
+        if (textIndex < 0) return true;
+        if (textIndex < texts.length) return charIndex == texts[textIndex].length();
         return true;
     }
 
     public boolean isTextDone() {
-        int lastEntryIndex = entries.length - 1;
-        int lastTextIndex = entries[lastEntryIndex].texts.length - 1;
-        int lastCharIndex = entries[lastEntryIndex].texts[lastTextIndex].length() - 1;
-        return entryIndex == lastEntryIndex
-            && textIndex == lastTextIndex
-            && charIndex == lastCharIndex + 1;
+        int lastTextIndex = texts.length - 1;
+        int lastCharIndex = texts[lastTextIndex].length() - 1;
+        return textIndex == lastTextIndex && charIndex == lastCharIndex + 1;
     }
 
     public boolean isDone() {
-        return entryIndex >= entries.length;
+        return textIndex >= texts.length && popTime <= 0;
     }
 
     private void updateText() {
@@ -109,18 +86,33 @@ public class Dialog extends Entity {
 
     @Override
     public void update(float dt) {
-        if (entryIndex >= 0 && entryIndex < entries.length) {
-            if (textIndex >= 0 && textIndex < entries[entryIndex].texts.length) {
-                if (time > 0) {
-                    time -= dt;
-                    if (time <= 0) {
-                        text += entries[entryIndex].texts[textIndex].charAt(charIndex);
-                        updateText();
-                        charIndex++;
-                        if (charIndex < entries[entryIndex].texts[textIndex].length()) {
-                            time = CHAR_TIME;
-                        }
+        if (textIndex >= 0 && textIndex < texts.length) {
+            if (popTime < POP_TIME) {
+                popTime += dt;
+                if (popTime > POP_TIME) {
+                    popTime = POP_TIME;
+                }
+            } else if (time > 0) {
+                time -= dt;
+                if (time <= 0) {
+                    text += texts[textIndex].charAt(charIndex);
+                    updateText();
+                    charIndex++;
+                    if (charIndex < texts[textIndex].length()) {
+                        time = CHAR_TIME;
                     }
+                }
+                blipTime -= dt;
+                if (blipTime < 0) {
+                    blipTime = BLIP_TIME;
+                    context.audio.playSound("dialog", 0.3f, MathUtils.random(0.92f, 1.08f));
+                }
+            }
+        } else if (textIndex == texts.length) {
+            if (popTime > 0) {
+                popTime -= dt;
+                if (popTime < 0) {
+                    popTime = 0;
                 }
             }
         }
@@ -129,9 +121,8 @@ public class Dialog extends Entity {
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(Color.WHITE);
-        if (entryIndex >= 0 && entryIndex < entries.length) {
-            Utils.drawCentered(sb, image, entries[entryIndex].entity.x, entries[entryIndex].entity.y + 220);
-            font.draw(sb, layout, entries[entryIndex].entity.x - w / 2, entries[entryIndex].entity.y + layout.height / 2f - font.getDescent() + 206);
-        }
+        if (textIndex == texts.length) Utils.drawCentered(sb, image, entity.x, entity.y + 220, CLOSE.apply(popTime / POP_TIME));
+        else if (textIndex >= 0) Utils.drawCentered(sb, image, entity.x, entity.y + 220, SWING_OUT_5.apply(popTime / POP_TIME));
+        if (textIndex >= 0 && textIndex < texts.length) font.draw(sb, layout, entity.x - w / 2, entity.y + layout.height / 2f - font.getDescent() + 206);
     }
 }
