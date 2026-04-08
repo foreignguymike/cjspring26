@@ -11,7 +11,7 @@ bounds:972,998,1,1
 platformoff
 bounds:4,146,128,128
 platformtoggle
-bounds:348,385,58,66
+bounds:429,385,58,66
 playeroutline
 bounds:140,305,103,146
 playerskin
@@ -20,3 +20,5 @@ strawberry
 bounds:251,358,89,93
 strawberryoff
 bounds:140,203,91,94
+strawberrytoggle
+bounds:348,369,73,82

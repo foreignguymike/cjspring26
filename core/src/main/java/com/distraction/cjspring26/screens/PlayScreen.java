@@ -5,6 +5,8 @@ import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Background;
 import com.distraction.cjspring26.entity.Player;
+import com.distraction.cjspring26.screens.scenes.EndScene;
+import com.distraction.cjspring26.screens.scenes.HelpScene;
 import com.distraction.cjspring26.screens.scenes.IntroScene;
 import com.distraction.cjspring26.screens.scenes.Scene;
 import com.distraction.cjspring26.screens.scenes.PanScene;
@@ -14,8 +16,10 @@ import com.distraction.cjspring26.tile.TileMap;
 public class PlayScreen extends Screen {
 
     public final Scene introScene;
+    public final Scene helpScene;
     public final Scene panScene;
     public final Scene playScene;
+    public final Scene endScene;
 
     private Scene scene = null;
 
@@ -32,9 +36,10 @@ public class PlayScreen extends Screen {
 
         tileMap = new TileMap(context, cam, uiCam);
         player = new Player(context, tileMap);
-        player.setTile(9, 0);
+        player.setTile(7, 59);
         stuck = new Player(context, tileMap);
-        stuck.setTile(9, 66);
+        stuck.setTile(9, 68);
+        stuck.mirror = true;
 
         in = new Transition(context, Transition.Type.CHECKERED_IN, 0.5f, () -> ignoreInput = false);
         ignoreInput = true;
@@ -42,8 +47,10 @@ public class PlayScreen extends Screen {
         out = new Transition(context, Transition.Type.CHECKERED_OUT, 0.5f);
 
         introScene = new IntroScene(this);
+        helpScene = new HelpScene(this);
         panScene = new PanScene(this);
         playScene = new PlayScene(this);
+        endScene = new EndScene(this);
 
         setScene(introScene);
 
@@ -91,6 +98,8 @@ public class PlayScreen extends Screen {
         player.render(sb);
         stuck.render(sb);
         tileMap.renderCollectibles(sb);
+
+        scene.render(sb);
 
         textureBg.render(sb);
 

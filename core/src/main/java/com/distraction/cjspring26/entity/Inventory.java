@@ -2,22 +2,30 @@ package com.distraction.cjspring26.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Context;
-import com.distraction.cjspring26.Utils;
+import com.distraction.cjspring26.util.Pulse;
+import com.distraction.cjspring26.util.Utils;
 import com.distraction.cjspring26.tile.MapData;
 
 public class Inventory extends Entity {
 
+    private static final Interpolation pop = new Interpolation.SwingOut(5f);
+    private static final Interpolation pulse = new Pulse(2f);
     private static final float SPEED = 2000f;
     private static final float INC_INTERVAL = 0.2f;
     private static final int MAX = MapData.collectibles.size();
 
+    public boolean start;
+
     private final TextureRegion offImage;
     private final boolean[] inv;
     private final float[] pos;
+    private float time;
 
     private float incTimer;
-    private int collectingIndex;
+    private int collectingIndex = -1;
 
     public Inventory(Context context) {
         super(context);
@@ -43,6 +51,7 @@ public class Inventory extends Entity {
 
     @Override
     public void update(float dt) {
+        if (start) time += dt;
         if (collectingIndex != -1) {
             boolean reachedDestination = atDestination();
             move(dt);
@@ -66,14 +75,23 @@ public class Inventory extends Entity {
     public void render(SpriteBatch sb) {
         for (int i = 0; i < MAX; i++) {
             if (inv[i]) {
-                float scale = collectingIndex == i ? 1 + incTimer * 3f : 1f;
-                Utils.drawCentered(sb, image, pos[i], 70, scale);
+                Utils.drawCentered(sb, image, pos[i], 70);
             } else {
-                Utils.drawCentered(sb, offImage, pos[i], 70);
+                Utils.drawCentered(
+                    sb,
+                    offImage,
+                    pos[i],
+                    70,
+                    pop.apply(MathUtils.clamp((time - i * 0.4f) / 0.4f, 0, 1))
+                );
             }
         }
-        if (collectingIndex != -1 && !atDestination()) {
-            Utils.drawCentered(sb, image, x, y);
+        if (collectingIndex != -1) {
+            if (atDestination()) {
+                Utils.drawCentered(sb, image, pos[collectingIndex], 70, 1 + pulse.apply(incTimer / INC_INTERVAL));
+            } else {
+                Utils.drawCentered(sb, image, x, y);
+            }
         }
     }
 }

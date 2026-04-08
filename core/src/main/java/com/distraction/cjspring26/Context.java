@@ -20,6 +20,7 @@ public class Context {
     public SpriteBatch sb;
 
     private final BitmapFont font;
+    private final BitmapFont dialogFont;
 
     public Context() {
         assets = new AssetManager();
@@ -28,6 +29,12 @@ public class Context {
         assets.finishLoading();
 
         font = assets.get(FONT64, BitmapFont.class);
+        dialogFont = new BitmapFont(
+            new BitmapFont.BitmapFontData(font.getData().fontFile, false),
+            font.getRegion(),
+            font.usesIntegerPositions()
+        );
+        dialogFont.setColor(Constants.BLACK);
 
         sb = new SpriteBatch();
 
@@ -48,6 +55,10 @@ public class Context {
 
     public BitmapFont getUiFont() {
         return font;
+    }
+
+    public BitmapFont getDialogFont() {
+        return dialogFont;
     }
 
     public void dispose() {

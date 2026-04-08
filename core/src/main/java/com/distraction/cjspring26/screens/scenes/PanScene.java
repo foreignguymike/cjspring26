@@ -14,16 +14,22 @@ public class PanScene extends Scene {
     }
 
     @Override
+    public void enter() {
+        player.inventory.start = true;
+    }
+
+    @Override
     public void update(float dt) {
         camTarget.set(
-            MathUtils.clamp(player.x, Constants.WIDTH2, tileMap.getTotalWidth() - Constants.WIDTH2),
+            MathUtils.clamp(player.x, Constants.WIDTH2, tileMap.getPlayableWidth() - Constants.WIDTH2),
             player.y,
             0
         );
         cam.position.lerp(camTarget, 2f * dt);
         cam.update();
 
-        if (Math.abs(cam.position.x - Constants.WIDTH2) + Math.abs(cam.position.y - player.y) < 5) {
+        float cx = MathUtils.clamp(player.x, Constants.WIDTH2, tileMap.getPlayableWidth() - Constants.WIDTH2);
+        if (Math.abs(cam.position.x - cx) + Math.abs(cam.position.y - player.y) < 10) {
             screen.setScene(screen.playScene);
         }
     }

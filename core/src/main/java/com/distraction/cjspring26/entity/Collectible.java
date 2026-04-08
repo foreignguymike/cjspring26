@@ -3,7 +3,7 @@ package com.distraction.cjspring26.entity;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Context;
-import com.distraction.cjspring26.Utils;
+import com.distraction.cjspring26.util.Utils;
 import com.distraction.cjspring26.tile.TileMap;
 
 public class Collectible extends TileEntity {

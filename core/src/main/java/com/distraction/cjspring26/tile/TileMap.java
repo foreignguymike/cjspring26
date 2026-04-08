@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
-import com.distraction.cjspring26.Utils;
+import com.distraction.cjspring26.util.Utils;
 import com.distraction.cjspring26.entity.Collectible;
 import com.distraction.cjspring26.entity.Player;
 
@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TileMap {
+
+    private static final float RELEASE_INTERVAL = 0.15f;
 
     private final Context context;
     private final OrthographicCamera cam;
@@ -31,13 +33,17 @@ public class TileMap {
 
     // cache
     private final List<GridPoint2> platforms;
-    public final List<Collectible> collectibles;
+    private final List<GridPoint2> exits;
+    private final List<Collectible> collectibles;
+
+    private float releaseTime;
 
     public TileMap(Context context, OrthographicCamera cam, OrthographicCamera uiCam) {
         this.context = context;
         this.cam = cam;
         this.uiCam = uiCam;
         platforms = new ArrayList<>();
+        exits = new ArrayList<>();
 
         int[][] mapData = MapData.mapData;
         map = new Tile[mapData.length][mapData[0].length];
@@ -57,6 +63,10 @@ public class TileMap {
                     tile.platform = true;
                     tile.on = true;
                     platforms.add(new GridPoint2(map.length - row - 2, col));
+                } else if (type == 5) {
+                    tile.grass = true;
+                    tile.on = false;
+                    exits.add(new GridPoint2(map.length - row - 2, col));
                 }
                 map[row][col] = tile;
             }
@@ -67,6 +77,9 @@ public class TileMap {
         for (GridPoint2 toggle : MapData.toggles) {
             map[map.length - toggle.x - 2][toggle.y].platformToggle = true;
         }
+        for (GridPoint2 toggle : MapData.strawberryToggles) {
+            map[map.length - toggle.x - 2][toggle.y].strawberryToggle = true;
+        }
 
         collectibles = new ArrayList<>();
         int index = 0;
@@ -75,8 +88,14 @@ public class TileMap {
         }
     }
 
-    public int getTotalWidth() {
-        return map[0].length * tileSize;
+    public int getPlayableWidth() {
+        return (map[0].length - 2) * tileSize;
+    }
+
+    public void playerLeft(int row, int col) {
+        if (map[row][col].strawberryToggle) {
+            releaseTime = RELEASE_INTERVAL;
+        }
     }
 
     public void playerLanded(Player player, int row, int col) {
@@ -95,12 +114,22 @@ public class TileMap {
         if (map[row][col].platformToggle) {
             toggle();
         }
+        if (map[row][col].strawberryToggle) {
+            toggleExits();
+        }
     }
 
     public void toggle() {
         context.audio.playSound("toggle", 0.3f);
         for (GridPoint2 s : platforms) {
             map[s.x + 1][s.y].toggle();
+        }
+    }
+
+    public void toggleExits() {
+        context.audio.playSound("toggle", 0.3f);
+        for (GridPoint2 e : exits) {
+            map[e.x + 1][e.y].toggle();
         }
     }
 
@@ -142,6 +171,13 @@ public class TileMap {
             }
         }
         for (Collectible collectible : collectibles) collectible.update(dt);
+        if (releaseTime > 0) {
+            releaseTime -= dt;
+            if (releaseTime < 0) {
+                releaseTime = 0;
+                toggleExits();
+            }
+        }
     }
 
     public void render(SpriteBatch sb) {

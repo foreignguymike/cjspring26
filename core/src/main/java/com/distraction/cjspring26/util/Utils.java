@@ -1,4 +1,4 @@
-package com.distraction.cjspring26;
+package com.distraction.cjspring26.util;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

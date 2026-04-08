@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
-import com.distraction.cjspring26.Utils;
+import com.distraction.cjspring26.util.Utils;
 import com.distraction.cjspring26.tile.TileMap;
 
 public class Player extends TileEntity {
@@ -22,15 +22,21 @@ public class Player extends TileEntity {
     private float totalDistance;
 
     public boolean up, down, left, right;
-    private boolean mirror;
+    public boolean mirror;
 
     public Inventory inventory;
+
+    private final float offsety = 20;
 
     public Player(Context context, TileMap tileMap) {
         super(context, tileMap);
         image = context.getImage("playeroutline");
         playerSkinImage = context.getImage("playerskin");
         inventory = new Inventory(context);
+    }
+
+    public void reset() {
+        up = down = left = right = false;
     }
 
     public void collect(Collectible c, float x, float y) {
@@ -46,6 +52,7 @@ public class Player extends TileEntity {
                 direction = Direction.UP;
                 dist = tileMap.getTravelDistance(row, col, direction);
                 if (dist > 0) {
+                    tileMap.playerLeft(row, col);
                     row += dist;
                     ydest = tileMap.coord(row);
                     totalDistance = getRemainingDistanceM();
@@ -56,6 +63,7 @@ public class Player extends TileEntity {
                 direction = Direction.DOWN;
                 dist = tileMap.getTravelDistance(row, col, direction);
                 if (dist > 0) {
+                    tileMap.playerLeft(row, col);
                     row -= dist;
                     ydest = tileMap.coord(row);
                     totalDistance = getRemainingDistanceM();
@@ -67,6 +75,7 @@ public class Player extends TileEntity {
                 direction = Direction.LEFT;
                 dist = tileMap.getTravelDistance(row, col, direction);
                 if (dist > 0) {
+                    tileMap.playerLeft(row, col);
                     col -= dist;
                     xdest = tileMap.coord(col);
                     totalDistance = getRemainingDistanceM();
@@ -78,6 +87,7 @@ public class Player extends TileEntity {
                 direction = Direction.RIGHT;
                 dist = tileMap.getTravelDistance(row, col, direction);
                 if (dist > 0) {
+                    tileMap.playerLeft(row, col);
                     col += dist;
                     xdest = tileMap.coord(col);
                     totalDistance = getRemainingDistanceM();
@@ -115,11 +125,11 @@ public class Player extends TileEntity {
     @Override
     public void render(SpriteBatch sb) {
         if (mirror) {
-            Utils.drawCenteredFlipped(sb, playerSkinImage, x, y + jumpy);
-            Utils.drawCenteredFlipped(sb, image, x, y + jumpy);
+            Utils.drawCenteredFlipped(sb, playerSkinImage, x, y + jumpy + offsety);
+            Utils.drawCenteredFlipped(sb, image, x, y + jumpy + offsety);
         } else {
-            Utils.drawCentered(sb, playerSkinImage, x, y + jumpy);
-            Utils.drawCentered(sb, image, x, y + jumpy);
+            Utils.drawCentered(sb, playerSkinImage, x, y + jumpy + offsety);
+            Utils.drawCentered(sb, image, x, y + jumpy + offsety);
         }
     }
 }

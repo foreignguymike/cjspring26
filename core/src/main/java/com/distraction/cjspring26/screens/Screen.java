@@ -1,6 +1,5 @@
 package com.distraction.cjspring26.screens;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,7 +12,7 @@ import com.distraction.cjspring26.MyViewport;
 
 public abstract class Screen {
 
-    protected Context context;
+    public Context context;
 
     protected final TextureRegion pixel;
 
