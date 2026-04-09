@@ -53,14 +53,14 @@ public class MapData {
         toggles.add(new GridPoint2(8, 62));
         toggles.add(new GridPoint2(3, 54));
 
-        collectibles.add(new GridPoint2(2, 1));
-        collectibles.add(new GridPoint2(4, 21));
-        collectibles.add(new GridPoint2(1, 35));
-        collectibles.add(new GridPoint2(18, 43));
-        collectibles.add(new GridPoint2(19, 18));
-        collectibles.add(new GridPoint2(17, 28));
-        collectibles.add(new GridPoint2(11, 47));
-        collectibles.add(new GridPoint2(7, 49));
+//        collectibles.add(new GridPoint2(2, 1));
+//        collectibles.add(new GridPoint2(4, 21));
+//        collectibles.add(new GridPoint2(1, 35));
+//        collectibles.add(new GridPoint2(18, 43));
+//        collectibles.add(new GridPoint2(19, 18));
+//        collectibles.add(new GridPoint2(17, 28));
+//        collectibles.add(new GridPoint2(11, 47));
+//        collectibles.add(new GridPoint2(7, 49));
 
         strawberryToggles.add(new GridPoint2(10, 67));
     }

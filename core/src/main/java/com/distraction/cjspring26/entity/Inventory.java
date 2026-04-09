@@ -36,6 +36,13 @@ public class Inventory extends Entity {
         for (int i = 0; i < MAX; i++) pos[i] = 70 + 100 * i;
     }
 
+    public boolean isFinished() {
+        for (int i = 0; i < inv.length; i++) {
+            if (!inv[i]) return false;
+        }
+        return true;
+    }
+
     public void collect(int index, float x, float y) {
         collectingIndex = index;
         xdest = pos[index];

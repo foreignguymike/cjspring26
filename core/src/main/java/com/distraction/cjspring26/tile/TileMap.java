@@ -12,7 +12,6 @@ import com.distraction.cjspring26.Direction;
 import com.distraction.cjspring26.entity.Inventory;
 import com.distraction.cjspring26.util.Utils;
 import com.distraction.cjspring26.entity.Collectible;
-import com.distraction.cjspring26.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +102,7 @@ public class TileMap {
         }
     }
 
-    public void playerLanded(Player player, int row, int col) {
+    public void playerLanded(int row, int col) {
         for (int i = 0; i < collectibles.size(); i++) {
             Collectible c = collectibles.get(i);
             if (c.row == row && c.col == col) {

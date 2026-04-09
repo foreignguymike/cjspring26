@@ -1,6 +1,5 @@
 package com.distraction.cjspring26.tile;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.distraction.cjspring26.Context;
@@ -16,7 +15,6 @@ public class Tile extends TileEntity {
     public boolean strawberryToggle;
 
     private final TextureRegion grassImage;
-    private final TextureRegion platformImage;
     private final TextureRegion platformOffImage;
     private final TextureRegion platformToggleImage;
     private final TextureRegion strawberryToggleImage;
@@ -25,7 +23,6 @@ public class Tile extends TileEntity {
         super(context, tileMap);
         setTile(row, col);
         grassImage = context.getImage("grass");
-        platformImage = context.getImage("grass");
         platformOffImage = context.getImage("platformoff");
         platformToggleImage = context.getImage("platformtoggle");
         strawberryToggleImage = context.getImage("strawberrytoggle");
@@ -37,10 +34,10 @@ public class Tile extends TileEntity {
 
     public void render(SpriteBatch sb) {
         if (grass) {
-            Utils.drawCentered(sb, platformImage, x, y - 42, toggleScale);
+            Utils.drawCentered(sb, grassImage, x, y - 42, toggleScale);
         }
         if (platform) {
-            Utils.drawCentered(sb, platformImage, x, y - 42, toggleScale);
+            Utils.drawCentered(sb, grassImage, x, y - 42, toggleScale);
             if (!on && toggleTime <= 0) Utils.drawCentered(sb, platformOffImage, x, y - 23);
         }
         if (platformToggle) Utils.drawCentered(sb, platformToggleImage, x, y + 110);

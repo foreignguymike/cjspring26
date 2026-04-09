@@ -94,7 +94,7 @@ public class Player extends TileEntity {
 
         // just reached destination
         if (!reachedDestination && atDestination()) {
-            tileMap.playerLanded(this, row, col);
+            tileMap.playerLanded(row, col);
         }
 
         // prevent moving while already moving or changing direction

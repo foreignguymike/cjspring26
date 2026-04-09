@@ -40,7 +40,8 @@ public class PlayScreen extends Screen {
         setScene(new IntroScene(this));
 
         context.audio.stopMusic();
-        context.audio.playMusic("main", 0.3f, true);
+        context.audio.playMusic("main", 0.15f, true);
+        context.audio.playMusic("beach", 0.15f, true);
     }
 
     public void playerSwap() {
@@ -92,7 +93,7 @@ public class PlayScreen extends Screen {
 
         scene.render(sb);
 
-        textureBg.render(sb);
+//        textureBg.render(sb);
 
         sb.setProjectionMatrix(uiCam.combined);
         sb.setColor(Color.WHITE);

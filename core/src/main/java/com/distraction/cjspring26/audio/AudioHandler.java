@@ -14,13 +14,17 @@ public class AudioHandler {
     private final Map<String, Music> music;
     private final Map<String, Sound> sounds;
 
-    private MusicConfig currentlyPlaying;
+    private final Map<String, MusicConfig> playing;
 
     public AudioHandler() {
         music = new HashMap<>();
-        addMusic("main", "music/Castles In the Sky.mp3");
+//        addMusic("main", "music/Castles In the Sky.mp3");
+        addMusic("main", "music/strollingthrough.ogg");
+        addMusic("beach", "music/beach.mp3");
         sounds = new HashMap<>();
         importSounds();
+
+        playing = new HashMap<>();
     }
 
     private void importSounds() {
@@ -37,29 +41,30 @@ public class AudioHandler {
         music.put(key, Gdx.audio.newMusic(Gdx.files.internal(fileName)));
     }
 
-    public boolean isMusicPlaying() {
-        if (currentlyPlaying == null) return false;
-        if (currentlyPlaying.getMusic() == null) return false;
-        return currentlyPlaying.getMusic().isPlaying();
-    }
-
     public void playMusic(String key, float volume, boolean looping) {
         Music newMusic = music.get(key);
         if (newMusic == null) {
             System.out.println("unknown music: " + key);
             return;
         }
-        if (currentlyPlaying != null && newMusic != currentlyPlaying.getMusic()) {
-//            stopMusic();
+        if (playing.containsKey(key)) {
+            playing.get(key).play();
+        } else {
+            MusicConfig musicConfig = new MusicConfig(music.get(key), volume, looping);
+            musicConfig.play();
+            playing.put(key, musicConfig);
         }
-        currentlyPlaying = new MusicConfig(music.get(key), volume, looping);
-        currentlyPlaying.play();
     }
 
     public void stopMusic() {
-        if (currentlyPlaying != null) {
-            currentlyPlaying.stop();
-            currentlyPlaying = null;
+        for (Map.Entry<String, MusicConfig> entry : playing.entrySet()) {
+            entry.getValue().stop();
+        }
+    }
+
+    public void stopMusic(String key) {
+        if (playing.containsKey(key)) {
+            playing.get(key).stop();
         }
     }
 
