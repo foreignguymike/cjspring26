@@ -28,6 +28,7 @@ public class PlayScreen extends Screen {
         player = new Player(context, tileMap);
         player.setTile(9, 0);
 //        player.setTile(7, 60); // test
+        player.debug = true;
         stuck = new Player(context, tileMap);
         stuck.setTile(9, 68);
         stuck.mirror = true;
@@ -93,7 +94,7 @@ public class PlayScreen extends Screen {
 
         scene.render(sb);
 
-//        textureBg.render(sb);
+        textureBg.render(sb);
 
         sb.setProjectionMatrix(uiCam.combined);
         sb.setColor(Color.WHITE);

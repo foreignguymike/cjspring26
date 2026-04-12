@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
+import com.distraction.cjspring26.util.Animation;
 import com.distraction.cjspring26.util.Utils;
 import com.distraction.cjspring26.tile.TileMap;
 
@@ -13,7 +14,12 @@ public class Player extends TileEntity {
     private static final float SPEED = 500;
     private static final float OFFSET_Y = 20;
 
-    private final TextureRegion playerSkinImage;
+    public boolean debug;
+
+    private Animation<TextureRegion[]> animation;
+    private final TextureRegion[][] idle;
+    private final TextureRegion[][] walk;
+    private final TextureRegion[][] jump;
 
     private boolean moving;
 
@@ -26,8 +32,26 @@ public class Player extends TileEntity {
 
     public Player(Context context, TileMap tileMap) {
         super(context, tileMap);
-        image = context.getImage("playeroutline");
-        playerSkinImage = context.getImage("playerskin");
+
+        w = 100;
+        h = 150;
+        TextureRegion[] outlineSprites = context.getImage("playeroutline").split(100, 150)[0];
+        TextureRegion[] fillSprites = context.getImage("playerfill").split(100, 150)[0];
+
+
+        idle = new TextureRegion[][] {
+            { outlineSprites[0], fillSprites[0] }
+        };
+        walk = new TextureRegion[][] {
+            { outlineSprites[1], fillSprites[1] },
+            { outlineSprites[2], fillSprites[2] },
+            { outlineSprites[3], fillSprites[3] },
+            { outlineSprites[4], fillSprites[4] }
+        };
+        jump = new TextureRegion[][] {
+            { outlineSprites[5], fillSprites[5] }
+        };
+        animation = new Animation<>(idle, 1 / 8f);
     }
 
     public void reset() {
@@ -102,19 +126,26 @@ public class Player extends TileEntity {
 
         // calculate jump
         if (!moving) jumping = false;
+        jumpy = (jumping ? 100 : 10) * MathUtils.sin(3.14f * getRemainingDistanceM() / totalDistance);
+
         if (jumping) {
-            jumpy = 100 * MathUtils.sin(3.14f * getRemainingDistanceM() / totalDistance);
+            animation.set(jump);
+        } else if (!reachedDestination) {
+            animation.set(walk);
+        } else {
+            animation.set(idle);
         }
+        animation.update(dt);
     }
 
     @Override
     public void render(SpriteBatch sb) {
         if (mirror) {
-            Utils.drawCenteredFlipped(sb, playerSkinImage, x, y + jumpy + OFFSET_Y);
-            Utils.drawCenteredFlipped(sb, image, x, y + jumpy + OFFSET_Y);
+            Utils.drawCenteredFlipped(sb, animation.get()[1], x, y + jumpy + OFFSET_Y);
+            Utils.drawCenteredFlipped(sb, animation.get()[0], x, y + jumpy + OFFSET_Y);
         } else {
-            Utils.drawCentered(sb, playerSkinImage, x, y + jumpy + OFFSET_Y);
-            Utils.drawCentered(sb, image, x, y + jumpy + OFFSET_Y);
+            Utils.drawCentered(sb, animation.get()[1], x, y + jumpy + OFFSET_Y);
+            Utils.drawCentered(sb, animation.get()[0], x, y + jumpy + OFFSET_Y);
         }
     }
 }

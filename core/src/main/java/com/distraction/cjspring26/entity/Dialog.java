@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.util.Utils;
+import com.sun.org.apache.bcel.internal.generic.POP;
 
 public class Dialog extends Entity {
 
@@ -46,6 +47,7 @@ public class Dialog extends Entity {
 
     public void next() {
         if (lock && textIndex == texts.length - 1) return;
+        if (textIndex == texts.length) return;
         if (!isCurrentTextDone()) return;
 
         textIndex++;
