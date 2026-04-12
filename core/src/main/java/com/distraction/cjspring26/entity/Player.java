@@ -1,8 +1,10 @@
 package com.distraction.cjspring26.entity;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
 import com.distraction.cjspring26.util.Animation;
@@ -16,10 +18,20 @@ public class Player extends TileEntity {
 
     public boolean debug;
 
-    private Animation<TextureRegion[]> animation;
+    private final Animation<TextureRegion[]> animation;
     private final TextureRegion[][] idle;
     private final TextureRegion[][] walk;
     private final TextureRegion[][] jump;
+
+    public Color skinColor = Constants.SKIN1;
+
+    private PlayerData.Face face = PlayerData.Face.DEFAULT;
+    private TextureRegion[] faceImages;
+    private Color eyeColor = Constants.WISTERIC_17[4];
+
+    private PlayerData.Hair hair = PlayerData.Hair.ANIME;
+    private TextureRegion[] hairImages;
+    private Color hairColor = Constants.WISTERIC_17[7];
 
     private boolean moving;
 
@@ -52,6 +64,27 @@ public class Player extends TileEntity {
             { outlineSprites[5], fillSprites[5] }
         };
         animation = new Animation<>(idle, 1 / 8f);
+
+        setFace(PlayerData.Face.DEFAULT, Constants.WISTERIC_17[16]);
+        setHair(PlayerData.Hair.ANIME, Constants.WISTERIC_17[0]);
+    }
+
+    public void setFace(PlayerData.Face face, Color color) {
+        this.face = face;
+        faceImages = new TextureRegion[] {
+            context.getImage(face.nameOutline),
+            context.getImage(face.nameFill)
+        };
+        this.eyeColor = color;
+    }
+
+    public void setHair(PlayerData.Hair hair, Color color) {
+        this.hair = hair;
+        hairImages = new TextureRegion[] {
+            context.getImage(hair.nameOutline),
+            context.getImage(hair.nameFill)
+        };
+        this.hairColor = color;
     }
 
     public void reset() {
@@ -126,7 +159,7 @@ public class Player extends TileEntity {
 
         // calculate jump
         if (!moving) jumping = false;
-        jumpy = (jumping ? 100 : 10) * MathUtils.sin(3.14f * getRemainingDistanceM() / totalDistance);
+        jumpy = (jumping ? 100 : 5) * MathUtils.sin(3.14f * getRemainingDistanceM() / totalDistance);
 
         if (jumping) {
             animation.set(jump);
@@ -140,12 +173,23 @@ public class Player extends TileEntity {
 
     @Override
     public void render(SpriteBatch sb) {
-        if (mirror) {
-            Utils.drawCenteredFlipped(sb, animation.get()[1], x, y + jumpy + OFFSET_Y);
-            Utils.drawCenteredFlipped(sb, animation.get()[0], x, y + jumpy + OFFSET_Y);
-        } else {
-            Utils.drawCentered(sb, animation.get()[1], x, y + jumpy + OFFSET_Y);
-            Utils.drawCentered(sb, animation.get()[0], x, y + jumpy + OFFSET_Y);
-        }
+        float y = this.y + jumpy + OFFSET_Y;
+        // body
+        sb.setColor(skinColor);
+        Utils.drawCentered(sb, animation.get()[1], x, y, mirror);
+        sb.setColor(Color.WHITE);
+        Utils.drawCentered(sb, animation.get()[0], x, y, mirror);
+
+        // face
+        sb.setColor(eyeColor);
+        Utils.drawCentered(sb, faceImages[1], x + face.x * (mirror ? -1 : 1), y + face.y, mirror);
+        sb.setColor(Color.WHITE);
+        Utils.drawCentered(sb, faceImages[0], x + face.x * (mirror ? -1 : 1), y + face.y, mirror);
+
+        // hair
+        sb.setColor(hairColor);
+        Utils.drawCentered(sb, hairImages[1], x + hair.x * (mirror ? -1 : 1), y + hair.y, mirror);
+        sb.setColor(Color.WHITE);
+        Utils.drawCentered(sb, hairImages[0], x + hair.x * (mirror ? -1 : 1), y + hair.y, mirror);
     }
 }

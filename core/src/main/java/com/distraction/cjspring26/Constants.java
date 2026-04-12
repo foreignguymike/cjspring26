@@ -36,7 +36,12 @@ public class Constants {
     };
 
     public static final Color BLACK = WISTERIC_17[5];
-    public static final Color WATER = WISTERIC_17[12];
+    public static final Color WATER = Color.valueOf("63E2FF");//WISTERIC_17[12];
+
+    public static final Color SKIN0 = Color.WHITE;
+    public static final Color SKIN1 = WISTERIC_17[11];
+    public static final Color SKIN2 = WISTERIC_17[10];
+    public static final Color SKIN3 = WISTERIC_17[12];
 
     public static final Color TEXTURE_OPACITY = new Color(1, 1, 1, 0.1f);
 

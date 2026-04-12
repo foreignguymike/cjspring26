@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.Align;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.util.Utils;
-import com.sun.org.apache.bcel.internal.generic.POP;
 
 public class Dialog extends Entity {
 

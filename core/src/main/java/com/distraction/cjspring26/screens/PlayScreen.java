@@ -94,7 +94,7 @@ public class PlayScreen extends Screen {
 
         scene.render(sb);
 
-        textureBg.render(sb);
+//        textureBg.render(sb);
 
         sb.setProjectionMatrix(uiCam.combined);
         sb.setColor(Color.WHITE);
