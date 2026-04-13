@@ -11,19 +11,33 @@ import com.distraction.cjspring26.util.Utils;
 public class PlayerRenderer extends Entity {
 
     public enum BodyType {
-        DEFAULT
+        DEFAULT(-40, 12),
+        BLOCK(-44, 16)
         ;
+        public final float shadowy;
+        public final float highlighty;
 
+        BodyType(float shadowy, float highlighty) {
+            this.shadowy = shadowy;
+            this.highlighty = highlighty;
+        }
     }
 
     public enum BodyColor {
+        WHITE(9, 8),
+        BLACK(2, 1),
         RED(15, 14),
         GREEN(32, 31),
         BLUE(48, 47),
-        PINK(57, 56)
+        PINK(57, 56),
+        PEACH(63, 62),
+        CYAN(43, 42),
+        VIOLET(53, 52),
+        ORANGE(23, 22),
+        YELLOW(28, 27)
         ;
-        public Color color;
-        public Color shadow;
+        public final Color color;
+        public final Color shadow;
 
         BodyColor(int index1, int index2) {
             this.color = Constants.RESURRECT_64[index1];
@@ -32,9 +46,15 @@ public class PlayerRenderer extends Entity {
     }
 
     public enum FaceType {
-        DEFAULT(0)
+        DEFAULTM(0),
+        DEFAULTF(1),
+        SLEEP(2),
+        COOL(3),
+        CRAZY(4),
+        DOG(5),
+        CAT(6)
         ;
-        public int index;
+        public final int index;
 
         FaceType(int index) {
             this.index = index;
@@ -43,9 +63,9 @@ public class PlayerRenderer extends Entity {
 
     private final Player player;
 
-    public BodyType bodyType = BodyType.DEFAULT;
-    public BodyColor bodyColor = BodyColor.PINK;
-    public FaceType faceType = FaceType.DEFAULT;
+    public BodyType bodyType;
+    public BodyColor bodyColor;
+    public FaceType faceType;
 
     private TextureRegion outline;
     private TextureRegion fill;
@@ -58,19 +78,25 @@ public class PlayerRenderer extends Entity {
         super(context);
         this.player = player;
 
-        setBodyType(BodyType.DEFAULT);
-        setFaceType(FaceType.DEFAULT);
+        setBody(BodyType.DEFAULT, BodyColor.PINK);
+        setFaceType(FaceType.DEFAULTM);
 
         w = h = 128;
     }
 
-    public void setBodyType(BodyType bodyType) {
+    public void setBody(BodyType bodyType, BodyColor bodyColor) {
         this.bodyType = bodyType;
+        this.bodyColor = bodyColor;
         if (bodyType == BodyType.DEFAULT) {
             outline = context.getImage("playeroutline");
             fill = context.getImage("playerfill");
             shadow = context.getImage("playershadow");
             highlight = context.getImage("playerhighlight");
+        } else if (bodyType == BodyType.BLOCK) {
+            outline = context.getImage("playeroutlineblock");
+            fill = context.getImage("playerfillblock");
+            shadow = context.getImage("playershadowblock");
+            highlight = context.getImage("playerhighlightblock");
         }
     }
 
@@ -89,9 +115,11 @@ public class PlayerRenderer extends Entity {
         sb.setColor(bodyColor.color);
         Utils.drawCentered(sb, fill, x, y, w, h);
         sb.setColor(bodyColor.shadow);
-        Utils.drawCentered(sb, shadow, x, y - 40);
+        Utils.drawCentered(sb, shadow, x, y + bodyType.shadowy);
         sb.setColor(Color.WHITE);
-        Utils.drawCentered(sb, highlight, x, y + 12);
+        if (highlight != null) {
+            Utils.drawCentered(sb, highlight, x, y + bodyType.highlighty);
+        }
         Utils.drawCentered(sb, outline, x, y, w, h);
 
         // face

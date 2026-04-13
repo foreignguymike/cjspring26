@@ -10,6 +10,8 @@ import com.distraction.cjspring26.entity.TileEntity;
 
 public class Tile extends TileEntity {
 
+    private static final float WAVE_SPEED = 100;
+
     public boolean water;
     public boolean grass;
     public boolean platform;
@@ -19,6 +21,9 @@ public class Tile extends TileEntity {
     private final TextureRegion pixel;
     private final TextureRegion platformOffImage;
     private final TextureRegion strawberryToggleImage;
+    private final TextureRegion wave;
+
+    private float wavex;
 
     public Tile(Context context, TileMap tileMap, int row, int col) {
         super(context, tileMap);
@@ -26,18 +31,30 @@ public class Tile extends TileEntity {
         pixel = context.getPixel();
         platformOffImage = context.getImage("platformoff");
         strawberryToggleImage = context.getImage("strawberrytoggle");
+        wave = context.getImage("wave");
     }
 
     public boolean canWalk() {
         return (grass || platform) && on;
     }
 
+    @Override
+    public void update(float dt) {
+        super.update(dt);
+        wavex = WAVE_SPEED * context.clock;
+        wavex %= wave.getRegionWidth();
+    }
+
+    @Override
     public void render(SpriteBatch sb) {
         if (grass || platform) {
             sb.setColor(Constants.GRASS);
             Utils.drawCenteredScaled(sb, pixel, x, y, TileMap.TILE_WIDTH, TileMap.TILE_HEIGHT + 1, toggleScale);
             sb.setColor(Constants.GRASS_SHADOW);
             Utils.drawCenteredScaled(sb, pixel, x, y - TileMap.TILE_HEIGHT / 2f - 20, TileMap.TILE_WIDTH, 40, toggleScale);
+            sb.setColor(Constants.WATER);
+            Utils.drawCentered(sb, wave, x + wavex, y - 100);
+            Utils.drawCentered(sb, wave, x + wavex - wave.getRegionWidth(), y - 100);
         }
         if (platform && !on && toggleTime <= 0) {
             sb.setColor(Color.WHITE);
