@@ -2,6 +2,7 @@ package com.distraction.cjspring26.util;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 
 public class Utils {
 
@@ -56,6 +57,11 @@ public class Utils {
             map[i] = map[numRows - 1 - i];
             map[numRows - 1 - i] = temp;
         }
+    }
+
+    public static <T extends Enum<T>> T randomEnum(Class<T> clazz) {
+        T[] enums = clazz.getEnumConstants();
+        return enums[MathUtils.random(enums.length - 1)];
     }
 
 }

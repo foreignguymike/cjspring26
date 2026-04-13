@@ -23,8 +23,6 @@ public class Context {
     private final BitmapFont font;
     private final BitmapFont dialogFont;
 
-    public float clock;
-
     public Context() {
         assets = new AssetManager();
         assets.load(ATLAS, TextureAtlas.class);
@@ -45,10 +43,6 @@ public class Context {
         audio = new AudioHandler();
 
         sm = new ScreenManager(new com.distraction.cjspring26.screens.PlayScreen(this));
-    }
-
-    public void incrementClock(float dt) {
-        clock += dt;
     }
 
     public TextureRegion getImage(String key) {

@@ -3,6 +3,7 @@ package com.distraction.cjspring26.entity.player;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Entity;
@@ -82,6 +83,11 @@ public class PlayerRenderer extends Entity {
         setFaceType(FaceType.DEFAULTM);
 
         w = h = 128;
+    }
+
+    public void randomize() {
+        setBody(Utils.randomEnum(BodyType.class), Utils.randomEnum(BodyColor.class));
+        setFaceType(Utils.randomEnum(FaceType.class));
     }
 
     public void setBody(BodyType bodyType, BodyColor bodyColor) {

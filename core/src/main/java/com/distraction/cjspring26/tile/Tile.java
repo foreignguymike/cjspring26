@@ -20,17 +20,13 @@ public class Tile extends TileEntity {
 
     private final TextureRegion pixel;
     private final TextureRegion platformOffImage;
-    private final TextureRegion strawberryToggleImage;
     private final TextureRegion wave;
-
-    private float wavex;
 
     public Tile(Context context, TileMap tileMap, int row, int col) {
         super(context, tileMap);
         setTile(row, col);
         pixel = context.getPixel();
         platformOffImage = context.getImage("platformoff");
-        strawberryToggleImage = context.getImage("strawberrytoggle");
         wave = context.getImage("wave");
     }
 
@@ -39,15 +35,9 @@ public class Tile extends TileEntity {
     }
 
     @Override
-    public void update(float dt) {
-        super.update(dt);
-        wavex = WAVE_SPEED * context.clock;
-        wavex %= wave.getRegionWidth();
-    }
-
-    @Override
     public void render(SpriteBatch sb) {
         if (grass || platform) {
+            float wavex = (WAVE_SPEED * TileMap.WAVE_TIME) % wave.getRegionWidth();
             sb.setColor(Constants.GRASS);
             Utils.drawCenteredScaled(sb, pixel, x, y, TileMap.TILE_WIDTH, TileMap.TILE_HEIGHT + 1, toggleScale);
             sb.setColor(Constants.GRASS_SHADOW);
@@ -68,9 +58,13 @@ public class Tile extends TileEntity {
             Utils.drawCentered(sb, pixel, x, y + TileMap.TILE_HEIGHT + 4, TileMap.TILE_WIDTH / 2f, TileMap.TILE_HEIGHT / 2f);
             sb.setColor(Constants.TOGGLE_SHADOW);
             Utils.drawCentered(sb, pixel, x, y + TileMap.TILE_HEIGHT + 4 - TileMap.TILE_HEIGHT / 4f, TileMap.TILE_WIDTH / 2f, 8);
-            sb.setColor(Constants.TOGGLE_SHADOW);
         }
-        if (strawberryToggle) Utils.drawCentered(sb, strawberryToggleImage, x, y + 110);
+        if (strawberryToggle) {
+            sb.setColor(Constants.FINAL_TOGGLE);
+            Utils.drawCentered(sb, pixel, x, y + TileMap.TILE_HEIGHT + 4, TileMap.TILE_WIDTH / 2f, TileMap.TILE_HEIGHT / 2f);
+            sb.setColor(Constants.FINAL_TOGGLE_SHADOW);
+            Utils.drawCentered(sb, pixel, x, y + TileMap.TILE_HEIGHT + 4 - TileMap.TILE_HEIGHT / 4f, TileMap.TILE_WIDTH / 2f, 8);
+        }
     }
 
 }

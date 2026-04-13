@@ -22,6 +22,8 @@ public class TileMap {
     public static final int TILE_HEIGHT = 128;
     private static final float RELEASE_INTERVAL = 0.15f;
 
+    public static float WAVE_TIME;
+
     private final Context context;
     private final OrthographicCamera cam;
     private final OrthographicCamera uiCam;
@@ -188,6 +190,9 @@ public class TileMap {
             }
         }
         inventory.update(dt);
+
+        WAVE_TIME += dt;
+        if (WAVE_TIME > 10000) WAVE_TIME -= 10000;
     }
 
     public void render(SpriteBatch sb) {

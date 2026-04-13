@@ -34,7 +34,6 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void render() {
-        context.incrementClock(Gdx.graphics.getDeltaTime());
         context.sm.input();
         context.sm.update(Gdx.graphics.getDeltaTime());
         context.sm.render();

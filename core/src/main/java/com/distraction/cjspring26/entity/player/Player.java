@@ -85,7 +85,10 @@ public class Player extends TileEntity {
             } else {
                 dx = dy = 0;
             }
-            jumping = dist > 1;
+            if (dist > 0) {
+                jumping = dist > 1;
+                context.audio.playSound("pop", 0.3f, MathUtils.random(0.7f, 1.3f));
+            }
         }
 
         boolean reachedDestination = atDestination();

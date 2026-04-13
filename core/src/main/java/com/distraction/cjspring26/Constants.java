@@ -13,7 +13,7 @@ public class Constants {
     public static final int SWIDTH = WIDTH;
     public static final int SHEIGHT = HEIGHT;
 
-    public static final boolean FULLSCREEN = false;
+    public static final boolean FULLSCREEN = true;
 
     public static final Color[] RESURRECT_64 = new Color[] {
         // 0 unsaturated brown
@@ -51,6 +51,8 @@ public class Constants {
     public static final Color GRASS_SHADOW = RESURRECT_64[30];
     public static final Color TOGGLE = RESURRECT_64[28];
     public static final Color TOGGLE_SHADOW = RESURRECT_64[26];
+    public static final Color FINAL_TOGGLE = RESURRECT_64[57];
+    public static final Color FINAL_TOGGLE_SHADOW = RESURRECT_64[56];
 
     public static final Color TEXTURE_OPACITY = new Color(1, 1, 1, 0.1f);
 
