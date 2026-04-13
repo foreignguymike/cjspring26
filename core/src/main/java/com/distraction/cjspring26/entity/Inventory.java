@@ -84,7 +84,7 @@ public class Inventory extends Entity {
             if (inv[i]) {
                 Utils.drawCentered(sb, image, pos[i], 70);
             } else {
-                Utils.drawCentered(
+                Utils.drawCenteredScaled(
                     sb,
                     offImage,
                     pos[i],
@@ -95,7 +95,7 @@ public class Inventory extends Entity {
         }
         if (collectingIndex != -1) {
             if (atDestination()) {
-                Utils.drawCentered(sb, image, pos[collectingIndex], 70, 1 + pulse.apply(incTimer / INC_INTERVAL));
+                Utils.drawCenteredScaled(sb, image, pos[collectingIndex], 70, 1 + pulse.apply(incTimer / INC_INTERVAL));
             } else {
                 Utils.drawCentered(sb, image, x, y);
             }

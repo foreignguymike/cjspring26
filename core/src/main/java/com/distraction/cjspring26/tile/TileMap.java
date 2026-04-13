@@ -18,6 +18,8 @@ import java.util.List;
 
 public class TileMap {
 
+    public static final int TILE_WIDTH = 128;
+    public static final int TILE_HEIGHT = 128;
     private static final float RELEASE_INTERVAL = 0.15f;
 
     private final Context context;
@@ -29,7 +31,6 @@ public class TileMap {
     private int endCol;
 
     private final Tile[][] map;
-    private final int tileSize = 128;
 
     // cache
     private final List<GridPoint2> platforms;
@@ -93,7 +94,7 @@ public class TileMap {
     }
 
     public int getPlayableWidth() {
-        return (map[0].length - 3) * tileSize;
+        return (map[0].length - 3) * TILE_WIDTH;
     }
 
     public void playerLeft(int row, int col) {
@@ -158,17 +159,21 @@ public class TileMap {
         return 0;
     }
 
-    public int coord(int tile) {
-        return tile * tileSize + tileSize / 2;
+    public int coordRow(int row) {
+        return row * TILE_HEIGHT + TILE_HEIGHT / 2;
+    }
+
+    public int coordCol(int col) {
+        return col * TILE_WIDTH + TILE_WIDTH / 2;
     }
 
     public void update(float dt) {
         float x = cam.position.x;
         float y= cam.position.y;
-        startRow = MathUtils.clamp((int) (y / tileSize) + 6, 0, map.length - 1);
-        endRow = MathUtils.clamp((int) (y / tileSize) - 4, 0, map.length - 1);
-        startCol = MathUtils.clamp((int) (x / tileSize) - 10, 0, map[0].length - 1);
-        endCol = MathUtils.clamp((int) (x / tileSize) + 10, 0, map[0].length);
+        startRow = MathUtils.clamp((int) (y / TILE_HEIGHT) + 6, 0, map.length - 1);
+        endRow = MathUtils.clamp((int) (y / TILE_HEIGHT) - 4, 0, map.length - 1);
+        startCol = MathUtils.clamp((int) (x / TILE_WIDTH) - 10, 0, map[0].length - 1);
+        endCol = MathUtils.clamp((int) (x / TILE_WIDTH) + 10, 0, map[0].length);
         for (int row = startRow; row >= endRow; row--) {
             for (int col = startCol; col < endCol; col++) {
                 map[row][col].update(dt);

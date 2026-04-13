@@ -2,7 +2,7 @@ package com.distraction.cjspring26.screens.scenes;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.distraction.cjspring26.entity.Player;
+import com.distraction.cjspring26.entity.player.Player;
 import com.distraction.cjspring26.screens.PlayScreen;
 import com.distraction.cjspring26.tile.TileMap;
 

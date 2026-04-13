@@ -11,6 +11,10 @@ public class Utils {
         sb.draw(image, x - w / 2, y - h / 2, w, h);
     }
 
+    public static void drawCentered(SpriteBatch sb, TextureRegion image, float x, float y, float w, float h) {
+        sb.draw(image, x - w / 2, y - h / 2, w, h);
+    }
+
     public static void drawCentered(SpriteBatch sb, TextureRegion image, float x, float y, boolean flipped) {
         float w = image.getRegionWidth();
         float h = image.getRegionHeight();
@@ -19,9 +23,15 @@ public class Utils {
         sb.draw(image, nx, y - h / 2, nw, h);
     }
 
-    public static void drawCentered(SpriteBatch sb, TextureRegion image, float x, float y, float scale) {
+    public static void drawCenteredScaled(SpriteBatch sb, TextureRegion image, float x, float y, float scale) {
         float w = image.getRegionWidth() * scale;
         float h = image.getRegionHeight() * scale;
+        sb.draw(image, x - w / 2f, y - h / 2f, w, h);
+    }
+
+    public static void drawCenteredScaled(SpriteBatch sb, TextureRegion image, float x, float y, float w, float h, float scale) {
+        w *= scale;
+        h *= scale;
         sb.draw(image, x - w / 2f, y - h / 2f, w, h);
     }
 

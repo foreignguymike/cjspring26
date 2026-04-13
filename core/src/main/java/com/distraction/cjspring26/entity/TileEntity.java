@@ -29,8 +29,8 @@ public abstract class TileEntity extends Entity {
     public void setTile(int row, int col) {
         this.row = row;
         this.col = col;
-        x = tileMap.coord(col);
-        y = tileMap.coord(row);
+        x = tileMap.coordCol(col);
+        y = tileMap.coordRow(row);
         xdest = x;
         ydest = y;
     }

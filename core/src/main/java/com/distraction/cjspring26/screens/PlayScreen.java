@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Background;
-import com.distraction.cjspring26.entity.Player;
+import com.distraction.cjspring26.entity.player.Player;
 import com.distraction.cjspring26.screens.scenes.IntroScene;
 import com.distraction.cjspring26.screens.scenes.Scene;
 import com.distraction.cjspring26.tile.TileMap;
@@ -28,7 +28,6 @@ public class PlayScreen extends Screen {
         player = new Player(context, tileMap);
         player.setTile(9, 0);
 //        player.setTile(7, 60); // test
-        player.debug = true;
         stuck = new Player(context, tileMap);
         stuck.setTile(9, 68);
         stuck.mirror = true;

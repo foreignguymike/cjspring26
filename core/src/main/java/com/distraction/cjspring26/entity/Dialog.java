@@ -122,8 +122,8 @@ public class Dialog extends Entity {
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(Color.WHITE);
-        if (textIndex == texts.length) Utils.drawCentered(sb, image, entity.x, entity.y + 220, CLOSE.apply(popTime / POP_TIME));
-        else if (textIndex >= 0) Utils.drawCentered(sb, image, entity.x, entity.y + 220, SWING_OUT_5.apply(popTime / POP_TIME));
+        if (textIndex == texts.length) Utils.drawCenteredScaled(sb, image, entity.x, entity.y + 220, CLOSE.apply(popTime / POP_TIME));
+        else if (textIndex >= 0) Utils.drawCenteredScaled(sb, image, entity.x, entity.y + 220, SWING_OUT_5.apply(popTime / POP_TIME));
         if (textIndex >= 0 && textIndex < texts.length) font.draw(sb, layout, entity.x - w / 2, entity.y + layout.height / 2f - font.getDescent() + 206);
     }
 }
