@@ -1,11 +1,12 @@
 package com.distraction.cjspring26.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Background;
 import com.distraction.cjspring26.entity.player.Player;
-import com.distraction.cjspring26.entity.player.PlayerRenderer;
 import com.distraction.cjspring26.screens.scenes.IntroScene;
 import com.distraction.cjspring26.screens.scenes.Scene;
 import com.distraction.cjspring26.tile.TileMap;
@@ -29,7 +30,7 @@ public class PlayScreen extends Screen {
         player = new Player(context, tileMap);
         player.setTile(9, 0);
         player.playerRenderer.randomize();
-//        player.setTile(7, 60); // test
+        player.setTile(7, 60); // test
         stuck = new Player(context, tileMap);
         stuck.setTile(9, 68);
         stuck.playerRenderer.randomize();
@@ -64,6 +65,9 @@ public class PlayScreen extends Screen {
     public void input() {
         if (ignoreInput) return;
         scene.input();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
+            player.playerRenderer.randomize();
+        }
     }
 
     @Override

@@ -9,8 +9,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
-import com.distraction.cjspring26.util.Utils;
-import com.sun.org.apache.bcel.internal.generic.POP;
 
 public class Dialog extends Entity {
 
@@ -140,14 +138,16 @@ public class Dialog extends Entity {
         }
         if (textIndex >= 0) ninePatch.scale = SWING_OUT_5.apply(popTime / POP_TIME);
         else ninePatch.scale = CLOSE.apply(popTime / POP_TIME);
+        x = entity.x;
+        y = entity.y + 220;
+        ninePatch.x = x;
+        ninePatch.y = y;
     }
 
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(Color.WHITE);
-        ninePatch.render(sb);
-//        if (textIndex == texts.length) Utils.drawCenteredScaled(sb, image, entity.x, entity.y + 220, CLOSE.apply(popTime / POP_TIME));
-//        else if (textIndex >= 0) Utils.drawCenteredScaled(sb, image, entity.x, entity.y + 220, SWING_OUT_5.apply(popTime / POP_TIME));
+        if (popTime > 0) ninePatch.render(sb);
         if (textIndex >= 0 && textIndex < texts.length) font.draw(sb, layout, entity.x - w / 2, entity.y + layout.height / 2f - font.getDescent() + 206);
     }
 }
