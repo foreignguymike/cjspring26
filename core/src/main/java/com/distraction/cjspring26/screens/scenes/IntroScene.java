@@ -16,7 +16,6 @@ public class IntroScene extends Scene {
         cam.position.x = MathUtils.clamp(stuck.x, Constants.WIDTH2, tileMap.getPlayableWidth() - Constants.WIDTH2);
         cam.position.y = 1500;
         cam.update();
-        System.out.println("intro running");
     }
 
     @Override

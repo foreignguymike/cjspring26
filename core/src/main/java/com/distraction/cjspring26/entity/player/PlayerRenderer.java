@@ -80,6 +80,11 @@ public class PlayerRenderer extends Entity {
         w = h = 128;
     }
 
+    public void copy(PlayerRenderer other) {
+        setBody(other.bodyType, other.bodyColor);
+        setFaceType(other.faceType);
+    }
+
     public void randomize() {
         setBody(Utils.randomEnum(BodyType.class), Utils.randomEnum(BodyColor.class));
         setFaceType(Utils.randomEnum(FaceType.class));

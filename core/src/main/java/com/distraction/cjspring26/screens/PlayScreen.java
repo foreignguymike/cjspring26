@@ -8,6 +8,7 @@ import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Background;
 import com.distraction.cjspring26.entity.player.Player;
 import com.distraction.cjspring26.screens.scenes.IntroScene;
+import com.distraction.cjspring26.screens.scenes.PlayScene;
 import com.distraction.cjspring26.screens.scenes.Scene;
 import com.distraction.cjspring26.tile.TileMap;
 
@@ -65,8 +66,10 @@ public class PlayScreen extends Screen {
     public void input() {
         if (ignoreInput) return;
         scene.input();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
-            player.playerRenderer.randomize();
+        if (scene instanceof PlayScene) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
+                context.sm.push(new CustomizeScreen(context, player));
+            }
         }
     }
 

@@ -12,7 +12,7 @@ import com.distraction.cjspring26.Context;
 
 public class Dialog extends Entity {
 
-    private static final Interpolation SWING_OUT_5 = new Interpolation.SwingOut(3f);
+    private static final Interpolation SWING_OUT = new Interpolation.SwingOut(3f);
     private static final Interpolation CLOSE = Interpolation.fastSlow;
     private static final float POP_TIME = 0.2f;
     private static final float CHAR_TIME = 1 / 20f;
@@ -136,7 +136,7 @@ public class Dialog extends Entity {
                 }
             }
         }
-        if (textIndex >= 0) ninePatch.scale = SWING_OUT_5.apply(popTime / POP_TIME);
+        if (textIndex >= 0) ninePatch.scale = SWING_OUT.apply(popTime / POP_TIME);
         else ninePatch.scale = CLOSE.apply(popTime / POP_TIME);
         x = entity.x;
         y = entity.y + 220;
