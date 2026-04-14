@@ -1,5 +1,6 @@
 package com.distraction.cjspring26.util;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -50,6 +51,17 @@ public class Utils {
         );
     }
 
+    public static void drawCenteredRotated(SpriteBatch sb, TextureRegion image, float x, float y, float w, float h, float deg) {
+        sb.draw(
+            image,
+            x - w / 2, y - h / 2,
+            w / 2, h / 2,
+            w, h,
+            1, 1,
+            deg
+        );
+    }
+
     public static <T> void flip(T[][] map) {
         int numRows = map.length;
         for (int i = 0; i < numRows / 2; i++) {
@@ -62,6 +74,10 @@ public class Utils {
     public static <T extends Enum<T>> T randomEnum(Class<T> clazz) {
         T[] enums = clazz.getEnumConstants();
         return enums[MathUtils.random(enums.length - 1)];
+    }
+
+    public static void setAlpha(SpriteBatch sb, Color c, float a) {
+        sb.setColor(c.r, c.g, c.b, a);
     }
 
 }

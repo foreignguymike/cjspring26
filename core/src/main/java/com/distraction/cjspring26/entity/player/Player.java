@@ -12,14 +12,11 @@ public class Player extends TileEntity {
     private static final float SPEED = 500;
     public static final float OFFSET_Y = 30;
 
-    public boolean moving;
-
     public boolean jumping;
     public float jumpy;
     private float totalDistance;
 
     public boolean up, down, left, right;
-    public boolean mirror;
 
     public PlayerRenderer playerRenderer;
 
@@ -28,7 +25,7 @@ public class Player extends TileEntity {
         w = 128;
         h = 128;
 
-        playerRenderer = new PlayerRenderer(context, this);
+        playerRenderer = new PlayerRenderer(context);
     }
 
     public void reset() {
@@ -111,6 +108,7 @@ public class Player extends TileEntity {
 
     @Override
     public void render(SpriteBatch sb) {
+        playerRenderer.prepare(x, y + jumpy + OFFSET_Y, moving, mirror);
         playerRenderer.render(sb);
     }
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.util.Utils;
+import com.sun.org.apache.bcel.internal.generic.POP;
 
 public class Dialog extends Entity {
 
@@ -34,14 +35,34 @@ public class Dialog extends Entity {
     private float popTime;
     private float blipTime;
 
+    private final NinePatch ninePatch;
+
     public Dialog(Context context, String[] texts, Entity entity) {
+        this(context, texts, entity, 475, 200);
+    }
+
+    public Dialog(Context context, String[] texts, Entity entity, float w, float h) {
         super(context);
         this.texts = texts;
         this.entity = entity;
-        setImage(context.getImage("dialogbox"));
+        ninePatch = new NinePatch(
+            context,
+            context.getImage("dialogcorner"),
+            context.getImage("dialogside"),
+            context.getPixel(),
+            w, h
+        );
+
+        this.w = w;
+        this.h = h;
 
         font = context.getDialogFont();
         layout = new GlyphLayout();
+
+        x = entity.x;
+        y = entity.y + 220;
+        ninePatch.x = x;
+        ninePatch.y = y;
     }
 
     public void next() {
@@ -117,13 +138,16 @@ public class Dialog extends Entity {
                 }
             }
         }
+        if (textIndex >= 0) ninePatch.scale = SWING_OUT_5.apply(popTime / POP_TIME);
+        else ninePatch.scale = CLOSE.apply(popTime / POP_TIME);
     }
 
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(Color.WHITE);
-        if (textIndex == texts.length) Utils.drawCenteredScaled(sb, image, entity.x, entity.y + 220, CLOSE.apply(popTime / POP_TIME));
-        else if (textIndex >= 0) Utils.drawCenteredScaled(sb, image, entity.x, entity.y + 220, SWING_OUT_5.apply(popTime / POP_TIME));
+        ninePatch.render(sb);
+//        if (textIndex == texts.length) Utils.drawCenteredScaled(sb, image, entity.x, entity.y + 220, CLOSE.apply(popTime / POP_TIME));
+//        else if (textIndex >= 0) Utils.drawCenteredScaled(sb, image, entity.x, entity.y + 220, SWING_OUT_5.apply(popTime / POP_TIME));
         if (textIndex >= 0 && textIndex < texts.length) font.draw(sb, layout, entity.x - w / 2, entity.y + layout.height / 2f - font.getDescent() + 206);
     }
 }

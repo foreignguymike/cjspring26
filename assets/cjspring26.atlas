@@ -4,6 +4,10 @@ filter:Linear,Linear
 repeat:none
 dialogbox
 bounds:2,278,462,199
+dialogcorner
+bounds:600,331,14,14
+dialogside
+bounds:398,190,1,14
 face0
 bounds:966,920,56,31
 face1

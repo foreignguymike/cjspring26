@@ -3,9 +3,8 @@ package com.distraction.cjspring26;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -25,6 +24,13 @@ public class Main extends ApplicationAdapter {
         Gdx.input.setCatchKey(Input.Keys.NUM_2, true);
         Gdx.input.setCatchKey(Input.Keys.NUM_3, true);
         Gdx.input.setCatchKey(Input.Keys.NUM_4, true);
+
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0, 0, 0, 0);
+        pixmap.fill();
+        Cursor invisibleCursor = Gdx.graphics.newCursor(pixmap, 0, 0);
+        Gdx.graphics.setCursor(invisibleCursor);
+        pixmap.dispose();
     }
 
     @Override

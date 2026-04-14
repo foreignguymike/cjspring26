@@ -3,7 +3,6 @@ package com.distraction.cjspring26.entity.player;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Entity;
@@ -12,13 +11,15 @@ import com.distraction.cjspring26.util.Utils;
 public class PlayerRenderer extends Entity {
 
     public enum BodyType {
-        DEFAULT(-40, 12),
-        BLOCK(-44, 16)
+        DEFAULT(0.8f, -40, 12),
+        BLOCK(0.8f, -44, 16)
         ;
+        public final float a;
         public final float shadowy;
         public final float highlighty;
 
-        BodyType(float shadowy, float highlighty) {
+        BodyType(float a, float shadowy, float highlighty) {
+            this.a = a;
             this.shadowy = shadowy;
             this.highlighty = highlighty;
         }
@@ -62,8 +63,6 @@ public class PlayerRenderer extends Entity {
         }
     }
 
-    private final Player player;
-
     public BodyType bodyType;
     public BodyColor bodyColor;
     public FaceType faceType;
@@ -75,12 +74,8 @@ public class PlayerRenderer extends Entity {
 
     private TextureRegion face;
 
-    public PlayerRenderer(Context context, Player player) {
+    public PlayerRenderer(Context context) {
         super(context);
-        this.player = player;
-
-        setBody(BodyType.DEFAULT, BodyColor.PINK);
-        setFaceType(FaceType.DEFAULTM);
 
         w = h = 128;
     }
@@ -111,25 +106,36 @@ public class PlayerRenderer extends Entity {
         face = context.getImage("face" + faceType.index);
     }
 
+    public void prepare(float x, float y, boolean moving, boolean mirror) {
+        this.x = x;
+        this.y = y;
+        this.moving = moving;
+        this.mirror = mirror;
+    }
+
     @Override
     public void render(SpriteBatch sb) {
-        float x = player.x;
-        float y = player.y + player.jumpy + Player.OFFSET_Y;
         float h = this.h;
 
         // body
-        sb.setColor(bodyColor.color);
-        Utils.drawCentered(sb, fill, x, y, w, h);
-        sb.setColor(bodyColor.shadow);
-        Utils.drawCentered(sb, shadow, x, y + bodyType.shadowy);
+        if (bodyType != null && bodyColor != null) {
+            Utils.setAlpha(sb, bodyColor.color, bodyType.a);
+            Utils.drawCentered(sb, fill, x, y, w, h);
+            Utils.setAlpha(sb, bodyColor.shadow, bodyType.a);
+            Utils.drawCentered(sb, shadow, x, y + bodyType.shadowy);
+        }
         sb.setColor(Color.WHITE);
         if (highlight != null) {
             Utils.drawCentered(sb, highlight, x, y + bodyType.highlighty);
         }
-        Utils.drawCentered(sb, outline, x, y, w, h);
+        if (outline != null) {
+            Utils.drawCentered(sb, outline, x, y, w, h);
+        }
 
         // face
-        Utils.drawCentered(sb, face, x + 10 * (player.mirror ? -1 : 1), y - 28 + (player.moving ? 15 : 0), player.mirror);
+        if (face != null) {
+            Utils.drawCentered(sb, face, x + 10 * (mirror ? -1 : 1), y - 28 + (moving ? 15 : 0), mirror);
+        }
     }
 
 }

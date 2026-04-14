@@ -17,7 +17,11 @@ public class Entity {
     protected float xdest;
     protected float ydest;
 
+    public boolean moving;
+    public boolean mirror;
+
     protected TextureRegion image;
+    public float scale;
 
     protected Entity(Context context) {
         this.context = context;

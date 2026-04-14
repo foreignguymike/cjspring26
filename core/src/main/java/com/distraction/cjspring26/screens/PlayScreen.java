@@ -43,8 +43,8 @@ public class PlayScreen extends Screen {
         setScene(new IntroScene(this));
 
         context.audio.stopMusic();
-        context.audio.playMusic("main", 0.15f, true);
-        context.audio.playMusic("beach", 0.15f, true);
+        context.audio.playMusic("main", 0.2f, true);
+        context.audio.playMusic("beach", 0.2f, true);
     }
 
     public void playerSwap() {
