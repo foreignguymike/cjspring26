@@ -92,4 +92,9 @@ public class AudioHandler {
         }
     }
 
+    public void dispose() {
+        for (Music m : music.values()) m.dispose();
+        for (Sound s : sounds.values()) s.dispose();
+    }
+
 }

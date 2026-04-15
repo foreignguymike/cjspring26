@@ -14,7 +14,7 @@ public class Constants {
     public static final int SWIDTH = WIDTH;
     public static final int SHEIGHT = HEIGHT;
 
-    public static final boolean FULLSCREEN = true;
+    public static final boolean FULLSCREEN = false;
 
     public static final Color[] RESURRECT_64 = new Color[] {
         // 0 unsaturated brown

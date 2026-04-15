@@ -1,13 +1,12 @@
 package com.distraction.cjspring26.screens.scenes;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.entity.Dialog;
-import com.distraction.cjspring26.screens.PlayScreen;
+import com.distraction.cjspring26.screens.PlayScreen;import com.distraction.cjspring26.util.Utils;
 
 public class HelpScene extends Scene {
 
@@ -31,13 +30,14 @@ public class HelpScene extends Scene {
 
     @Override
     public void enter() {
+        System.out.println("entering help scene");
         stuck.mirror = true;
         dialog.next();
     }
 
     @Override
     public void input() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Utils.anyKeysJustPressed(Input.Keys.ENTER, Input.Keys.SPACE)) {
             dialog.next();
         }
     }

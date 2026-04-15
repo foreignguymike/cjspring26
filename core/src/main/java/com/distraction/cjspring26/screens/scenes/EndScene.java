@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.entity.Dialog;
-import com.distraction.cjspring26.screens.PlayScreen;
+import com.distraction.cjspring26.screens.PlayScreen;import com.distraction.cjspring26.util.Utils;
 
 public class EndScene extends Scene {
 
@@ -41,6 +41,9 @@ public class EndScene extends Scene {
     private final Dialog playerDialog1;
     private final Dialog stuckDialog3;
     private final Dialog playerDialog2;
+
+    private boolean skipping;
+    private float skipTimer;
 
     public EndScene(PlayScreen screen) {
         super(screen);
@@ -100,13 +103,22 @@ public class EndScene extends Scene {
 
     @Override
     public void input() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Utils.anyKeysJustPressed(Input.Keys.ENTER, Input.Keys.SPACE)) {
             if (dialog != null) dialog.next();
         }
+        skipping = Gdx.input.isKeyPressed(Input.Keys.ENTER);
     }
 
     @Override
     public void update(float dt) {
+        if (skipping) {
+            skipTimer += dt;
+            if (skipTimer > 1) {
+                leave();
+            }
+        } else {
+            skipTimer = 0;
+        }
         if (stage == Stage.PLAYER_MOVE1) {
             player.up = player.row < destRow;
             player.down = player.row > destRow;
@@ -174,8 +186,7 @@ public class EndScene extends Scene {
             if (dialog.isDone()) {
                 time -= dt;
                 if (time < 0) {
-                    screen.playerSwap();
-                    screen.setScene(new HelpScene(screen));
+                    leave();
                 }
             }
         }
@@ -193,5 +204,12 @@ public class EndScene extends Scene {
     @Override
     public void render(SpriteBatch sb) {
         if (!dialog.isDone()) dialog.render(sb);
+    }
+
+    private void leave() {
+        player.setTile(destRow, switchCol + 1);
+        player.mirror = true;
+        screen.playerSwap();
+        screen.setScene(new HelpScene(screen));
     }
 }

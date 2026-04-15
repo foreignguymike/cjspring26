@@ -2,12 +2,16 @@ cjspring26.png
 size:1024,1024
 filter:Linear,Linear
 repeat:none
+caret
+bounds:567,306,12,20
+customarrow
+bounds:398,170,35,34
 dialogbox
 bounds:2,278,462,199
 dialogcorner
 bounds:600,331,14,14
 dialogside
-bounds:398,190,1,14
+bounds:460,260,1,14
 face0
 bounds:966,920,56,31
 face1

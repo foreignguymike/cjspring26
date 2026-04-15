@@ -3,16 +3,25 @@ package com.distraction.cjspring26.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.NinePatch;
 import com.distraction.cjspring26.entity.player.Player;
 import com.distraction.cjspring26.entity.player.PlayerRenderer;
+import com.distraction.cjspring26.util.Customization;
 import com.distraction.cjspring26.util.Utils;
 
+import java.util.List;
+
 public class CustomizeScreen extends Screen {
+
+    private static final int BODY_TYPES_SIZE = Customization.BodyType.values().length;
+    private static final int BODY_COLORS_SIZE = Customization.BodyColor.values().length;
+    private static final int FACE_TYPES_SIZE = Customization.FaceType.values().length;
 
     private static final float POP_TIME = 0.3f;
     private static final Interpolation SWING_OUT = new Interpolation.SwingOut(2f);
@@ -27,20 +36,47 @@ public class CustomizeScreen extends Screen {
     private final NinePatch ninePatch;
     private final TextureRegion pixel;
 
+    private int index;
+    private int bodyTypeIndex;
+    private int bodyColorIndex;
+    private int faceTypeIndex;
+
+    private final List<Customization.BodyType> bodyTypes = Customization.unlockedBodyTypes;
+    private final List<Customization.BodyColor> bodyColors = Customization.unlockedBodyColors;
+    private final List<Customization.FaceType> faceTypes = Customization.unlockedFaceTypes;
+
+    private final BitmapFont font;
+    private final BitmapFont smallFont;
+
+    private float time;
+
+    private final float[] posy = new float[] {
+        Constants.HEIGHT2 + 200,
+        Constants.HEIGHT2 + 120,
+        Constants.HEIGHT2 + 40,
+        Constants.HEIGHT2 - 40,
+        Constants.HEIGHT2 - 100,
+        Constants.HEIGHT2 - 160
+    };
+
+    private final TextureRegion arrow;
+    private final TextureRegion caret;
+
     public CustomizeScreen(Context context, Player player) {
         super(context);
         this.player = player;
         renderer = new PlayerRenderer(context);
         renderer.copy(player.playerRenderer);
-        renderer.x = Constants.WIDTH2 - 400;
-        renderer.y = Constants.HEIGHT2;
+        renderer.x = Constants.WIDTH2 - 300;
+        renderer.y = Constants.HEIGHT2 + 20;
 
         ninePatch = new NinePatch(
             context,
             context.getImage("dialogcorner"),
             context.getImage("dialogside"),
             context.getPixel(),
-            Constants.WIDTH2, Constants.HEIGHT2
+            Constants.WIDTH2,
+            Constants.HEIGHT2
         );
         ninePatch.x = Constants.WIDTH2;
         ninePatch.y = Constants.HEIGHT2;
@@ -48,13 +84,71 @@ public class CustomizeScreen extends Screen {
 
         pixel = context.getPixel();
         transparent = true;
+
+        font = context.getUiFont();
+        smallFont = context.getDescriptionFont();
+
+        bodyTypeIndex = bodyTypes.indexOf(renderer.bodyType);
+        bodyColorIndex = bodyColors.indexOf(renderer.bodyColor);
+        faceTypeIndex = faceTypes.indexOf(renderer.faceType);
+
+        arrow = context.getImage("customarrow");
+        caret = context.getImage("caret");
+    }
+
+    private void updateRenderer() {
+        renderer.setBody(bodyTypes.get(bodyTypeIndex), bodyColors.get(bodyColorIndex));
+        renderer.setFaceType(faceTypes.get(faceTypeIndex));
+    }
+
+    private void incrementBodyTypes(int increment) {
+        int newIndex = bodyTypeIndex + increment;
+        if (newIndex >= 0 && newIndex < bodyTypes.size()) {
+            bodyTypeIndex = newIndex;
+            updateRenderer();
+        }
+    }
+
+    private void incrementBodyColors(int increment) {
+        int newIndex = bodyColorIndex + increment;
+        if (newIndex >= 0 && newIndex < bodyColors.size()) {
+            bodyColorIndex = newIndex;
+            updateRenderer();
+        }
+    }
+
+    private void incrementFaceTypes(int increment) {
+        int newIndex = faceTypeIndex + increment;
+        if (newIndex >= 0 && newIndex < faceTypes.size()) {
+            faceTypeIndex = newIndex;
+            updateRenderer();
+        }
+    }
+
+    private String getName(Customization.Accessory acc) {
+        if (acc == null) return "-";
+        else return acc.name;
     }
 
     @Override
     public void input() {
         if (popTime < POP_TIME) return;
-        if (Utils.anyKeysJustPressed(Input.Keys.ESCAPE, Input.Keys.TAB)) {
+        if (Utils.anyKeysJustPressed(Input.Keys.ESCAPE, Input.Keys.TAB, Input.Keys.ENTER)) {
             close = true;
+            player.playerRenderer.copy(renderer);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            if (index > 0) index--;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            if (index < posy.length - 1) index++;
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+            if (index == 0) incrementBodyTypes(-1);
+            else if (index == 1) incrementBodyColors(-1);
+            else if (index == 2) incrementFaceTypes(-1);
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+            if (index == 0) incrementBodyTypes(1);
+            else if (index == 1) incrementBodyColors(1);
+            else if (index == 2) incrementFaceTypes(1);
         }
     }
 
@@ -72,6 +166,7 @@ public class CustomizeScreen extends Screen {
             }
         }
         ninePatch.update(dt);
+        time += dt;
     }
 
     @Override
@@ -80,13 +175,40 @@ public class CustomizeScreen extends Screen {
         sb.setProjectionMatrix(uiCam.combined);
         sb.setColor(0, 0, 0, popTime * 2.5f);
         sb.draw(context.getPixel(), 0, 0, Constants.WIDTH, Constants.HEIGHT);
+        sb.setColor(Color.WHITE);
         ninePatch.render(sb);
 
         if (popTime < POP_TIME) {
             sb.end();
             return;
         }
+
         renderer.render(sb);
+
+        // labels
+        font.draw(sb, "Body Type", Constants.WIDTH2 - 50, posy[0]);
+        font.draw(sb, "Body Color", Constants.WIDTH2 - 50, posy[1]);
+        font.draw(sb, "Face Type", Constants.WIDTH2 - 50, posy[2]);
+        smallFont.draw(sb, "Unlocked " + bodyTypes.size() + "/" + BODY_TYPES_SIZE, Constants.WIDTH2 - 50, posy[0] - 35);
+        smallFont.draw(sb, "Unlocked " + bodyColors.size() + "/" + BODY_COLORS_SIZE, Constants.WIDTH2 - 50, posy[1] - 35);
+        smallFont.draw(sb, "Unlocked " + faceTypes.size() + "/" + FACE_TYPES_SIZE, Constants.WIDTH2 - 50, posy[2] - 35);
+        font.draw(sb, "Item 1", Constants.WIDTH2 - 50, posy[3]);
+        font.draw(sb, "Item 2", Constants.WIDTH2 - 50, posy[4]);
+        font.draw(sb, "Item 3", Constants.WIDTH2 - 50, posy[5]);
+        smallFont.draw(sb, "Unlocked " + 0 + "/" + 0, Constants.WIDTH2 - 50, posy[5] - 35);
+
+        // options
+        font.draw(sb, renderer.bodyType.name, Constants.WIDTH2 + 200, posy[0]);
+        font.draw(sb, renderer.bodyColor.name, Constants.WIDTH2 + 200, posy[1]);
+        font.draw(sb, renderer.faceType.name, Constants.WIDTH2 + 200, posy[2]);
+        font.draw(sb, getName(renderer.acc1), Constants.WIDTH2 + 200, posy[3]);
+        font.draw(sb, getName(renderer.acc2), Constants.WIDTH2 + 200, posy[4]);
+        font.draw(sb, getName(renderer.acc3), Constants.WIDTH2 + 200, posy[5]);
+
+        sb.setColor(Color.WHITE);
+        Utils.drawCentered(sb, arrow, Constants.WIDTH2 - 110 + 10 * MathUtils.sin(time * 5), posy[index] - 10);
+        Utils.drawCenteredRotated(sb, caret, Constants.WIDTH2 + 160 + 10, posy[index] - 12, 180);
+        Utils.drawCentered(sb, caret, Constants.WIDTH2 + 330, posy[index] - 12);
         sb.end();
     }
 }

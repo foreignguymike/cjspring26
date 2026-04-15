@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 
+import java.util.List;
+
 public class Utils {
 
     public static void drawCentered(SpriteBatch sb, TextureRegion image, float x, float y) {
@@ -72,9 +74,13 @@ public class Utils {
         }
     }
 
-    public static <T extends Enum<T>> T randomEnum(Class<T> clazz) {
-        T[] enums = clazz.getEnumConstants();
-        return enums[MathUtils.random(enums.length - 1)];
+    public static String capitalize(String s) {
+        s = s.toLowerCase();
+        return s.substring(0, 1).toUpperCase() + s.substring(1);
+    }
+
+    public static <T> T getRandomItem(List<T> list) {
+        return list.get(MathUtils.random(list.size() - 1));
     }
 
     public static void setAlpha(SpriteBatch sb, Color c, float a) {

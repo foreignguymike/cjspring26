@@ -6,73 +6,26 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Entity;
+import com.distraction.cjspring26.util.Customization;
 import com.distraction.cjspring26.util.Utils;
 
 public class PlayerRenderer extends Entity {
 
-    public enum BodyType {
-        DEFAULT(0.8f, -40, 12),
-        BLOCK(0.8f, -44, 16)
-        ;
-        public final float a;
-        public final float shadowy;
-        public final float highlighty;
-
-        BodyType(float a, float shadowy, float highlighty) {
-            this.a = a;
-            this.shadowy = shadowy;
-            this.highlighty = highlighty;
-        }
-    }
-
-    public enum BodyColor {
-        WHITE(9, 8),
-        BLACK(2, 1),
-        RED(15, 14),
-        GREEN(32, 31),
-        BLUE(48, 47),
-        PINK(57, 56),
-        PEACH(63, 62),
-        CYAN(43, 42),
-        VIOLET(53, 52),
-        ORANGE(23, 22),
-        YELLOW(28, 27)
-        ;
-        public final Color color;
-        public final Color shadow;
-
-        BodyColor(int index1, int index2) {
-            this.color = Constants.RESURRECT_64[index1];
-            this.shadow = Constants.RESURRECT_64[index2];
-        }
-    }
-
-    public enum FaceType {
-        DEFAULTM(0),
-        DEFAULTF(1),
-        SLEEP(2),
-        COOL(3),
-        CRAZY(4),
-        DOG(5),
-        CAT(6)
-        ;
-        public final int index;
-
-        FaceType(int index) {
-            this.index = index;
-        }
-    }
-
-    public BodyType bodyType;
-    public BodyColor bodyColor;
-    public FaceType faceType;
+    public Customization.BodyType bodyType;
+    public Customization.BodyColor bodyColor;
+    public Customization.FaceType faceType;
+    public Customization.Accessory acc1;
+    public Customization.Accessory acc2;
+    public Customization.Accessory acc3;
 
     private TextureRegion outline;
     private TextureRegion fill;
     private TextureRegion shadow;
     private TextureRegion highlight;
-
     private TextureRegion face;
+    private TextureRegion acc1Image;
+    private TextureRegion acc2Image;
+    private TextureRegion acc3Image;
 
     public PlayerRenderer(Context context) {
         super(context);
@@ -86,19 +39,19 @@ public class PlayerRenderer extends Entity {
     }
 
     public void randomize() {
-        setBody(Utils.randomEnum(BodyType.class), Utils.randomEnum(BodyColor.class));
-        setFaceType(Utils.randomEnum(FaceType.class));
+        setBody(Utils.getRandomItem(Customization.unlockedBodyTypes), Utils.getRandomItem(Customization.unlockedBodyColors));
+        setFaceType(Utils.getRandomItem(Customization.unlockedFaceTypes));
     }
 
-    public void setBody(BodyType bodyType, BodyColor bodyColor) {
+    public void setBody(Customization.BodyType bodyType, Customization.BodyColor bodyColor) {
         this.bodyType = bodyType;
         this.bodyColor = bodyColor;
-        if (bodyType == BodyType.DEFAULT) {
+        if (bodyType == Customization.BodyType.DEFAULT) {
             outline = context.getImage("playeroutline");
             fill = context.getImage("playerfill");
             shadow = context.getImage("playershadow");
             highlight = context.getImage("playerhighlight");
-        } else if (bodyType == BodyType.BLOCK) {
+        } else if (bodyType == Customization.BodyType.BLOCK) {
             outline = context.getImage("playeroutlineblock");
             fill = context.getImage("playerfillblock");
             shadow = context.getImage("playershadowblock");
@@ -106,9 +59,21 @@ public class PlayerRenderer extends Entity {
         }
     }
 
-    public void setFaceType(FaceType faceType) {
+    public void setFaceType(Customization.FaceType faceType) {
         this.faceType = faceType;
         face = context.getImage("face" + faceType.index);
+    }
+
+    public void setAcc1(Customization.Accessory acc1) {
+        this.acc1 = acc1;
+    }
+
+    public void setAcc2(Customization.Accessory acc2) {
+        this.acc2 = acc2;
+    }
+
+    public void setAcc3(Customization.Accessory acc3) {
+        this.acc3 = acc3;
     }
 
     public void prepare(float x, float y, boolean moving, boolean mirror) {
@@ -122,11 +87,23 @@ public class PlayerRenderer extends Entity {
     public void render(SpriteBatch sb) {
         float h = this.h;
 
+        // acc background
+        sb.setColor(Color.WHITE);
+        if (acc1Image != null) {
+
+        }
+        if (acc2Image != null) {
+
+        }
+        if (acc3Image != null) {
+
+        }
+
         // body
         if (bodyType != null && bodyColor != null) {
             Utils.setAlpha(sb, bodyColor.color, bodyType.a);
             Utils.drawCentered(sb, fill, x, y, w, h);
-            Utils.setAlpha(sb, bodyColor.shadow, bodyType.a);
+            Utils.setAlpha(sb, Constants.BLACK, 0.15f);
             Utils.drawCentered(sb, shadow, x, y + bodyType.shadowy);
         }
         sb.setColor(Color.WHITE);
@@ -141,6 +118,8 @@ public class PlayerRenderer extends Entity {
         if (face != null) {
             Utils.drawCentered(sb, face, x + 10 * (mirror ? -1 : 1), y - 28 + (moving ? 15 : 0), mirror);
         }
+
+        // acc foreground
     }
 
 }
