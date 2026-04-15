@@ -22,6 +22,7 @@ public class CustomizeScreen extends Screen {
     private static final int BODY_TYPES_SIZE = Customization.BodyType.values().length;
     private static final int BODY_COLORS_SIZE = Customization.BodyColor.values().length;
     private static final int FACE_TYPES_SIZE = Customization.FaceType.values().length;
+    private static final int ACCESSORIES_SIZE = Customization.Accessory.values().length;
 
     private static final float POP_TIME = 0.3f;
     private static final Interpolation SWING_OUT = new Interpolation.SwingOut(2f);
@@ -34,16 +35,19 @@ public class CustomizeScreen extends Screen {
     private float popTime;
 
     private final NinePatch ninePatch;
-    private final TextureRegion pixel;
 
     private int index;
     private int bodyTypeIndex;
     private int bodyColorIndex;
     private int faceTypeIndex;
+    private int acc1Index;
+    private int acc2Index;
+    private int acc3Index;
 
     private final List<Customization.BodyType> bodyTypes = Customization.unlockedBodyTypes;
     private final List<Customization.BodyColor> bodyColors = Customization.unlockedBodyColors;
     private final List<Customization.FaceType> faceTypes = Customization.unlockedFaceTypes;
+    private final List<Customization.Accessory> accessories = Customization.unlockedAccessories;
 
     private final BitmapFont font;
     private final BitmapFont smallFont;
@@ -82,30 +86,27 @@ public class CustomizeScreen extends Screen {
         ninePatch.y = Constants.HEIGHT2;
         ninePatch.fillColor = Constants.CUSTOMIZE_BG;
 
-        pixel = context.getPixel();
-        transparent = true;
-
         font = context.getUiFont();
         smallFont = context.getDescriptionFont();
 
         bodyTypeIndex = bodyTypes.indexOf(renderer.bodyType);
         bodyColorIndex = bodyColors.indexOf(renderer.bodyColor);
         faceTypeIndex = faceTypes.indexOf(renderer.faceType);
+        acc1Index = accessories.indexOf(renderer.acc1);
+        acc2Index = accessories.indexOf(renderer.acc2);
+        acc3Index = accessories.indexOf(renderer.acc3);
 
         arrow = context.getImage("customarrow");
         caret = context.getImage("caret");
-    }
 
-    private void updateRenderer() {
-        renderer.setBody(bodyTypes.get(bodyTypeIndex), bodyColors.get(bodyColorIndex));
-        renderer.setFaceType(faceTypes.get(faceTypeIndex));
+        transparent = true;
     }
 
     private void incrementBodyTypes(int increment) {
         int newIndex = bodyTypeIndex + increment;
         if (newIndex >= 0 && newIndex < bodyTypes.size()) {
             bodyTypeIndex = newIndex;
-            updateRenderer();
+            renderer.setBody(bodyTypes.get(bodyTypeIndex), bodyColors.get(bodyColorIndex));
         }
     }
 
@@ -113,7 +114,7 @@ public class CustomizeScreen extends Screen {
         int newIndex = bodyColorIndex + increment;
         if (newIndex >= 0 && newIndex < bodyColors.size()) {
             bodyColorIndex = newIndex;
-            updateRenderer();
+            renderer.setBody(bodyTypes.get(bodyTypeIndex), bodyColors.get(bodyColorIndex));
         }
     }
 
@@ -121,7 +122,40 @@ public class CustomizeScreen extends Screen {
         int newIndex = faceTypeIndex + increment;
         if (newIndex >= 0 && newIndex < faceTypes.size()) {
             faceTypeIndex = newIndex;
-            updateRenderer();
+            renderer.setFaceType(faceTypes.get(faceTypeIndex));
+        }
+    }
+
+    private void incrementAcc1(int increment) {
+        int newIndex = acc1Index + increment;
+        while (newIndex == acc2Index || newIndex == acc3Index) newIndex += increment;
+        if (newIndex == -2) newIndex = -1;
+        if (newIndex >= -1 && newIndex < accessories.size()) {
+            acc1Index = newIndex;
+            if (acc1Index == -1) renderer.setAcc1(null);
+            else renderer.setAcc1(accessories.get(acc1Index));
+        }
+    }
+
+    private void incrementAcc2(int increment) {
+        int newIndex = acc2Index + increment;
+        while (newIndex == acc1Index || newIndex == acc3Index) newIndex += increment;
+        if (newIndex == -2) newIndex = -1;
+        if (newIndex >= -1 && newIndex < accessories.size()) {
+            acc2Index = newIndex;
+            if (acc2Index == -1) renderer.setAcc2(null);
+            else renderer.setAcc2(accessories.get(acc2Index));
+        }
+    }
+
+    private void incrementAcc3(int increment) {
+        int newIndex = acc3Index + increment;
+        while (newIndex == acc1Index || newIndex == acc2Index) newIndex += increment;
+        if (newIndex == -2) newIndex = -1;
+        if (newIndex >= -1 && newIndex < accessories.size()) {
+            acc3Index = newIndex;
+            if (acc3Index == -1) renderer.setAcc3(null);
+            else renderer.setAcc3(accessories.get(acc3Index));
         }
     }
 
@@ -145,10 +179,16 @@ public class CustomizeScreen extends Screen {
             if (index == 0) incrementBodyTypes(-1);
             else if (index == 1) incrementBodyColors(-1);
             else if (index == 2) incrementFaceTypes(-1);
+            else if (index == 3) incrementAcc1(-1);
+            else if (index == 4) incrementAcc2(-1);
+            else if (index == 5) incrementAcc3(-1);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
             if (index == 0) incrementBodyTypes(1);
             else if (index == 1) incrementBodyColors(1);
             else if (index == 2) incrementFaceTypes(1);
+            else if (index == 3) incrementAcc1(1);
+            else if (index == 4) incrementAcc2(1);
+            else if (index == 5) incrementAcc3(1);
         }
     }
 
@@ -195,7 +235,7 @@ public class CustomizeScreen extends Screen {
         font.draw(sb, "Item 1", Constants.WIDTH2 - 50, posy[3]);
         font.draw(sb, "Item 2", Constants.WIDTH2 - 50, posy[4]);
         font.draw(sb, "Item 3", Constants.WIDTH2 - 50, posy[5]);
-        smallFont.draw(sb, "Unlocked " + 0 + "/" + 0, Constants.WIDTH2 - 50, posy[5] - 35);
+        smallFont.draw(sb, "Unlocked " + accessories.size() + "/" + ACCESSORIES_SIZE, Constants.WIDTH2 - 50, posy[5] - 35);
 
         // options
         font.draw(sb, renderer.bodyType.name, Constants.WIDTH2 + 200, posy[0]);

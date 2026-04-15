@@ -68,17 +68,23 @@ public class Customization {
         }
     }
 
+    // use ordinal for z ordering
     public enum Accessory implements Custom {
-        BUBBLE("Bubble", 0),
-        CROWN("Crown", 1),
-        ANGEL_WING("Angel", 2)
+        BUBBLE("Bubble", 0, -20, 55),
+        HALO("Halo", 1, 0, 50),
+        CROWN("Crown", 2, 0, 0),
+        ANGEL_WING("Angel", 3, 0, 0)
         ;
         public final String name;
         public final int index;
+        public float x;
+        public float y;
 
-        Accessory(String name, int index) {
+        Accessory(String name, int index, float x, float y) {
             this.name = name;
             this.index = index;
+            this.x = x;
+            this.y = y;
         }
     }
 
@@ -103,6 +109,8 @@ public class Customization {
         unlock(BodyColor.BLUE);
         unlock(FaceType.DEFAULTM);
         unlock(FaceType.DEFAULTF);
+        unlock(Accessory.BUBBLE);
+        unlock(Accessory.HALO);
     }
 
     public static void unlock(Custom type) {
@@ -115,6 +123,9 @@ public class Customization {
         } else if (type instanceof FaceType) {
             lockedFaceTypes.remove(type);
             unlockedFaceTypes.add((FaceType) type);
+        } else if (type instanceof Accessory) {
+            lockedAccessories.remove(type);
+            unlockedAccessories.add((Accessory) type);
         }
     }
 
