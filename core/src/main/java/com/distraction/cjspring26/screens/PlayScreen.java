@@ -11,6 +11,7 @@ import com.distraction.cjspring26.screens.scenes.IntroScene;
 import com.distraction.cjspring26.screens.scenes.PlayScene;
 import com.distraction.cjspring26.screens.scenes.Scene;
 import com.distraction.cjspring26.tile.TileMap;
+import com.distraction.cjspring26.util.Customization;
 
 public class PlayScreen extends Screen {
 
@@ -30,11 +31,15 @@ public class PlayScreen extends Screen {
         tileMap = new TileMap(context, cam, uiCam);
         player = new Player(context, tileMap);
         player.setTile(9, 0);
-        player.playerRenderer.randomize();
-        player.setTile(7, 60); // test
+        player.playerRenderer.setBody(Customization.BodyType.DEFAULT);
+        player.playerRenderer.setBodyColor(Customization.BodyColor.GREEN);
+        player.playerRenderer.setFaceType(Customization.FaceType.DEFAULTM);
+//        player.setTile(7, 60); // test
         stuck = new Player(context, tileMap);
         stuck.setTile(9, 68);
-        stuck.playerRenderer.randomize();
+        stuck.playerRenderer.setBody(Customization.BodyType.DEFAULT);
+        stuck.playerRenderer.setBodyColor(Customization.BodyColor.PINK);
+        stuck.playerRenderer.setFaceType(Customization.FaceType.DEFAULTM);
         stuck.mirror = true;
 
         in = new Transition(context, Transition.Type.CHECKERED_IN, 0.5f, () -> ignoreInput = false);

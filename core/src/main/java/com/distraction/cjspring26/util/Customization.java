@@ -12,77 +12,81 @@ public class Customization {
     public interface Custom {}
 
     public enum BodyType implements Custom {
-        DEFAULT("Slime", 0.8f, -40, 12),
-        BLOCK("Block", 0.8f, -44, 16)
+        DEFAULT("Slime", "", 0.8f),
+        BLOCK("Block", "block", 0.8f),
+        FUR("Fur", "fur", 1)
         ;
         public final String name;
+        public final String fileName;
         public final float a;
-        public final float shadowy;
-        public final float highlighty;
 
-        BodyType(String name, float a, float shadowy, float highlighty) {
+        BodyType(String name, String fileName, float a) {
             this.name = name;
+            this.fileName = fileName;
             this.a = a;
-            this.shadowy = shadowy;
-            this.highlighty = highlighty;
         }
     }
 
     public enum BodyColor implements Custom {
-        WHITE(9),
-        BLACK(2),
-        RED(15),
-        GREEN(32),
-        BLUE(48),
-        PINK(57),
-        PEACH(63),
-        CYAN(43),
-        VIOLET(53),
-        ORANGE(23),
-        YELLOW(28)
+        RED("Red", 15),
+        GREEN("Green", 32),
+        BLUE("Blue", 48),
+        WHITE("White", 9),
+        BLACK("Black", 2),
+        PINK("Pink", 57),
+        PEACH("Peach", 63),
+        CYAN("Cyan", 43),
+        VIOLET("Violet", 53),
+        ORANGE("Orange", 23),
+        PURPLE("Purple", 50),
+        YELLOW("Yellow", 28)
         ;
-        public final Color color;
         public final String name;
+        public final Color color;
 
-        BodyColor(int index1) {
-            this.color = Constants.RESURRECT_64[index1];
-            name = Utils.capitalize(toString());
+        BodyColor(String name, int index) {
+            this.name = name;
+            this.color = Constants.RESURRECT_64[index];
         }
     }
 
     public enum FaceType implements Custom {
-        DEFAULTM("Basic", 0),
-        DEFAULTF("Lashes", 1),
-        SLEEP("Sleepy", 2),
-        COOL("Cool", 3),
-        CRAZY("Crazy", 4),
-        DOG("Dog", 5),
-        CAT("Cat", 6)
+        DEFAULTM("Basic", "basic"),
+        DEFAULTF("Lashes", "lashes"),
+        SLEEP("Sleepy", "sleepy"),
+        COOL("Cool", "cool"),
+        CRAZY("Crazy", "crazy"),
+        DOG("Dog", "dog"),
+        CAT("Cat", "cat"),
+        INVERTED("Inverted", "inverted")
         ;
         public final String name;
-        public final int index;
+        public final String fileName;
 
-        FaceType(String name, int index) {
+        FaceType(String name, String fileName) {
             this.name = name;
-            this.index = index;
+            this.fileName = fileName;
         }
     }
 
     // use ordinal for z ordering
     public enum Accessory implements Custom {
-        BUBBLE("Bubble", 0, -20, 55),
-        HALO("Halo", 1, 0, 50),
-        CROWN("Crown", 2, 0, 0),
-        ANGEL_WING("Angel", 3, 0, 0)
+        BUBBLE("Bubble", "bubble", -20, 55),
+        CROWN("Crown", "crown", 0, 30),
+        HALO("Halo", "halo", 0, 50),
+        HORNS("Horns", "horns", -26, 22),
+        FLOWER("Flower", "flower", -30, 10),
+        ANGEL_WINGS("Angel Wings", "angelwings", -80, 0),
+        DEMON_WINGS("Demon Wings", "demonwings", -80, 0)
         ;
         public final String name;
-        public final int index;
-        public float x;
-        public float y;
+        public final String fileName;
+        public final float x;
+        public final float y;
 
-        Accessory(String name, int index, float x, float y) {
+        Accessory(String name, String fileName, float x, float y) {
             this.name = name;
-            this.index = index;
+            this.fileName = fileName;
             this.x = x;
             this.y = y;
         }
@@ -103,14 +107,17 @@ public class Customization {
         lockedFaceTypes.addAll(Arrays.asList(FaceType.values()));
         lockedAccessories.addAll(Arrays.asList(Accessory.values()));
 
-        unlock(BodyType.DEFAULT);
-        unlock(BodyColor.RED);
-        unlock(BodyColor.GREEN);
-        unlock(BodyColor.BLUE);
-        unlock(FaceType.DEFAULTM);
-        unlock(FaceType.DEFAULTF);
-        unlock(Accessory.BUBBLE);
-        unlock(Accessory.HALO);
+//        unlock(BodyType.DEFAULT);
+//        unlock(BodyColor.RED);
+//        unlock(BodyColor.GREEN);
+//        unlock(BodyColor.BLUE);
+//        unlock(FaceType.DEFAULTM);
+//        unlock(FaceType.DEFAULTF);
+
+        unlockedBodyTypes.addAll(Arrays.asList(BodyType.values()));
+        unlockedBodyColors.addAll(Arrays.asList(BodyColor.values()));
+        unlockedFaceTypes.addAll(Arrays.asList(FaceType.values()));
+        unlockedAccessories.addAll(Arrays.asList(Accessory.values()));
     }
 
     public static void unlock(Custom type) {

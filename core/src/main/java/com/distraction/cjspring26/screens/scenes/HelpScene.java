@@ -30,7 +30,6 @@ public class HelpScene extends Scene {
 
     @Override
     public void enter() {
-        System.out.println("entering help scene");
         stuck.mirror = true;
         dialog.next();
     }

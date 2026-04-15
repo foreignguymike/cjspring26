@@ -54,6 +54,36 @@ public class Utils {
         );
     }
 
+    public static void drawCenteredRotated(SpriteBatch sb, TextureRegion image, float x, float y, float deg, boolean flipped) {
+        float w = image.getRegionWidth();
+        float h = image.getRegionHeight();
+
+        sb.draw(
+            image,
+            x - w / 2, y - h / 2,
+            w / 2, h / 2,
+            w, h,
+            flipped ? -1 : 1, 1,
+            flipped ? -deg : deg
+        );
+    }
+
+    public static void drawCenteredRotated(SpriteBatch sb, TextureRegion image, float x, float y, float deg, float ax, float ay, boolean flipped) {
+        float w = image.getRegionWidth();
+        float h = image.getRegionHeight();
+        float ox = w * ax;
+        float oy = h * ay;
+
+        sb.draw(
+            image,
+            x - ox, y - oy,
+            ox, oy,
+            w, h,
+            flipped ? -1 : 1, 1,
+            flipped ? -deg : deg
+        );
+    }
+
     public static void drawCenteredRotated(SpriteBatch sb, TextureRegion image, float x, float y, float w, float h, float deg) {
         sb.draw(
             image,
@@ -72,11 +102,6 @@ public class Utils {
             map[i] = map[numRows - 1 - i];
             map[numRows - 1 - i] = temp;
         }
-    }
-
-    public static String capitalize(String s) {
-        s = s.toLowerCase();
-        return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
 
     public static <T> T getRandomItem(List<T> list) {

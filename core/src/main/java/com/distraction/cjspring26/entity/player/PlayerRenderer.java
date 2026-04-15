@@ -3,6 +3,7 @@ package com.distraction.cjspring26.entity.player;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.entity.Entity;
@@ -10,7 +11,6 @@ import com.distraction.cjspring26.util.Customization;
 import com.distraction.cjspring26.util.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -41,7 +41,9 @@ public class PlayerRenderer extends Entity {
     private TextureRegion acc2Image;
     private TextureRegion acc3Image;
 
-    private List<OrderData> order = new ArrayList<>();
+    private final List<OrderData> order = new ArrayList<>();
+    private float time;
+    private float wingTime;
 
     public PlayerRenderer(Context context) {
         super(context);
@@ -50,7 +52,8 @@ public class PlayerRenderer extends Entity {
     }
 
     public void copy(PlayerRenderer other) {
-        setBody(other.bodyType, other.bodyColor);
+        setBody(other.bodyType);
+        setBodyColor(other.bodyColor);
         setFaceType(other.faceType);
         setAcc1(other.acc1);
         setAcc2(other.acc2);
@@ -58,35 +61,32 @@ public class PlayerRenderer extends Entity {
     }
 
     public void randomize() {
-        setBody(Utils.getRandomItem(Customization.unlockedBodyTypes), Utils.getRandomItem(Customization.unlockedBodyColors));
-        setFaceType(Utils.getRandomItem(Customization.unlockedFaceTypes));
+        setBody(Utils.getRandomItem(Customization.lockedBodyTypes));
+        setBodyColor(Utils.getRandomItem(Customization.lockedBodyColors));
+        setFaceType(Utils.getRandomItem(Customization.lockedFaceTypes));
     }
 
-    public void setBody(Customization.BodyType bodyType, Customization.BodyColor bodyColor) {
+    public void setBody(Customization.BodyType bodyType) {
         this.bodyType = bodyType;
+        outline = context.getImage("playeroutline" + bodyType.fileName);
+        fill = context.getImage("playerfill" + bodyType.fileName);
+        shadow = context.getImage("playershadow" + bodyType.fileName);
+        highlight = context.getImage("playerhighlight" + bodyType.fileName);
+    }
+
+    public void setBodyColor(Customization.BodyColor bodyColor) {
         this.bodyColor = bodyColor;
-        if (bodyType == Customization.BodyType.DEFAULT) {
-            outline = context.getImage("playeroutline");
-            fill = context.getImage("playerfill");
-            shadow = context.getImage("playershadow");
-            highlight = context.getImage("playerhighlight");
-        } else if (bodyType == Customization.BodyType.BLOCK) {
-            outline = context.getImage("playeroutlineblock");
-            fill = context.getImage("playerfillblock");
-            shadow = context.getImage("playershadowblock");
-            highlight = context.getImage("playerhighlightblock");
-        }
     }
 
     public void setFaceType(Customization.FaceType faceType) {
         this.faceType = faceType;
-        face = context.getImage("face" + faceType.index);
+        face = context.getImage("face" + faceType.fileName);
     }
 
     public void setAcc1(Customization.Accessory acc1) {
         this.acc1 = acc1;
         if (acc1 != null) {
-            acc1Image = context.getImage("acc" + acc1.index);
+            acc1Image = context.getImage("acc" + acc1.fileName);
         }
         updateOrder();
     }
@@ -94,7 +94,7 @@ public class PlayerRenderer extends Entity {
     public void setAcc2(Customization.Accessory acc2) {
         this.acc2 = acc2;
         if (acc2 != null) {
-            acc2Image = context.getImage("acc" + acc2.index);
+            acc2Image = context.getImage("acc" + acc2.fileName);
         }
         updateOrder();
     }
@@ -102,7 +102,7 @@ public class PlayerRenderer extends Entity {
     public void setAcc3(Customization.Accessory acc3) {
         this.acc3 = acc3;
         if (acc3 != null) {
-            acc3Image = context.getImage("acc" + acc3.index);
+            acc3Image = context.getImage("acc" + acc3.fileName);
         }
         updateOrder();
     }
@@ -123,23 +123,33 @@ public class PlayerRenderer extends Entity {
     }
 
     @Override
+    public void update(float dt) {
+        time += dt;
+        wingTime += dt * (moving ? 20 : 1);
+    }
+
+    @Override
     public void render(SpriteBatch sb) {
         float h = this.h;
 
         // acc background
-        for (OrderData o : order) renderAccBackground(sb, o.acc, o.image);
+        for (int i = order.size() - 1; i >= 0; i--) {
+            OrderData o = order.get(i);
+            renderAccBackground(sb, o.acc, o.image);
+        }
 
         // body
         if (bodyType != null && bodyColor != null) {
             Utils.setAlpha(sb, bodyColor.color, bodyType.a);
             Utils.drawCentered(sb, fill, x, y, w, h);
             Utils.setAlpha(sb, Constants.BLACK, 0.15f);
-            Utils.drawCentered(sb, shadow, x, y + bodyType.shadowy);
+            Utils.drawCentered(sb, shadow, x, y);
+        }
+        if (highlight != null) {
+            Utils.setAlpha(sb, Color.WHITE, 0.3f);
+            Utils.drawCentered(sb, highlight, x, y);
         }
         sb.setColor(Color.WHITE);
-        if (highlight != null) {
-            Utils.drawCentered(sb, highlight, x, y + bodyType.highlighty);
-        }
         if (outline != null) {
             Utils.drawCentered(sb, outline, x, y, w, h);
         }
@@ -160,6 +170,12 @@ public class PlayerRenderer extends Entity {
             int w = image.getRegionWidth();
             int h = image.getRegionHeight();
             sb.draw(image.getTexture(), x - w / 2f + acc.x, y + acc.y, w, h / 2f, image.getRegionX(), image.getRegionY(), w, h / 2, false, false);
+        } else if (acc == Customization.Accessory.HORNS) {
+            Utils.drawCentered(sb, image, x - acc.x * (mirror ? -1f : 1f), y + acc.y, !mirror);
+        } else if (acc == Customization.Accessory.ANGEL_WINGS || acc == Customization.Accessory.DEMON_WINGS) {
+            Utils.drawCenteredRotated(sb, image, x - acc.x * (mirror ? -0.84f : 0.84f), y + 4, -10 * (1 - MathUtils.sin(wingTime * 1.5f)), 0.8f, 0.5f, !mirror);
+        } else if (acc == Customization.Accessory.FLOWER) {
+            if (mirror) Utils.drawCentered(sb, image, x + acc.x, y + acc.y, true);
         }
     }
 
@@ -171,6 +187,12 @@ public class PlayerRenderer extends Entity {
             int w = image.getRegionWidth();
             int h = image.getRegionHeight();
             sb.draw(image.getTexture(), x - w / 2f + acc.x, y - h / 2f + acc.y, w, h / 2f, image.getRegionX(), image.getRegionY() + h / 2, w, h / 2, false, false);
+        } else if (acc == Customization.Accessory.HORNS) {
+            Utils.drawCentered(sb, image, x + acc.x * (mirror ? -1f : 1f), y + acc.y, mirror);
+        } else if (acc == Customization.Accessory.ANGEL_WINGS || acc == Customization.Accessory.DEMON_WINGS) {
+            Utils.drawCenteredRotated(sb, image, x + acc.x * (mirror ? -1 : 1), y + acc.y, 10 * MathUtils.sin(wingTime * 1.5f) - 10, 0.8f, 0.5f, mirror);
+        } else if (acc == Customization.Accessory.FLOWER) {
+            if (!mirror) Utils.drawCentered(sb, image, x + acc.x, y + acc.y);
         } else {
             Utils.drawCentered(sb, image, x + acc.x * (mirror ? -1 : 1), y + acc.y, mirror);
         }

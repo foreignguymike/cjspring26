@@ -7,7 +7,6 @@ import com.badlogic.gdx.files.FileHandle;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.FileHandler;
 
 public class AudioHandler {
 
@@ -43,8 +42,7 @@ public class AudioHandler {
     public void playMusic(String key, float volume, boolean looping) {
         Music newMusic = music.get(key);
         if (newMusic == null) {
-            System.out.println("unknown music: " + key);
-            return;
+            throw new IllegalArgumentException("Unknown music: " + key);
         }
         if (playing.containsKey(key)) {
             playing.get(key).play();

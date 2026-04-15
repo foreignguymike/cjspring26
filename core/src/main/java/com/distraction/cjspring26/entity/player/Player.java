@@ -104,6 +104,8 @@ public class Player extends TileEntity {
         // calculate jump
         if (!moving) jumping = false;
         jumpy = (jumping ? 120 : 30) * MathUtils.sin(3.14f * getRemainingDistanceM() / totalDistance);
+
+        playerRenderer.update(dt);
     }
 
     @Override

@@ -100,13 +100,28 @@ public class CustomizeScreen extends Screen {
         caret = context.getImage("caret");
 
         transparent = true;
+
+        context.audio.playSound("pop", 0.5f);
+    }
+
+    private void pop() {
+        context.audio.playSound("pop", 0.5f, MathUtils.random(0.7f, 1.3f));
+    }
+
+    private void increment(int increment) {
+        int newIndex = index + increment;
+        if (newIndex >= 0 && newIndex < posy.length) {
+            index = newIndex;
+            pop();
+        }
     }
 
     private void incrementBodyTypes(int increment) {
         int newIndex = bodyTypeIndex + increment;
         if (newIndex >= 0 && newIndex < bodyTypes.size()) {
             bodyTypeIndex = newIndex;
-            renderer.setBody(bodyTypes.get(bodyTypeIndex), bodyColors.get(bodyColorIndex));
+            renderer.setBody(bodyTypes.get(bodyTypeIndex));
+            pop();
         }
     }
 
@@ -114,7 +129,8 @@ public class CustomizeScreen extends Screen {
         int newIndex = bodyColorIndex + increment;
         if (newIndex >= 0 && newIndex < bodyColors.size()) {
             bodyColorIndex = newIndex;
-            renderer.setBody(bodyTypes.get(bodyTypeIndex), bodyColors.get(bodyColorIndex));
+            renderer.setBodyColor(bodyColors.get(bodyColorIndex));
+            pop();
         }
     }
 
@@ -123,39 +139,40 @@ public class CustomizeScreen extends Screen {
         if (newIndex >= 0 && newIndex < faceTypes.size()) {
             faceTypeIndex = newIndex;
             renderer.setFaceType(faceTypes.get(faceTypeIndex));
+            pop();
         }
     }
 
     private void incrementAcc1(int increment) {
         int newIndex = acc1Index + increment;
-        while (newIndex == acc2Index || newIndex == acc3Index) newIndex += increment;
-        if (newIndex == -2) newIndex = -1;
+        while (newIndex != -1 && (newIndex == acc2Index || newIndex == acc3Index)) newIndex += increment;
         if (newIndex >= -1 && newIndex < accessories.size()) {
             acc1Index = newIndex;
             if (acc1Index == -1) renderer.setAcc1(null);
             else renderer.setAcc1(accessories.get(acc1Index));
+            pop();
         }
     }
 
     private void incrementAcc2(int increment) {
         int newIndex = acc2Index + increment;
-        while (newIndex == acc1Index || newIndex == acc3Index) newIndex += increment;
-        if (newIndex == -2) newIndex = -1;
+        while (newIndex != -1 && (newIndex == acc1Index || newIndex == acc3Index)) newIndex += increment;
         if (newIndex >= -1 && newIndex < accessories.size()) {
             acc2Index = newIndex;
             if (acc2Index == -1) renderer.setAcc2(null);
             else renderer.setAcc2(accessories.get(acc2Index));
+            pop();
         }
     }
 
     private void incrementAcc3(int increment) {
         int newIndex = acc3Index + increment;
-        while (newIndex == acc1Index || newIndex == acc2Index) newIndex += increment;
-        if (newIndex == -2) newIndex = -1;
+        while (newIndex != -1 && (newIndex == acc1Index || newIndex == acc2Index)) newIndex += increment;
         if (newIndex >= -1 && newIndex < accessories.size()) {
             acc3Index = newIndex;
             if (acc3Index == -1) renderer.setAcc3(null);
             else renderer.setAcc3(accessories.get(acc3Index));
+            pop();
         }
     }
 
@@ -172,9 +189,9 @@ public class CustomizeScreen extends Screen {
             player.playerRenderer.copy(renderer);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            if (index > 0) index--;
+            increment(-1);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            if (index < posy.length - 1) index++;
+            increment(1);
         } else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
             if (index == 0) incrementBodyTypes(-1);
             else if (index == 1) incrementBodyColors(-1);
@@ -206,6 +223,7 @@ public class CustomizeScreen extends Screen {
             }
         }
         ninePatch.update(dt);
+        renderer.update(dt);
         time += dt;
     }
 
@@ -245,10 +263,11 @@ public class CustomizeScreen extends Screen {
         font.draw(sb, getName(renderer.acc2), Constants.WIDTH2 + 200, posy[4]);
         font.draw(sb, getName(renderer.acc3), Constants.WIDTH2 + 200, posy[5]);
 
+        // arrows
         sb.setColor(Color.WHITE);
         Utils.drawCentered(sb, arrow, Constants.WIDTH2 - 110 + 10 * MathUtils.sin(time * 5), posy[index] - 10);
         Utils.drawCenteredRotated(sb, caret, Constants.WIDTH2 + 160 + 10, posy[index] - 12, 180);
-        Utils.drawCentered(sb, caret, Constants.WIDTH2 + 330, posy[index] - 12);
+        Utils.drawCentered(sb, caret, Constants.WIDTH2 + 350 + (index > 2 ? 80 : 0), posy[index] - 12);
         sb.end();
     }
 }
