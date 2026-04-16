@@ -126,4 +126,9 @@ public class Utils {
         return false;
     }
 
+    public static float pow(float b, float e) {
+        for (int i = 0; i < e; i++) b *= b;
+        return b;
+    }
+
 }

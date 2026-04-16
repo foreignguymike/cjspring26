@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.Context;
-import com.distraction.cjspring26.entity.Background;
 import com.distraction.cjspring26.entity.player.Player;
 import com.distraction.cjspring26.screens.scenes.IntroScene;
 import com.distraction.cjspring26.screens.scenes.PlayScene;
@@ -17,16 +16,12 @@ public class PlayScreen extends Screen {
 
     private Scene scene = null;
 
-    private final Background textureBg;
-
     public final TileMap tileMap;
     public Player player;
     public Player stuck;
 
     public PlayScreen(Context context) {
         super(context);
-
-        textureBg = new Background(context, cam, context.getImage("papermache"), Constants.TEXTURE_OPACITY);
 
         tileMap = new TileMap(context, cam, uiCam);
         player = new Player(context, tileMap);
@@ -42,7 +37,7 @@ public class PlayScreen extends Screen {
         stuck.playerRenderer.setFaceType(Customization.FaceType.DEFAULTM);
         stuck.mirror = true;
 
-        in = new Transition(context, Transition.Type.CHECKERED_IN, 0.5f, () -> ignoreInput = false);
+        in = new Transition(context, Transition.Type.FLASH_IN, 2f, () -> ignoreInput = false);
         ignoreInput = true;
         in.start();
         out = new Transition(context, Transition.Type.CHECKERED_OUT, 0.5f);

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Constants {
 
-    public static final String TITLE = "Long Way Home";
+    public static final String TITLE = "Thanks Bye!";
 
     public static final int WIDTH = 1920;
     public static final int HEIGHT = 1080;
@@ -46,8 +46,12 @@ public class Constants {
     };
 
     public static final Color BLACK = RESURRECT_64[0];
-    public static final Color WATER = RESURRECT_64[48];
 
+    public static final Color TITLE_BG = RESURRECT_64[47];
+    public static final Color CLOUDS1 = RESURRECT_64[48];
+    public static final Color CLOUDS2 = RESURRECT_64[9];
+
+    public static final Color WATER = RESURRECT_64[48];
     public static final Color GRASS = RESURRECT_64[31];
     public static final Color GRASS_SHADOW = RESURRECT_64[30];
     public static final Color TOGGLE = RESURRECT_64[28];

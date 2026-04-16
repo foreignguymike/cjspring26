@@ -45,7 +45,6 @@ public class Context {
             font64.getRegion(),
             font64.usesIntegerPositions()
         );
-        dialogFont.setColor(Constants.BLACK);
 
         uiFont = new BitmapFont(
             new BitmapFont.BitmapFontData(font64.getData().fontFile, false),
@@ -53,20 +52,19 @@ public class Context {
             font64.usesIntegerPositions()
         );
         uiFont.getData().setScale(0.5f);
-        uiFont.setColor(Constants.BLACK);
 
         descriptionFont = new BitmapFont(
             new BitmapFont.BitmapFontData(font16.getData().fontFile, false),
             font16.getRegion(),
             font16.usesIntegerPositions()
         );
-        descriptionFont.setColor(Constants.BLACK);
 
         sb = new SpriteBatch();
 
         audio = new AudioHandler();
 
         sm = new ScreenManager(new com.distraction.cjspring26.screens.PlayScreen(this));
+//        sm = new ScreenManager(new com.distraction.cjspring26.screens.TitleScreen(this));
     }
 
     public TextureRegion getImage(String key) {

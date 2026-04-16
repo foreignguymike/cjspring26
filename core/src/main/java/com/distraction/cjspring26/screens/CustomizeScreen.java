@@ -87,7 +87,9 @@ public class CustomizeScreen extends Screen {
         ninePatch.fillColor = Constants.CUSTOMIZE_BG;
 
         font = context.getUiFont();
+        font.setColor(Constants.BLACK);
         smallFont = context.getDescriptionFont();
+        smallFont.setColor(Constants.BLACK);
 
         bodyTypeIndex = bodyTypes.indexOf(renderer.bodyType);
         bodyColorIndex = bodyColors.indexOf(renderer.bodyColor);
@@ -184,9 +186,10 @@ public class CustomizeScreen extends Screen {
     @Override
     public void input() {
         if (popTime < POP_TIME) return;
-        if (Utils.anyKeysJustPressed(Input.Keys.ESCAPE, Input.Keys.TAB, Input.Keys.ENTER)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             close = true;
             player.playerRenderer.copy(renderer);
+            pop();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             increment(-1);
