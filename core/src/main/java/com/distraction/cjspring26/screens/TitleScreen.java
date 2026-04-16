@@ -95,7 +95,7 @@ public class TitleScreen extends Screen {
 
         clouds1y = -600 + 600 * (time > 0.5f ? 1f : Interpolation.fastSlow.apply(time / 0.5f));
         if (exiting) {
-            clouds2y = -200 + Constants.HEIGHT * Interpolation.slowFast.apply(exitTime / 0.5f);
+            clouds2y = -200 + Constants.HEIGHT * Interpolation.swingIn.apply(exitTime / 0.5f);
         } else {
             clouds2y = -700 + 500 * (time > 1f ? 1f : Interpolation.fastSlow.apply(time));
         }

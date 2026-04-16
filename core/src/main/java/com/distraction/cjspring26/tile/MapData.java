@@ -35,8 +35,8 @@ public class MapData {
     };
 
     public static List<GridPoint2> toggles = new ArrayList<>();
-    public static List<GridPoint2> collectibles = new ArrayList<>();
-    public static List<GridPoint2> strawberryToggles = new ArrayList<>();
+    public static List<GridPoint2> collectibleSpawns = new ArrayList<>();
+    public static List<GridPoint2> finalToggles = new ArrayList<>();
 
     static {
         toggles.add(new GridPoint2(7, 14));
@@ -53,16 +53,22 @@ public class MapData {
         toggles.add(new GridPoint2(8, 62));
         toggles.add(new GridPoint2(3, 54));
 
-        collectibles.add(new GridPoint2(2, 1));
-        collectibles.add(new GridPoint2(4, 21));
-        collectibles.add(new GridPoint2(1, 35));
-        collectibles.add(new GridPoint2(18, 43));
-        collectibles.add(new GridPoint2(19, 18));
-        collectibles.add(new GridPoint2(17, 28));
-        collectibles.add(new GridPoint2(11, 47));
-        collectibles.add(new GridPoint2(7, 49));
+        collectibleSpawns.add(new GridPoint2(10, 3));
+        collectibleSpawns.add(new GridPoint2(3, 14));
+        collectibleSpawns.add(new GridPoint2(10, 33));
+        collectibleSpawns.add(new GridPoint2(15, 59));
+        collectibleSpawns.add(new GridPoint2(3, 61));
 
-        strawberryToggles.add(new GridPoint2(10, 67));
+        collectibleSpawns.add(new GridPoint2(2, 1));
+        collectibleSpawns.add(new GridPoint2(4, 21));
+        collectibleSpawns.add(new GridPoint2(1, 35));
+        collectibleSpawns.add(new GridPoint2(18, 43));
+        collectibleSpawns.add(new GridPoint2(19, 18));
+        collectibleSpawns.add(new GridPoint2(17, 28));
+        collectibleSpawns.add(new GridPoint2(11, 47));
+        collectibleSpawns.add(new GridPoint2(7, 49));
+
+        finalToggles.add(new GridPoint2(10, 67));
     }
 
 }

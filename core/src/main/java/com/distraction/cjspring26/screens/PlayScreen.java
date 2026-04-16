@@ -29,7 +29,7 @@ public class PlayScreen extends Screen {
         player.playerRenderer.setBody(Customization.BodyType.DEFAULT);
         player.playerRenderer.setBodyColor(Customization.BodyColor.GREEN);
         player.playerRenderer.setFaceType(Customization.FaceType.DEFAULTM);
-//        player.setTile(7, 60); // test
+//        player.setTile(14, 60); // test
         stuck = new Player(context, tileMap);
         stuck.setTile(9, 68);
         stuck.playerRenderer.setBody(Customization.BodyType.DEFAULT);
@@ -108,7 +108,6 @@ public class PlayScreen extends Screen {
 
         sb.setProjectionMatrix(uiCam.combined);
         sb.setColor(Color.WHITE);
-        tileMap.inventory.render(sb);
 
         in.render(sb);
         out.render(sb);

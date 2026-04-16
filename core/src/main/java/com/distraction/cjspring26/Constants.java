@@ -56,11 +56,8 @@ public class Constants {
     public static final Color GRASS_SHADOW = RESURRECT_64[30];
     public static final Color TOGGLE = RESURRECT_64[28];
     public static final Color TOGGLE_SHADOW = RESURRECT_64[26];
-    public static final Color FINAL_TOGGLE = RESURRECT_64[57];
-    public static final Color FINAL_TOGGLE_SHADOW = RESURRECT_64[56];
+    public static final Color FINAL_TOGGLE = RESURRECT_64[11];
+    public static final Color FINAL_TOGGLE_SHADOW = RESURRECT_64[10];
 
     public static final Color CUSTOMIZE_BG = RESURRECT_64[63];
-
-    public static final Color TEXTURE_OPACITY = new Color(1, 1, 1, 0.1f);
-
 }

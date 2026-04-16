@@ -63,8 +63,8 @@ public class Context {
 
         audio = new AudioHandler();
 
-        sm = new ScreenManager(new com.distraction.cjspring26.screens.PlayScreen(this));
-//        sm = new ScreenManager(new com.distraction.cjspring26.screens.TitleScreen(this));
+//        sm = new ScreenManager(new com.distraction.cjspring26.screens.PlayScreen(this));
+        sm = new ScreenManager(new com.distraction.cjspring26.screens.TitleScreen(this));
     }
 
     public TextureRegion getImage(String key) {

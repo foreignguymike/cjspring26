@@ -10,6 +10,7 @@ public class Scene {
 
     protected final PlayScreen screen;
     protected final OrthographicCamera cam;
+    protected final OrthographicCamera uiCam;
     protected final Player player;
     protected final Player stuck;
     protected final TileMap tileMap;
@@ -17,6 +18,7 @@ public class Scene {
     public Scene(PlayScreen screen) {
         this.screen = screen;
         this.cam = screen.cam;
+        this.uiCam = screen.uiCam;
         this.player = screen.player;
         this.stuck = screen.stuck;
         this.tileMap = screen.tileMap;

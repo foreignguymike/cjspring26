@@ -16,7 +16,7 @@ public class Tile extends TileEntity {
     public boolean grass;
     public boolean platform;
     public boolean platformToggle;
-    public boolean strawberryToggle;
+    public boolean finalToggle;
 
     private final TextureRegion pixel;
     private final TextureRegion platformOffImage;
@@ -59,7 +59,7 @@ public class Tile extends TileEntity {
             sb.setColor(Constants.TOGGLE_SHADOW);
             Utils.drawCentered(sb, pixel, x, y + TileMap.TILE_HEIGHT + 4 - TileMap.TILE_HEIGHT / 4f, TileMap.TILE_WIDTH / 2f, 8);
         }
-        if (strawberryToggle) {
+        if (finalToggle) {
             sb.setColor(Constants.FINAL_TOGGLE);
             Utils.drawCentered(sb, pixel, x, y + TileMap.TILE_HEIGHT + 4, TileMap.TILE_WIDTH / 2f, TileMap.TILE_HEIGHT / 2f);
             sb.setColor(Constants.FINAL_TOGGLE_SHADOW);

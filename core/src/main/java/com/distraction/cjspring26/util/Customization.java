@@ -1,10 +1,12 @@
 package com.distraction.cjspring26.util;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Constants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class Customization {
@@ -107,32 +109,48 @@ public class Customization {
         lockedFaceTypes.addAll(Arrays.asList(FaceType.values()));
         lockedAccessories.addAll(Arrays.asList(Accessory.values()));
 
-//        unlock(BodyType.DEFAULT);
-//        unlock(BodyColor.RED);
-//        unlock(BodyColor.GREEN);
-//        unlock(BodyColor.BLUE);
-//        unlock(FaceType.DEFAULTM);
-//        unlock(FaceType.DEFAULTF);
+        unlock(BodyType.DEFAULT);
+        unlock(BodyColor.RED);
+        unlock(BodyColor.GREEN);
+        unlock(BodyColor.BLUE);
+        unlock(FaceType.DEFAULTM);
+        unlock(FaceType.DEFAULTF);
 
-        unlockedBodyTypes.addAll(Arrays.asList(BodyType.values()));
-        unlockedBodyColors.addAll(Arrays.asList(BodyColor.values()));
-        unlockedFaceTypes.addAll(Arrays.asList(FaceType.values()));
-        unlockedAccessories.addAll(Arrays.asList(Accessory.values()));
+//        unlockedBodyTypes.addAll(Arrays.asList(BodyType.values()));
+//        unlockedBodyColors.addAll(Arrays.asList(BodyColor.values()));
+//        unlockedFaceTypes.addAll(Arrays.asList(FaceType.values()));
+//        unlockedAccessories.addAll(Arrays.asList(Accessory.values()));
+    }
+
+    public static Custom random() {
+        int totalSize = lockedBodyTypes.size() + lockedBodyColors.size() + lockedFaceTypes.size() + lockedAccessories.size();
+        int r = MathUtils.random(totalSize - 1);
+        if (r < lockedBodyTypes.size()) return lockedBodyTypes.get(r);
+        r -= lockedBodyTypes.size();
+        if (r < lockedBodyColors.size()) return lockedBodyColors.get(r);
+        r -= lockedBodyColors.size();
+        if (r < lockedFaceTypes.size()) return lockedFaceTypes.get(r);
+        r -= lockedFaceTypes.size();
+        return lockedAccessories.get(r);
     }
 
     public static void unlock(Custom type) {
         if (type instanceof BodyType) {
             lockedBodyTypes.remove(type);
             unlockedBodyTypes.add((BodyType) type);
+            unlockedBodyTypes.sort(Comparator.comparingInt(Enum::ordinal));
         } else if (type instanceof BodyColor) {
             lockedBodyColors.remove(type);
             unlockedBodyColors.add((BodyColor) type);
+            unlockedBodyColors.sort(Comparator.comparingInt(Enum::ordinal));
         } else if (type instanceof FaceType) {
             lockedFaceTypes.remove(type);
             unlockedFaceTypes.add((FaceType) type);
+            unlockedFaceTypes.sort(Comparator.comparingInt(Enum::ordinal));
         } else if (type instanceof Accessory) {
             lockedAccessories.remove(type);
             unlockedAccessories.add((Accessory) type);
+            unlockedAccessories.sort(Comparator.comparingInt(Enum::ordinal));
         }
     }
 

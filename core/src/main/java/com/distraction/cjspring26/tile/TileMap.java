@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
-import com.distraction.cjspring26.entity.Inventory;
+import com.distraction.cjspring26.screens.CollectScreen;
 import com.distraction.cjspring26.util.Utils;
 import com.distraction.cjspring26.entity.Collectible;
 
@@ -40,8 +40,6 @@ public class TileMap {
     private final List<Collectible> collectibles;
 
     private float releaseTime;
-
-    public final Inventory inventory;
 
     public TileMap(Context context, OrthographicCamera cam, OrthographicCamera uiCam) {
         this.context = context;
@@ -82,17 +80,26 @@ public class TileMap {
         for (GridPoint2 toggle : MapData.toggles) {
             map[map.length - toggle.x - 2][toggle.y].platformToggle = true;
         }
-        for (GridPoint2 toggle : MapData.strawberryToggles) {
-            map[map.length - toggle.x - 2][toggle.y].strawberryToggle = true;
+        for (GridPoint2 toggle : MapData.finalToggles) {
+            map[map.length - toggle.x - 2][toggle.y].finalToggle = true;
         }
 
         collectibles = new ArrayList<>();
-        int index = 0;
-        for (GridPoint2 c : MapData.collectibles) {
-            collectibles.add(new Collectible(context, this, map.length - c.x - 2, c.y, index++));
-        }
+        addCollectibles();
+    }
 
-        inventory = new Inventory(context);
+    public void addCollectibles() {
+        for (GridPoint2 p : MapData.collectibleSpawns) {
+            boolean found = false;
+            for (Collectible c : collectibles) {
+                if (c.row == map.length - p.x - 2 && c.col == p.y) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) continue;
+            collectibles.add(new Collectible(context, this, map.length - p.x - 2, p.y));
+        }
     }
 
     public int getPlayableWidth() {
@@ -100,7 +107,7 @@ public class TileMap {
     }
 
     public void playerLeft(int row, int col) {
-        if (map[row][col].strawberryToggle) {
+        if (map[row][col].finalToggle) {
             releaseTime = RELEASE_INTERVAL;
         }
     }
@@ -109,11 +116,8 @@ public class TileMap {
         for (int i = 0; i < collectibles.size(); i++) {
             Collectible c = collectibles.get(i);
             if (c.row == row && c.col == col) {
-                Vector3 pos = new Vector3(c.x, c.y, 0);
-                cam.project(pos);
-                pos.y = Gdx.graphics.getHeight() - pos.y;
-                uiCam.unproject(pos);
-                inventory.collect(c.index, pos.x, pos.y);
+                context.audio.playSound("collect", 0.2f);
+                context.sm.push(new CollectScreen(context));
                 collectibles.remove(i);
                 i--;
             }
@@ -121,7 +125,7 @@ public class TileMap {
         if (map[row][col].platformToggle) {
             toggle();
         }
-        if (map[row][col].strawberryToggle) {
+        if (map[row][col].finalToggle) {
             toggleExits();
         }
     }
@@ -189,7 +193,6 @@ public class TileMap {
                 toggleExits();
             }
         }
-        inventory.update(dt);
 
         WAVE_TIME += dt;
         if (WAVE_TIME > 10000) WAVE_TIME -= 10000;

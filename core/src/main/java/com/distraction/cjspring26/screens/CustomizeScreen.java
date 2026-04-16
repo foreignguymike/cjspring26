@@ -186,7 +186,7 @@ public class CustomizeScreen extends Screen {
     @Override
     public void input() {
         if (popTime < POP_TIME) return;
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+        if (Utils.anyKeysJustPressed(Input.Keys.ENTER, Input.Keys.TAB)) {
             close = true;
             player.playerRenderer.copy(renderer);
             pop();

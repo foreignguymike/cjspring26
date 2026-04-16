@@ -14,7 +14,7 @@ public class IntroScene extends Scene {
     public void enter() {
         screen.ignoreInput = true;
         cam.position.x = MathUtils.clamp(stuck.x, Constants.WIDTH2, tileMap.getPlayableWidth() - Constants.WIDTH2);
-        cam.position.y = 1500;
+        cam.position.y = 3000;
         cam.update();
     }
 

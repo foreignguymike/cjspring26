@@ -32,6 +32,7 @@ public class HelpScene extends Scene {
     public void enter() {
         stuck.mirror = true;
         dialog.next();
+        tileMap.addCollectibles();
     }
 
     @Override
@@ -45,7 +46,6 @@ public class HelpScene extends Scene {
     public void update(float dt) {
         dialog.update(dt);
         if (dialog.isDone()) {
-            tileMap.inventory.start = true;
             camTarget.set(
                 MathUtils.clamp(player.x, Constants.WIDTH2, tileMap.getPlayableWidth() - Constants.WIDTH2),
                 player.y,

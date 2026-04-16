@@ -2,6 +2,9 @@ package com.distraction.cjspring26.screens.scenes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.distraction.cjspring26.Constants;
@@ -14,8 +17,11 @@ public class PlayScene extends Scene {
 
     private final Vector3 camTarget = new Vector3();
 
+    private final TextureRegion tab;
+
     public PlayScene(PlayScreen screen) {
         super(screen);
+        tab = screen.context.getImage("tab");
     }
 
     @Override
@@ -46,4 +52,10 @@ public class PlayScene extends Scene {
         }
     }
 
+    @Override
+    public void render(SpriteBatch sb) {
+        sb.setProjectionMatrix(uiCam.combined);
+        sb.setColor(Color.WHITE);
+        sb.draw(tab, Constants.WIDTH - tab.getRegionWidth() - 50, 50);
+    }
 }
