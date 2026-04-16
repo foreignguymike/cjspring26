@@ -11,6 +11,8 @@ import com.distraction.cjspring26.screens.ScreenManager;
 
 public class Context {
 
+    public static final boolean DEBUG = false;
+
     private static final String ATLAS = "cjspring26.atlas";
     public static final String FONT64 = "fonts/fredoka-medium-64.fnt";
     public static final String FONT16 = "fonts/fredoka-medium-16.fnt";
@@ -60,8 +62,8 @@ public class Context {
 
         audio = new AudioHandler();
 
-//        sm = new ScreenManager(new com.distraction.cjspring26.screens.PlayScreen(this));
-        sm = new ScreenManager(new com.distraction.cjspring26.screens.TitleScreen(this));
+        if (DEBUG) sm = new ScreenManager(new com.distraction.cjspring26.screens.PlayScreen(this));
+        else sm = new ScreenManager(new com.distraction.cjspring26.screens.TitleScreen(this));
     }
 
     public TextureRegion getImage(String key) {

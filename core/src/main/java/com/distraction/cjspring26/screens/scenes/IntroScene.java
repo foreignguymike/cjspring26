@@ -2,6 +2,7 @@ package com.distraction.cjspring26.screens.scenes;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Constants;
+import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.screens.PlayScreen;
 
 public class IntroScene extends Scene {
@@ -14,7 +15,7 @@ public class IntroScene extends Scene {
     public void enter() {
         screen.ignoreInput = true;
         cam.position.x = MathUtils.clamp(stuck.x, Constants.WIDTH2, tileMap.getPlayableWidth() - Constants.WIDTH2);
-        cam.position.y = 3000;
+        cam.position.y = Context.DEBUG ? 1500 : 3000;
         cam.update();
     }
 

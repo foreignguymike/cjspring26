@@ -84,7 +84,7 @@ public class CustomizeScreen extends Screen {
         );
         ninePatch.x = Constants.WIDTH2;
         ninePatch.y = Constants.HEIGHT2;
-        ninePatch.fillColor = Constants.TITLE_BG;
+        ninePatch.fillColor = Constants.CUSTOMIZE_BG;
 
         font = context.getUiFont();
         font.setColor(Constants.BLACK);
@@ -267,8 +267,9 @@ public class CustomizeScreen extends Screen {
         font.draw(sb, getName(renderer.acc3), Constants.WIDTH2 + 200, posy[5]);
 
         // arrows
-        sb.setColor(Color.WHITE);
+        sb.setColor(Constants.CUSTOMIZE_ARROW);
         Utils.drawCentered(sb, arrow, Constants.WIDTH2 - 110 + 10 * MathUtils.sin(time * 5), posy[index] - 10);
+        sb.setColor(Color.WHITE);
         Utils.drawCenteredRotated(sb, caret, Constants.WIDTH2 + 160 + 10, posy[index] - 12, 180);
         Utils.drawCentered(sb, caret, Constants.WIDTH2 + 350 + (index > 2 ? 80 : 0), posy[index] - 12);
         sb.end();

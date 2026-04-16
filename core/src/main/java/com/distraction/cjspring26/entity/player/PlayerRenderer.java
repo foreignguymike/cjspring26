@@ -71,8 +71,10 @@ public class PlayerRenderer extends Entity {
 
     public void setBody(Customization.BodyType bodyType) {
         this.bodyType = bodyType;
-        outline = context.getImage("playeroutline" + bodyType.fileName);
-        fill = context.getImage("playerfill" + bodyType.fileName);
+        String bodyFileName = bodyType == Customization.BodyType.MATTE ? "" : bodyType.fileName;
+        String fillFileName = bodyType == Customization.BodyType.MATTE ? "" : bodyType.fileName;
+        outline = context.getImage("playeroutline" + bodyFileName);
+        fill = context.getImage("playerfill" + fillFileName);
         shadow = context.getImage("playershadow" + bodyType.fileName);
         highlight = context.getImage("playerhighlight" + bodyType.fileName);
     }
@@ -177,8 +179,20 @@ public class PlayerRenderer extends Entity {
             Utils.drawCentered(sb, image, x - acc.x * (mirror ? -1f : 1f), y + acc.y, !mirror);
         } else if (acc == Customization.Accessory.ANGEL_WINGS || acc == Customization.Accessory.DEMON_WINGS) {
             Utils.drawCenteredRotated(sb, image, x - acc.x * (mirror ? -0.84f : 0.84f), y + 4, -10 * (1 - MathUtils.sin(wingTime * 1.5f)), 0.8f, 0.5f, !mirror);
-        } else if (acc == Customization.Accessory.FLOWER) {
-            if (mirror) Utils.drawCentered(sb, image, x + acc.x, y + acc.y, true);
+        } else if (acc == Customization.Accessory.FLOWER || acc == Customization.Accessory.RIBBON) {
+            if (mirror) Utils.drawCentered(sb, image, x + acc.x * 0.8f, y + acc.y, true);
+        } else if (acc == Customization.Accessory.STAR) {
+            float dy = MathUtils.sin(2 * time);
+            if (dy > 0) {
+                float dx = MathUtils.cos(2 * time);
+                Utils.drawCenteredRotated(sb, image, x + dx * 100, y - 20 + dy * 10, 30 * time);
+            }
+        } else if (acc == Customization.Accessory.BEE) {
+            float dy = MathUtils.sin(2 * time);
+            if (dy > 0) {
+                float dx = MathUtils.cos(2 * time);
+                Utils.drawCentered(sb, image, x + dx * 100, y - 20 + dy * 10 + 10 * MathUtils.sin(6 * time), true);
+            }
         }
     }
 
@@ -194,8 +208,22 @@ public class PlayerRenderer extends Entity {
             Utils.drawCentered(sb, image, x + acc.x * (mirror ? -1f : 1f), y + acc.y, mirror);
         } else if (acc == Customization.Accessory.ANGEL_WINGS || acc == Customization.Accessory.DEMON_WINGS) {
             Utils.drawCenteredRotated(sb, image, x + acc.x * (mirror ? -1 : 1), y + acc.y, 10 * MathUtils.sin(wingTime * 1.5f) - 10, 0.8f, 0.5f, mirror);
-        } else if (acc == Customization.Accessory.FLOWER) {
+        } else if (acc == Customization.Accessory.FLOWER || acc == Customization.Accessory.RIBBON) {
             if (!mirror) Utils.drawCentered(sb, image, x + acc.x, y + acc.y);
+        } else if (acc == Customization.Accessory.STAR) {
+            float dy = MathUtils.sin(2 * time);
+            if (dy < 0) {
+                float dx = MathUtils.cos(2 * time);
+                Utils.drawCenteredRotated(sb, image, x + dx * 100, y - 20 + dy * 10, 30 * time);
+            }
+        } else if (acc == Customization.Accessory.BEE) {
+            float dy = MathUtils.sin(2 * time);
+            if (dy < 0) {
+                float dx = MathUtils.cos(2 * time);
+                Utils.drawCentered(sb, image, x + dx * 100, y - 20 + dy * 10 + 10 * MathUtils.sin(6 * time));
+            }
+        } else if (acc == Customization.Accessory.BLUSH) {
+            Utils.drawCentered(sb, image, x + acc.x * (mirror ? -1 : 1), y + acc.y + (moving ? 15 : 0), mirror);
         } else {
             Utils.drawCentered(sb, image, x + acc.x * (mirror ? -1 : 1), y + acc.y, mirror);
         }

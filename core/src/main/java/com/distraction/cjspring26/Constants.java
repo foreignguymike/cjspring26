@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 public class Constants {
 
     public static final String TITLE = "Thanks Bye!";
+    public static final String VERSION = "1.1";
 
     public static final int WIDTH = 1920;
     public static final int HEIGHT = 1080;
@@ -60,4 +61,5 @@ public class Constants {
     public static final Color FINAL_TOGGLE_SHADOW = RESURRECT_64[10];
 
     public static final Color CUSTOMIZE_BG = RESURRECT_64[63];
+    public static final Color CUSTOMIZE_ARROW = RESURRECT_64[61];
 }

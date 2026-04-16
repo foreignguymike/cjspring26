@@ -3,6 +3,7 @@ package com.distraction.cjspring26.util;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Constants;
+import com.distraction.cjspring26.Context;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ public class Customization {
     public enum BodyType implements Custom {
         DEFAULT("Slime", "", 0.8f),
         BLOCK("Block", "block", 0.8f),
+        MATTE("Matte", "matte", 1),
         FUR("Fur", "fur", 1)
         ;
         public final String name;
@@ -34,11 +36,13 @@ public class Customization {
         GREEN("Green", 32),
         BLUE("Blue", 48),
         WHITE("White", 9),
-        BLACK("Black", 2),
-        PINK("Pink", 57),
+        BLACK("Black", 1),
+        GRAY("Gray", 7),
+        BROWN("Brown", 3),
+        GUM("Gum", 57),
         PEACH("Peach", 63),
         CYAN("Cyan", 43),
-        VIOLET("Violet", 53),
+        PINK("Pink", 53),
         ORANGE("Orange", 23),
         PURPLE("Purple", 50),
         YELLOW("Yellow", 28)
@@ -73,13 +77,17 @@ public class Customization {
 
     // use ordinal for z ordering
     public enum Accessory implements Custom {
+        BLUSH("Blush", "blush", 10, -34),
         BUBBLE("Bubble", "bubble", -20, 55),
         CROWN("Crown", "crown", 0, 30),
         HALO("Halo", "halo", 0, 50),
         HORNS("Horns", "horns", -26, 22),
         FLOWER("Flower", "flower", -30, 10),
+        RIBBON("Ribbon", "ribbon", -30, 10),
         ANGEL_WINGS("Angel Wings", "angelwings", -80, 0),
-        DEMON_WINGS("Demon Wings", "demonwings", -80, 0)
+        DEMON_WINGS("Demon Wings", "demonwings", -80, 0),
+        BEE("Bee", "bee", 0, 0),
+        STAR("Star", "star", 0, 0)
         ;
         public final String name;
         public final String fileName;
@@ -116,10 +124,12 @@ public class Customization {
         unlock(FaceType.DEFAULTM);
         unlock(FaceType.DEFAULTF);
 
-//        unlockedBodyTypes.addAll(Arrays.asList(BodyType.values()));
-//        unlockedBodyColors.addAll(Arrays.asList(BodyColor.values()));
-//        unlockedFaceTypes.addAll(Arrays.asList(FaceType.values()));
-//        unlockedAccessories.addAll(Arrays.asList(Accessory.values()));
+        if (Context.DEBUG) {
+            for (BodyType e : BodyType.values()) unlock(e);
+            for (BodyColor e : BodyColor.values()) unlock(e);
+            for (FaceType e : FaceType.values()) unlock(e);
+            for (Accessory e : Accessory.values()) unlock(e);
+        }
     }
 
     public static int totalSize() {
@@ -141,21 +151,25 @@ public class Customization {
 
     public static void unlock(Custom type) {
         if (type instanceof BodyType) {
-            lockedBodyTypes.remove(type);
-            unlockedBodyTypes.add((BodyType) type);
-            unlockedBodyTypes.sort(Comparator.comparingInt(Enum::ordinal));
+            if (lockedBodyTypes.remove(type)) {
+                unlockedBodyTypes.add((BodyType) type);
+                unlockedBodyTypes.sort(Comparator.comparingInt(Enum::ordinal));
+            }
         } else if (type instanceof BodyColor) {
-            lockedBodyColors.remove(type);
-            unlockedBodyColors.add((BodyColor) type);
-            unlockedBodyColors.sort(Comparator.comparingInt(Enum::ordinal));
+            if (lockedBodyColors.remove(type)) {
+                unlockedBodyColors.add((BodyColor) type);
+                unlockedBodyColors.sort(Comparator.comparingInt(Enum::ordinal));
+            }
         } else if (type instanceof FaceType) {
-            lockedFaceTypes.remove(type);
-            unlockedFaceTypes.add((FaceType) type);
-            unlockedFaceTypes.sort(Comparator.comparingInt(Enum::ordinal));
+            if (lockedFaceTypes.remove(type)) {
+                unlockedFaceTypes.add((FaceType) type);
+                unlockedFaceTypes.sort(Comparator.comparingInt(Enum::ordinal));
+            }
         } else if (type instanceof Accessory) {
-            lockedAccessories.remove(type);
-            unlockedAccessories.add((Accessory) type);
-            unlockedAccessories.sort(Comparator.comparingInt(Enum::ordinal));
+            if (lockedAccessories.remove(type)) {
+                unlockedAccessories.add((Accessory) type);
+                unlockedAccessories.sort(Comparator.comparingInt(Enum::ordinal));
+            }
         }
     }
 

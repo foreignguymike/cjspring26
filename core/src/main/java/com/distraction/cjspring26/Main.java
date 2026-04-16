@@ -22,12 +22,12 @@ public class Main extends ApplicationAdapter {
         Gdx.input.setCatchKey(Input.Keys.TAB, true);
         Gdx.input.setCatchKey(Input.Keys.ENTER, true);
 
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0, 0, 0, 0);
-        pixmap.fill();
-        Cursor invisibleCursor = Gdx.graphics.newCursor(pixmap, 0, 0);
-        Gdx.graphics.setCursor(invisibleCursor);
-        pixmap.dispose();
+//        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+//        pixmap.setColor(0, 0, 0, 0);
+//        pixmap.fill();
+//        Cursor invisibleCursor = Gdx.graphics.newCursor(pixmap, 0, 0);
+//        Gdx.graphics.setCursor(invisibleCursor);
+//        pixmap.dispose();
     }
 
     @Override

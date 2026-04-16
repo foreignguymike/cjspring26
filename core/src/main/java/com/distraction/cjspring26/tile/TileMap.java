@@ -85,9 +85,9 @@ public class TileMap {
     }
 
     public void addCollectibles() {
-        int totalSize = Customization.totalSize();
+        int totalSize = Customization.totalSize() - collectibles.size();
         for (GridPoint2 p : MapData.collectibleSpawns) {
-            if (totalSize == 0) break;
+            if (totalSize <= 0) break;
             boolean found = false;
             for (Collectible c : collectibles) {
                 if (c.row == map.length - p.x - 2 && c.col == p.y) {

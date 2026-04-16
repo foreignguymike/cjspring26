@@ -125,7 +125,7 @@ public class Dialog extends Entity {
                 blipTime -= dt;
                 if (blipTime < 0) {
                     blipTime = BLIP_TIME;
-                    context.audio.playSound("dialog", 0.3f, MathUtils.random(0.92f, 1.08f));
+                    context.audio.playSound("dialog", 0.25f, MathUtils.random(0.92f, 1.08f));
                 }
             }
         } else if (textIndex == texts.length) {

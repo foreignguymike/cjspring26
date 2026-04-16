@@ -25,15 +25,15 @@ public class PlayScreen extends Screen {
 
         tileMap = new TileMap(context, cam);
         player = new Player(context, tileMap);
-        player.setTile(9, 0);
+        if (Context.DEBUG) player.setTile(7, 60);
+        else player.setTile(9, 0);
         player.playerRenderer.setBody(Customization.BodyType.DEFAULT);
         player.playerRenderer.setBodyColor(Customization.BodyColor.GREEN);
         player.playerRenderer.setFaceType(Customization.FaceType.DEFAULTM);
-//        player.setTile(14, 60); // test
         stuck = new Player(context, tileMap);
         stuck.setTile(9, 68);
         stuck.playerRenderer.setBody(Customization.BodyType.DEFAULT);
-        stuck.playerRenderer.setBodyColor(Customization.BodyColor.PINK);
+        stuck.playerRenderer.setBodyColor(Customization.BodyColor.GUM);
         stuck.playerRenderer.setFaceType(Customization.FaceType.DEFAULTM);
         stuck.mirror = true;
 
@@ -45,8 +45,8 @@ public class PlayScreen extends Screen {
         setScene(new IntroScene(this));
 
         context.audio.stopMusic();
-        context.audio.playMusic("main", 0.2f, true);
-        context.audio.playMusic("beach", 0.2f, true);
+        context.audio.playMusic("main", 0.15f, true);
+        context.audio.playMusic("beach", 0.15f, true);
     }
 
     public void playerSwap() {

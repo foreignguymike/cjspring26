@@ -96,10 +96,11 @@ public class TitleScreen extends Screen {
 
         if (exiting) exitTime += dt;
 
-        clouds1y = -600 + 600 * (time > 0.5f ? 1f : Interpolation.fastSlow.apply(time / 0.5f));
         if (exiting) {
+            clouds1y = Constants.HEIGHT * Interpolation.swingIn.apply(exitTime / 0.4f);
             clouds2y = -200 + Constants.HEIGHT * Interpolation.swingIn.apply(exitTime / 0.5f);
         } else {
+            clouds1y = -600 + 600 * (time > 0.5f ? 1f : Interpolation.fastSlow.apply(time / 0.5f));
             clouds2y = -700 + 500 * (time > 1f ? 1f : Interpolation.fastSlow.apply(time));
         }
 
@@ -132,11 +133,11 @@ public class TitleScreen extends Screen {
         sb.draw(pixel, 0, 0, Constants.WIDTH, clouds2y + 200);
 
         if (time > ENTER_TIME && !exiting) {
-            if (time % 2 > 1) {
-                Utils.drawCentered(sb, pressEnter, Constants.WIDTH2, 260);
-            }
+            Utils.setAlpha(sb, Color.WHITE, MathUtils.sin(3f * time + 2f * ENTER_TIME) * 0.5f + 0.5f);
+            Utils.drawCentered(sb, pressEnter, Constants.WIDTH2, 260);
+            sb.setColor(Color.WHITE);
             smallFont.draw(sb, "Mike S", 10, 40);
-            smallFont.draw(sb, "version 1.0", 10, 20);
+            smallFont.draw(sb, "Version " + Constants.VERSION, 10, 20);
         }
 
         in.render(sb);
