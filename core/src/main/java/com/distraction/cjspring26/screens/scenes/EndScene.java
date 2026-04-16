@@ -79,7 +79,7 @@ public class EndScene extends Scene {
             screen.context,
             new String[]{
                 "Thanks...",
-                "SUCKER!!"
+                "BYE! HAHAHAHA!"
             },
             stuck
         );

@@ -64,6 +64,9 @@ public class PlayerRenderer extends Entity {
         setBody(Utils.getRandomItem(Customization.unlockedBodyTypes));
         setBodyColor(Utils.getRandomItem(Customization.unlockedBodyColors));
         setFaceType(Utils.getRandomItem(Customization.unlockedFaceTypes));
+        if (!Customization.unlockedAccessories.isEmpty()) {
+            setAcc1(Utils.getRandomItem(Customization.unlockedAccessories));
+        }
     }
 
     public void setBody(Customization.BodyType bodyType) {
