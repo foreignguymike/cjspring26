@@ -22,7 +22,7 @@ public class AudioHandler {
         sounds = new HashMap<>();
         addSound("collect", "sfx/collect.wav");
         addSound("dialog", "sfx/dialog.wav");
-        addSound("enter", "sfx/enter.wav");
+        addSound("enter", "sfx/enter.ogg");
         addSound("pop", "sfx/pop.wav");
         addSound("toggle", "sfx/toggle.wav");
 

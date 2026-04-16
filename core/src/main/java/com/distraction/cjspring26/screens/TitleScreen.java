@@ -26,6 +26,7 @@ public class TitleScreen extends Screen {
     private float time = -TITLE_TIME;
 
     private final BitmapFont font;
+    private final BitmapFont smallFont;
 
     private final TextureRegion circle;
     private final List<Vector3> clouds1 = new ArrayList<>();
@@ -48,6 +49,8 @@ public class TitleScreen extends Screen {
 
         font = context.getDialogFont();
         font.setColor(Color.WHITE);
+        smallFont = context.getDescriptionFont();
+        smallFont.setColor(Constants.BLACK);
 
         circle = context.getImage("circle");
 
@@ -128,8 +131,12 @@ public class TitleScreen extends Screen {
         for (Vector3 v : clouds2) Utils.drawCenteredScaled(sb, circle, v.x, Constants.HEIGHT - v.y + clouds2y, v.z);
         sb.draw(pixel, 0, 0, Constants.WIDTH, clouds2y + 200);
 
-        if (time > ENTER_TIME && time % 2 > 1 && !exiting) {
-            font.draw(sb, "Press Enter", Constants.WIDTH2 - 165, 300);
+        if (time > ENTER_TIME && !exiting) {
+            if (time % 2 > 1) {
+                font.draw(sb, "Press Enter", Constants.WIDTH2 - 165, 300);
+            }
+            smallFont.draw(sb, "Mike S", 10, 40);
+            smallFont.draw(sb, "version 1.0", 10, 20);
         }
 
         in.render(sb);
