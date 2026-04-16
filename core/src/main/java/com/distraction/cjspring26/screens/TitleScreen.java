@@ -25,7 +25,8 @@ public class TitleScreen extends Screen {
     private final TextureRegion title;
     private float time = -TITLE_TIME;
 
-    private final BitmapFont font;
+    private final TextureRegion pressEnter;
+
     private final BitmapFont smallFont;
 
     private final TextureRegion circle;
@@ -39,6 +40,7 @@ public class TitleScreen extends Screen {
     public TitleScreen(Context context) {
         super(context);
         title = context.getImage("title");
+        pressEnter = context.getImage("pressenter");
 
         in = new Transition(context, Transition.Type.FLASH_IN, 1f, () -> ignoreInput = false);
         ignoreInput = true;
@@ -47,8 +49,6 @@ public class TitleScreen extends Screen {
             context.sm.replace(new PlayScreen(context));
         });
 
-        font = context.getDialogFont();
-        font.setColor(Color.WHITE);
         smallFont = context.getDescriptionFont();
         smallFont.setColor(Constants.BLACK);
 
@@ -133,7 +133,7 @@ public class TitleScreen extends Screen {
 
         if (time > ENTER_TIME && !exiting) {
             if (time % 2 > 1) {
-                font.draw(sb, "Press Enter", Constants.WIDTH2 - 165, 300);
+                Utils.drawCentered(sb, pressEnter, Constants.WIDTH2, 260);
             }
             smallFont.draw(sb, "Mike S", 10, 40);
             smallFont.draw(sb, "version 1.0", 10, 20);

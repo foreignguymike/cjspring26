@@ -9,9 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.distraction.cjspring26.audio.AudioHandler;
 import com.distraction.cjspring26.screens.ScreenManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Context {
 
     private static final String ATLAS = "cjspring26.atlas";

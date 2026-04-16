@@ -3,7 +3,6 @@ package com.distraction.cjspring26.audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,7 +82,7 @@ public class AudioHandler {
         for (Map.Entry<String, Sound> entry : sounds.entrySet()) {
             if (entry.getKey().equals(key)) {
                 if (cut) entry.getValue().stop();
-                entry.getValue().play(volume, pitch, 1f);
+                entry.getValue().play(volume, pitch, 0f);
             }
         }
     }

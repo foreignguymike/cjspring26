@@ -6,7 +6,7 @@ public enum Direction {
     LEFT(180f),
     RIGHT(0f);
 
-    public float deg;
+    public final float deg;
 
     Direction(float deg) {
         this.deg = deg;
