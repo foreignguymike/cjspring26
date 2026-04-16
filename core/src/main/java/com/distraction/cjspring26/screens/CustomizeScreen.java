@@ -84,7 +84,7 @@ public class CustomizeScreen extends Screen {
         );
         ninePatch.x = Constants.WIDTH2;
         ninePatch.y = Constants.HEIGHT2;
-        ninePatch.fillColor = Constants.CUSTOMIZE_BG;
+        ninePatch.fillColor = Constants.TITLE_BG;
 
         font = context.getUiFont();
         font.setColor(Constants.BLACK);

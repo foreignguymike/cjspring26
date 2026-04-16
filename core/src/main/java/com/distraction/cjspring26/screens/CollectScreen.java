@@ -25,13 +25,12 @@ public class CollectScreen extends Screen {
     private final BitmapFont font;
     private final GlyphLayout layout;
 
-    public CollectScreen(Context context) {
+    public CollectScreen(Context context, Customization.Custom custom) {
         super(context);
 
         font = context.getUiFont();
         layout = new GlyphLayout();
 
-        Customization.Custom custom = Customization.random();
         Customization.unlock(custom);
         String text = getText(custom);
         layout.setText(

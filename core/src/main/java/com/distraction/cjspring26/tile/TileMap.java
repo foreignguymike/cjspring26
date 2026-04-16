@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.distraction.cjspring26.Context;
 import com.distraction.cjspring26.Direction;
 import com.distraction.cjspring26.screens.CollectScreen;
-import com.distraction.cjspring26.util.Utils;
+import com.distraction.cjspring26.util.Customization;import com.distraction.cjspring26.util.Utils;
 import com.distraction.cjspring26.entity.Collectible;
 
 import java.util.ArrayList;
@@ -85,7 +85,9 @@ public class TileMap {
     }
 
     public void addCollectibles() {
+        int totalSize = Customization.totalSize();
         for (GridPoint2 p : MapData.collectibleSpawns) {
+            if (totalSize == 0) break;
             boolean found = false;
             for (Collectible c : collectibles) {
                 if (c.row == map.length - p.x - 2 && c.col == p.y) {
@@ -95,6 +97,7 @@ public class TileMap {
             }
             if (found) continue;
             collectibles.add(new Collectible(context, this, map.length - p.x - 2, p.y));
+            totalSize--;
         }
     }
 
@@ -113,9 +116,12 @@ public class TileMap {
             Collectible c = collectibles.get(i);
             if (c.row == row && c.col == col) {
                 context.audio.playSound("collect", 0.2f);
-                context.sm.push(new CollectScreen(context));
                 collectibles.remove(i);
                 i--;
+                Customization.Custom custom = Customization.random();
+                if (custom != null) {
+                    context.sm.push(new CollectScreen(context, custom));
+                }
             }
         }
         if (map[row][col].platformToggle) {

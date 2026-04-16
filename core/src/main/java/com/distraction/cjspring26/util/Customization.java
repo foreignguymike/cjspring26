@@ -122,8 +122,13 @@ public class Customization {
 //        unlockedAccessories.addAll(Arrays.asList(Accessory.values()));
     }
 
+    public static int totalSize() {
+        return lockedBodyTypes.size() + lockedBodyColors.size() + lockedFaceTypes.size() + lockedAccessories.size();
+    }
+
     public static Custom random() {
-        int totalSize = lockedBodyTypes.size() + lockedBodyColors.size() + lockedFaceTypes.size() + lockedAccessories.size();
+        int totalSize = totalSize();
+        if (totalSize == 0) return null;
         int r = MathUtils.random(totalSize - 1);
         if (r < lockedBodyTypes.size()) return lockedBodyTypes.get(r);
         r -= lockedBodyTypes.size();
