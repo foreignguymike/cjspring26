@@ -128,7 +128,7 @@ public class TitleScreen extends Screen {
         for (Vector3 v : clouds2) Utils.drawCenteredScaled(sb, circle, v.x, Constants.HEIGHT - v.y + clouds2y, v.z);
         sb.draw(pixel, 0, 0, Constants.WIDTH, clouds2y + 200);
 
-        if (time > ENTER_TIME && time % 2 > 1) {
+        if (time > ENTER_TIME && time % 2 > 1 && !exiting) {
             font.draw(sb, "Press Enter", Constants.WIDTH2 - 165, 300);
         }
 

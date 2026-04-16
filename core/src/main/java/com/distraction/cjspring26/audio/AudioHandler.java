@@ -20,23 +20,21 @@ public class AudioHandler {
         addMusic("main", "music/ontheway.ogg");
         addMusic("beach", "music/beach.mp3");
         sounds = new HashMap<>();
-        importSounds();
+        addSound("collect", "sfx/collect.wav");
+        addSound("dialog", "sfx/dialog.wav");
+        addSound("enter", "sfx/enter.wav");
+        addSound("pop", "sfx/pop.wav");
+        addSound("toggle", "sfx/toggle.wav");
 
         playing = new HashMap<>();
     }
 
-    private void importSounds() {
-        FileHandle dir = Gdx.files.internal("assets/sfx");
-        for (FileHandle file : dir.list()) {
-            String ext = file.extension().toLowerCase();
-            if (ext.equals("wav")) {
-                sounds.put(file.nameWithoutExtension(), Gdx.audio.newSound(file));
-            }
-        }
-    }
-
     private void addMusic(String key, String fileName) {
         music.put(key, Gdx.audio.newMusic(Gdx.files.internal(fileName)));
+    }
+
+    private void addSound(String key, String fileName) {
+        sounds.put(key, Gdx.audio.newSound(Gdx.files.internal(fileName)));
     }
 
     public void playMusic(String key, float volume, boolean looping) {

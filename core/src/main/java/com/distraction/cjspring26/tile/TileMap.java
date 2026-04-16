@@ -26,7 +26,6 @@ public class TileMap {
 
     private final Context context;
     private final OrthographicCamera cam;
-    private final OrthographicCamera uiCam;
     private int startRow;
     private int endRow;
     private int startCol;
@@ -41,10 +40,9 @@ public class TileMap {
 
     private float releaseTime;
 
-    public TileMap(Context context, OrthographicCamera cam, OrthographicCamera uiCam) {
+    public TileMap(Context context, OrthographicCamera cam) {
         this.context = context;
         this.cam = cam;
-        this.uiCam = uiCam;
         platforms = new ArrayList<>();
         exits = new ArrayList<>();
 

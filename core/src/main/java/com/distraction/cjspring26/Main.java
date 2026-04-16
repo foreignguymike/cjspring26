@@ -19,11 +19,8 @@ public class Main extends ApplicationAdapter {
         Gdx.input.setCatchKey(Input.Keys.DOWN, true);
         Gdx.input.setCatchKey(Input.Keys.LEFT, true);
         Gdx.input.setCatchKey(Input.Keys.RIGHT, true);
-        Gdx.input.setCatchKey(Input.Keys.SPACE, true);
-        Gdx.input.setCatchKey(Input.Keys.NUM_1, true);
-        Gdx.input.setCatchKey(Input.Keys.NUM_2, true);
-        Gdx.input.setCatchKey(Input.Keys.NUM_3, true);
-        Gdx.input.setCatchKey(Input.Keys.NUM_4, true);
+        Gdx.input.setCatchKey(Input.Keys.TAB, true);
+        Gdx.input.setCatchKey(Input.Keys.ENTER, true);
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 0);

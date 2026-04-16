@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.distraction.cjspring26.Constants;
 import com.distraction.cjspring26.entity.Dialog;
-import com.distraction.cjspring26.screens.PlayScreen;import com.distraction.cjspring26.util.Utils;
+import com.distraction.cjspring26.screens.PlayScreen;
 
 public class EndScene extends Scene {
 
@@ -103,7 +103,7 @@ public class EndScene extends Scene {
 
     @Override
     public void input() {
-        if (Utils.anyKeysJustPressed(Input.Keys.ENTER, Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (dialog != null) dialog.next();
         }
         skipping = Gdx.input.isKeyPressed(Input.Keys.ENTER);

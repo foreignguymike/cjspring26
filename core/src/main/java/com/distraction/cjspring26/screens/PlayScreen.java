@@ -23,7 +23,7 @@ public class PlayScreen extends Screen {
     public PlayScreen(Context context) {
         super(context);
 
-        tileMap = new TileMap(context, cam, uiCam);
+        tileMap = new TileMap(context, cam);
         player = new Player(context, tileMap);
         player.setTile(9, 0);
         player.playerRenderer.setBody(Customization.BodyType.DEFAULT);
